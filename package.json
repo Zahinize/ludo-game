@@ -1,0 +1,30 @@
+{
+    "name": "ludo-game",
+    "source": "src/index.html",
+    "version": "1.0.0",
+    "description": "A Multiplayer online ludo game!",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "start": "parcel",
+      "build": "parcel build"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/Zahinize/ludo-game.git"
+    },
+    "keywords": [
+      "ludo-game",
+      "ludo",
+      "html5",
+      "game"
+    ],
+    "author": "Zahin Omar Alwa",
+    "license": "ISC",
+    "bugs": {
+      "url": "https://github.com/Zahinize/ludo-game/issues"
+    },
+    "homepage": "https://github.com/Zahinize/ludo-game#readme",
+    "devDependencies": {
+      "parcel": "^2.13.0"
+    }
+  }
