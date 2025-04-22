@@ -3,193 +3,246 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ludo Game</title>
+    <title>Ludo Hero | An online-multiplayer Ludo Game</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Protest+Guerrilla&display=swap" rel="stylesheet">    
     <link rel="stylesheet" href="./style.css">
   </head>
   <body>
-    <div class="h-min bg-primary d-flex d-column d-y-center dark-mode js-app-wrapper">
-      <header class="header d-flex d-x-space-between d-y-center">
-        <div class="p-20"></div>
-        <h1 class="d-flex d-y-center protest-guerrilla-regular color-white p-20 font-xl">
-          <img src="./assets/icon-logo.png" height="70" class="m-r5" alt="Main logo" />
-          Ludo Hero
-        </h1>
-        <div class="p-20"></div>
-      </header>
-      <div class="game-wrapper d-flex m-t40 br-5 relative">
-        <div class="game-house bgcolor-blue d-flex d-x-center d-y-center">
-          <div class="token-container">
-            <div class="h-50-pc d-flex d-y-center d-x-space-around">
-              <div class="token bgcolor-blue"></div>
-              <div class="token bgcolor-blue"></div>
-            </div>
-            <div class="h-50-pc d-flex d-y-center d-x-space-around">
-              <div class="token bgcolor-blue"></div>
-              <div class="token bgcolor-blue"></div>
-            </div>
-          </div>
+    <div class="h-min bg-primary dark-mode js-app-wrapper">
+      <div id="splashScreen" class="d-flex d-column d-y-center js-splashScreen">
+        <div class="image-hero m-t40">
+          <img src="./assets/icon-hero.png" alt="Hero Image" />
         </div>
-        <div class="game-house bgcolor-red d-flex d-x-center d-y-center">
-          <div class="token-container">
-            <div class="h-50-pc d-flex d-y-center d-x-space-around">
-              <div class="token bgcolor-red"></div>
-              <div class="token bgcolor-red"></div>
-            </div>
-            <div class="h-50-pc d-flex d-y-center d-x-space-around">
-              <div class="token bgcolor-red"></div>
-              <div class="token bgcolor-red"></div>
-            </div>
-          </div>
+        <div class="m-t40 js-hero-buttons">
+          <button disabled class="button protest-guerrilla-regular d-flex d-column d-y-center m-r20" id="online-multiplayer">
+            <img src="./assets/icon-multiplayer.png" width="70" height="70" class="m-r5 m-b10" alt="Internet icon" />
+            Online Multiplayer
+          </button>
+          <button class="button protest-guerrilla-regular d-flex d-column d-y-center" id="vs-computer">
+            <img src="./assets/icon-computer.png" width="70" height="70" class="m-r5 m-b10" alt="Internet icon" />
+            VS Computer
+          </button>
         </div>
-        <div class="game-house bgcolor-yellow d-flex d-x-center d-y-center">
-          <div class="token-container">
-            <div class="h-50-pc d-flex d-y-center d-x-space-around">
-              <div class="token bgcolor-yellow"></div>
-              <div class="token bgcolor-yellow"></div>
+        <div class="m-t40 p-20 br-5 bg-white color-selection d-none js-cs-wrapper">
+          <h2 class="protest-guerrilla-regular d-flex d-y-center d-x-center">SELECT YOUR COLOR</h2>
+          <div class="m-t20 d-flex d-y-center d-x-center">
+            <div data-flag="0" data-color="blue" class="d-flex d-column d-x-center d-y-center cr-pointer js-color-selection">
+              <img width="60" height="60" src="./assets/icon-token-blue.png" title="Blue token" class="" />
+              <div class="color-select color-select-blue d-flex d-x-center d-y-center br-round m-t10">
+                <div class="color-select-check js-cs-check-blue"></div>
+              </div>
             </div>
-            <div class="h-50-pc d-flex d-y-center d-x-space-around">
-              <div class="token bgcolor-yellow"></div>
-              <div class="token bgcolor-yellow"></div>
+            <div data-flag="0" data-color="red" class="d-flex d-column d-x-center d-y-center cr-pointer js-color-selection">
+              <img width="60" height="60" src="./assets/icon-token-red.png" title="Red token" class="" />
+              <div class="color-select color-select-red d-flex d-x-center d-y-center br-round m-t10">
+                <div class="color-select-check js-cs-check-red"></div>
+              </div>
+            </div>
+            <div data-flag="0" data-color="green" class="d-flex d-column d-x-center d-y-center cr-pointer js-color-selection">
+              <img width="60" height="60" src="./assets/icon-token-green.png" title="Green token" class="" />
+              <div class="color-select color-select-green d-flex d-x-center d-y-center br-round m-t10">
+                <div class="color-select-check js-cs-check-green"></div>
+              </div>
+            </div>
+            <div data-flag="0" data-color="yellow" class="d-flex d-column d-x-center d-y-center cr-pointer js-color-selection">
+              <img width="60" height="60" src="./assets/icon-token-yellow.png" title="Yellow token" class="" />
+              <div class="color-select color-select-yellow d-flex d-x-center d-y-center br-round m-t10">
+                <div class="color-select-check js-cs-check-yellow"></div>
+              </div>
             </div>
           </div>
         </div>
-        <div class="game-house bgcolor-green d-flex d-x-center d-y-center">
-          <div class="token-container">
-            <div class="h-50-pc d-flex d-y-center d-x-space-around">
-              <div class="token bgcolor-green"></div>
-              <div class="token bgcolor-green"></div>
+        <div class="m-t40 d-flex d-none js-cta-buttons">
+          <button class="button d-flex d-y-center d-x-center m-r20 js-back-btn">
+            <img src="./assets/icon-back.png" width="30" height="30" class="" alt="Back icon" />
+          </button>
+          <button disabled class="button protest-guerrilla-regular d-flex d-x-center d-y-center js-play-btn">PLAY</button>
+        </div>
+      </div>
+      <div id="app" class="d-flex d-column d-y-center d-none js-app">
+        <header class="header d-flex d-x-space-between d-y-center">
+          <div class="p-20"></div>
+          <h1 class="d-flex d-y-center protest-guerrilla-regular color-white p-20 font-xl">
+            <img src="./assets/icon-logo.png" height="70" class="m-r5" alt="Main logo" />
+            Ludo Hero
+          </h1>
+          <div class="p-20"></div>
+        </header>
+        <div class="game-wrapper d-flex m-t40 br-5 relative">
+          <div class="game-house bgcolor-blue d-flex d-x-center d-y-center">
+            <div class="token-container">
+              <div class="h-50-pc d-flex d-y-center d-x-space-around">
+                <div class="token bgcolor-blue"></div>
+                <div class="token bgcolor-blue"></div>
+              </div>
+              <div class="h-50-pc d-flex d-y-center d-x-space-around">
+                <div class="token bgcolor-blue"></div>
+                <div class="token bgcolor-blue"></div>
+              </div>
             </div>
-            <div class="h-50-pc d-flex d-y-center d-x-space-around">
-              <div class="token bgcolor-green"></div>
-              <div class="token bgcolor-green"></div>
+          </div>
+          <div class="game-house bgcolor-red d-flex d-x-center d-y-center">
+            <div class="token-container">
+              <div class="h-50-pc d-flex d-y-center d-x-space-around">
+                <div class="token bgcolor-red"></div>
+                <div class="token bgcolor-red"></div>
+              </div>
+              <div class="h-50-pc d-flex d-y-center d-x-space-around">
+                <div class="token bgcolor-red"></div>
+                <div class="token bgcolor-red"></div>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="game-fort">
-        </div>
-        <div class="game-track game-track-left">
-          <div class="track-line-h"></div>
-          <div class="track-line-h"></div>
-          <div class="track-line-v track-line-1"></div>
-          <div class="track-line-v track-line-2"></div>
-          <div class="track-line-v track-line-3"></div>
-          <div class="track-line-v track-line-4"></div>
-          <div class="track-line-v track-line-5"></div>
-          <div class="track-dots bgcolor-blue"></div>
-          <div class="track-icon track-star d-flex d-x-center d-y-center js-left-star-container">
-            <img width="45" height="45" src="./assets/icon-star.png" title="Star for ludo track" class="js-left-star" />
+          <div class="game-house bgcolor-yellow d-flex d-x-center d-y-center">
+            <div class="token-container">
+              <div class="h-50-pc d-flex d-y-center d-x-space-around">
+                <div class="token bgcolor-yellow"></div>
+                <div class="token bgcolor-yellow"></div>
+              </div>
+              <div class="h-50-pc d-flex d-y-center d-x-space-around">
+                <div class="token bgcolor-yellow"></div>
+                <div class="token bgcolor-yellow"></div>
+              </div>
+            </div>
           </div>
-          <div class="track-icon track-arrow d-flex d-x-center d-y-center js-left-arrow-container">
-            <img width="45" height="45" src="./assets/icon-arrow-right.png" title="Arrow for ludo track" class="js-left-arrow" />
+          <div class="game-house bgcolor-green d-flex d-x-center d-y-center">
+            <div class="token-container">
+              <div class="h-50-pc d-flex d-y-center d-x-space-around">
+                <div class="token bgcolor-green"></div>
+                <div class="token bgcolor-green"></div>
+              </div>
+              <div class="h-50-pc d-flex d-y-center d-x-space-around">
+                <div class="token bgcolor-green"></div>
+                <div class="token bgcolor-green"></div>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="game-track game-track-right">
-          <div class="track-line-h"></div>
-          <div class="track-line-h"></div>
-          <div class="track-line-v track-line-1"></div>
-          <div class="track-line-v track-line-2"></div>
-          <div class="track-line-v track-line-3"></div>
-          <div class="track-line-v track-line-4"></div>
-          <div class="track-line-v track-line-5"></div>
-          <div class="track-dots bgcolor-green"></div>
-          <div class="track-icon track-star d-flex d-x-center d-y-center js-right-star-container">
-            <img width="45" height="45" src="./assets/icon-star.png" title="Star for ludo track" class="js-right-star" />
+          <div class="game-fort">
           </div>
-          <div class="track-icon track-arrow d-flex d-x-center d-y-center js-right-arrow-container">
-            <img width="45" height="45" src="./assets/icon-arrow-left.png" title="Arrow for ludo track" class="js-right-arrow" />
+          <div class="game-track game-track-left">
+            <div class="track-line-h"></div>
+            <div class="track-line-h"></div>
+            <div class="track-line-v track-line-1"></div>
+            <div class="track-line-v track-line-2"></div>
+            <div class="track-line-v track-line-3"></div>
+            <div class="track-line-v track-line-4"></div>
+            <div class="track-line-v track-line-5"></div>
+            <div class="track-dots bgcolor-blue"></div>
+            <div class="track-icon track-star d-flex d-x-center d-y-center js-left-star-container">
+              <img width="45" height="45" src="./assets/icon-star.png" title="Star for ludo track" class="js-left-star" />
+            </div>
+            <div class="track-icon track-arrow d-flex d-x-center d-y-center js-left-arrow-container">
+              <img width="45" height="45" src="./assets/icon-arrow-right.png" title="Arrow for ludo track" class="js-left-arrow" />
+            </div>
           </div>
-        </div>
-        <div class="game-track game-track-top">
-          <div class="track-line-h"></div>
-          <div class="track-line-h"></div>
-          <div class="track-line-h"></div>
-          <div class="track-line-h"></div>
-          <div class="track-line-h"></div>
-          <div class="track-line-v track-line-1"></div>
-          <div class="track-line-v track-line-2"></div>
-          <div class="track-dots bgcolor-red"></div>
-          <div class="track-icon track-star d-flex d-x-center d-y-center js-top-star-container">
-            <img width="45" height="45" src="./assets/icon-star.png" title="Star for ludo track" class="js-right-star" />
+          <div class="game-track game-track-right">
+            <div class="track-line-h"></div>
+            <div class="track-line-h"></div>
+            <div class="track-line-v track-line-1"></div>
+            <div class="track-line-v track-line-2"></div>
+            <div class="track-line-v track-line-3"></div>
+            <div class="track-line-v track-line-4"></div>
+            <div class="track-line-v track-line-5"></div>
+            <div class="track-dots bgcolor-green"></div>
+            <div class="track-icon track-star d-flex d-x-center d-y-center js-right-star-container">
+              <img width="45" height="45" src="./assets/icon-star.png" title="Star for ludo track" class="js-right-star" />
+            </div>
+            <div class="track-icon track-arrow d-flex d-x-center d-y-center js-right-arrow-container">
+              <img width="45" height="45" src="./assets/icon-arrow-left.png" title="Arrow for ludo track" class="js-right-arrow" />
+            </div>
           </div>
-          <div class="track-icon track-arrow d-flex d-x-center d-y-center js-top-arrow-container">
-            <img width="45" height="45" src="./assets/icon-arrow-down.png" title="Arrow for ludo track" class="js-down-arrow" />
+          <div class="game-track game-track-top">
+            <div class="track-line-h"></div>
+            <div class="track-line-h"></div>
+            <div class="track-line-h"></div>
+            <div class="track-line-h"></div>
+            <div class="track-line-h"></div>
+            <div class="track-line-v track-line-1"></div>
+            <div class="track-line-v track-line-2"></div>
+            <div class="track-dots bgcolor-red"></div>
+            <div class="track-icon track-star d-flex d-x-center d-y-center js-top-star-container">
+              <img width="45" height="45" src="./assets/icon-star.png" title="Star for ludo track" class="js-right-star" />
+            </div>
+            <div class="track-icon track-arrow d-flex d-x-center d-y-center js-top-arrow-container">
+              <img width="45" height="45" src="./assets/icon-arrow-down.png" title="Arrow for ludo track" class="js-down-arrow" />
+            </div>
           </div>
-        </div>
-        <div class="game-track game-track-bottom">
-          <div class="track-line-h"></div>
-          <div class="track-line-h"></div>
-          <div class="track-line-h"></div>
-          <div class="track-line-h"></div>
-          <div class="track-line-h"></div>
-          <div class="track-line-v track-line-1"></div>
-          <div class="track-line-v track-line-2"></div>
-          <div class="track-dots bgcolor-yellow"></div>
-          <div class="track-icon track-star d-flex d-x-center d-y-center js-bottom-star-container">
-            <img width="45" height="45" src="./assets/icon-star.png" title="Star for ludo track" class="js-right-star" />
+          <div class="game-track game-track-bottom">
+            <div class="track-line-h"></div>
+            <div class="track-line-h"></div>
+            <div class="track-line-h"></div>
+            <div class="track-line-h"></div>
+            <div class="track-line-h"></div>
+            <div class="track-line-v track-line-1"></div>
+            <div class="track-line-v track-line-2"></div>
+            <div class="track-dots bgcolor-yellow"></div>
+            <div class="track-icon track-star d-flex d-x-center d-y-center js-bottom-star-container">
+              <img width="45" height="45" src="./assets/icon-star.png" title="Star for ludo track" class="js-right-star" />
+            </div>
+            <div class="track-icon track-arrow d-flex d-x-center d-y-center js-bottom-arrow-container">
+              <img width="45" height="45" src="./assets/icon-arrow-up.png" title="Arrow for ludo track" class="js-up-arrow" />
+            </div>
           </div>
-          <div class="track-icon track-arrow d-flex d-x-center d-y-center js-bottom-arrow-container">
-            <img width="45" height="45" src="./assets/icon-arrow-up.png" title="Arrow for ludo track" class="js-up-arrow" />
+          <!--Ludo game blue tokens-->
+          <div class="game-token game-token-blue-1 d-flex d-x-center d-y-center js-token-blue-1">
+            <img width="60" height="60" src="./assets/icon-token-blue.png" title="Blue token 1" class="js-blue-1" />
           </div>
-        </div>
-        <!--Ludo game blue tokens-->
-        <div class="game-token game-token-blue-1 d-flex d-x-center d-y-center js-token-blue-1">
-          <img width="60" height="60" src="./assets/icon-token-blue.png" title="Blue token 1" class="js-blue-1" />
-        </div>
-        <div class="game-token game-token-blue-2 d-flex d-x-center d-y-center js-token-blue-2">
-          <img width="60" height="60" src="./assets/icon-token-blue.png" title="Blue token 2" class="js-blue-2" />
-        </div>
-        <div class="game-token game-token-blue-3 d-flex d-x-center d-y-center js-token-blue-3">
-          <img width="60" height="60" src="./assets/icon-token-blue.png" title="Blue token 3" class="js-blue-3" />
-        </div>
-        <div class="game-token game-token-blue-4 d-flex d-x-center d-y-center js-token-blue-4">
-          <img width="60" height="60" src="./assets/icon-token-blue.png" title="Blue token 4" class="js-blue-4" />
-        </div>
-
-        <!--Ludo game red tokens-->
-        <div class="game-token game-token-red-1 d-flex d-x-center d-y-center js-token-red-1">
-          <img width="60" height="60" src="./assets/icon-token-red.png" title="Red token 1" class="js-red-1" />
-        </div>
-        <div class="game-token game-token-red-2 d-flex d-x-center d-y-center js-token-red-2">
-          <img width="60" height="60" src="./assets/icon-token-red.png" title="Red token 2" class="js-red-2" />
-        </div>
-        <div class="game-token game-token-red-3 d-flex d-x-center d-y-center js-token-red-3">
-          <img width="60" height="60" src="./assets/icon-token-red.png" title="Red token 3" class="js-red-3" />
-        </div>
-        <div class="game-token game-token-red-4 d-flex d-x-center d-y-center js-token-red-4">
-          <img width="60" height="60" src="./assets/icon-token-red.png" title="Red token 4" class="js-red-4" />
-        </div>
-
-        <!--Ludo game yellow tokens-->
-        <div class="game-token game-token-yellow-1 d-flex d-x-center d-y-center js-token-yellow-1">
-          <img width="60" height="60" src="./assets/icon-token-yellow.png" title="Yellow token 1" class="js-yellow-1" />
-        </div>
-        <div class="game-token game-token-yellow-2 d-flex d-x-center d-y-center js-token-yellow-2">
-          <img width="60" height="60" src="./assets/icon-token-yellow.png" title="Yellow token 2" class="js-yellow-2" />
-        </div>
-        <div class="game-token game-token-yellow-3 d-flex d-x-center d-y-center js-token-yellow-3">
-          <img width="60" height="60" src="./assets/icon-token-yellow.png" title="Yellow token 3" class="js-yellow-3" />
-        </div>
-        <div class="game-token game-token-yellow-4 d-flex d-x-center d-y-center js-token-yellow-4">
-          <img width="60" height="60" src="./assets/icon-token-yellow.png" title="Yellow token 4" class="js-yellow-4" />
-        </div>
-
-        <!--Ludo game green tokens-->
-        <div class="game-token game-token-green-1 d-flex d-x-center d-y-center js-token-green-1">
-          <img width="60" height="60" src="./assets/icon-token-green.png" title="Green token 1" class="js-green-1" />
-        </div>
-        <div class="game-token game-token-green-2 d-flex d-x-center d-y-center js-token-green-2">
-          <img width="60" height="60" src="./assets/icon-token-green.png" title="Green token 2" class="js-green-2" />
-        </div>
-        <div class="game-token game-token-green-3 d-flex d-x-center d-y-center js-token-green-3">
-          <img width="60" height="60" src="./assets/icon-token-green.png" title="Green token 3" class="js-green-3" />
-        </div>
-        <div class="game-token game-token-green-4 d-flex d-x-center d-y-center js-token-green-4">
-          <img width="60" height="60" src="./assets/icon-token-green.png" title="Green token 4" class="js-green-4" />
+          <div class="game-token game-token-blue-2 d-flex d-x-center d-y-center js-token-blue-2">
+            <img width="60" height="60" src="./assets/icon-token-blue.png" title="Blue token 2" class="js-blue-2" />
+          </div>
+          <div class="game-token game-token-blue-3 d-flex d-x-center d-y-center js-token-blue-3">
+            <img width="60" height="60" src="./assets/icon-token-blue.png" title="Blue token 3" class="js-blue-3" />
+          </div>
+          <div class="game-token game-token-blue-4 d-flex d-x-center d-y-center js-token-blue-4">
+            <img width="60" height="60" src="./assets/icon-token-blue.png" title="Blue token 4" class="js-blue-4" />
+          </div>
+  
+          <!--Ludo game red tokens-->
+          <div class="game-token game-token-red-1 d-flex d-x-center d-y-center js-token-red-1">
+            <img width="60" height="60" src="./assets/icon-token-red.png" title="Red token 1" class="js-red-1" />
+          </div>
+          <div class="game-token game-token-red-2 d-flex d-x-center d-y-center js-token-red-2">
+            <img width="60" height="60" src="./assets/icon-token-red.png" title="Red token 2" class="js-red-2" />
+          </div>
+          <div class="game-token game-token-red-3 d-flex d-x-center d-y-center js-token-red-3">
+            <img width="60" height="60" src="./assets/icon-token-red.png" title="Red token 3" class="js-red-3" />
+          </div>
+          <div class="game-token game-token-red-4 d-flex d-x-center d-y-center js-token-red-4">
+            <img width="60" height="60" src="./assets/icon-token-red.png" title="Red token 4" class="js-red-4" />
+          </div>
+  
+          <!--Ludo game yellow tokens-->
+          <div class="game-token game-token-yellow-1 d-flex d-x-center d-y-center js-token-yellow-1">
+            <img width="60" height="60" src="./assets/icon-token-yellow.png" title="Yellow token 1" class="js-yellow-1" />
+          </div>
+          <div class="game-token game-token-yellow-2 d-flex d-x-center d-y-center js-token-yellow-2">
+            <img width="60" height="60" src="./assets/icon-token-yellow.png" title="Yellow token 2" class="js-yellow-2" />
+          </div>
+          <div class="game-token game-token-yellow-3 d-flex d-x-center d-y-center js-token-yellow-3">
+            <img width="60" height="60" src="./assets/icon-token-yellow.png" title="Yellow token 3" class="js-yellow-3" />
+          </div>
+          <div class="game-token game-token-yellow-4 d-flex d-x-center d-y-center js-token-yellow-4">
+            <img width="60" height="60" src="./assets/icon-token-yellow.png" title="Yellow token 4" class="js-yellow-4" />
+          </div>
+  
+          <!--Ludo game green tokens-->
+          <div class="game-token game-token-green-1 d-flex d-x-center d-y-center js-token-green-1">
+            <img width="60" height="60" src="./assets/icon-token-green.png" title="Green token 1" class="js-green-1" />
+          </div>
+          <div class="game-token game-token-green-2 d-flex d-x-center d-y-center js-token-green-2">
+            <img width="60" height="60" src="./assets/icon-token-green.png" title="Green token 2" class="js-green-2" />
+          </div>
+          <div class="game-token game-token-green-3 d-flex d-x-center d-y-center js-token-green-3">
+            <img width="60" height="60" src="./assets/icon-token-green.png" title="Green token 3" class="js-green-3" />
+          </div>
+          <div class="game-token game-token-green-4 d-flex d-x-center d-y-center js-token-green-4">
+            <img width="60" height="60" src="./assets/icon-token-green.png" title="Green token 4" class="js-green-4" />
+          </div>
         </div>
       </div>
     </div>
+    <script type="module" src="./app.js"></script>
   </body>
 </html>
