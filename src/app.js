@@ -1,8 +1,14 @@
 (function() {
   /** Set Global variables and cache DOM element refs **/
   let selectedColor = "";
+  let computerColor = "";
   let hasGameStarted = false;
   let isBgPlayStarted = false;
+  const BLUE_COLOR = "blue";
+  const RED_COLOR = "red";
+  const GREEN_COLOR = "green";
+  const YELLOW_COLOR = "yellow";
+  const colorSequence = [BLUE_COLOR, RED_COLOR, GREEN_COLOR, YELLOW_COLOR];
   const vsComputerEl = document.getElementById("vs-computer");
   const colorSelectionList = document.querySelectorAll(".js-color-selection");
   const csContainerEl = document.querySelector(".js-cs-wrapper");
@@ -19,6 +25,17 @@
   const gameMusicPath = new URL('assets/game-music.mp3', import.meta.url);
   const gameAudio = new Audio(gameMusicPath);
 
+  function getRivalColors(color) {
+    if (color == "") return null;
+    color = color.toLowerCase();
+
+    const userColorIdx = colorSequence.indexOf(color);
+    // In our game, the computer will appear diagonally to the end user.
+    // Thus, we can get computer color index by adding 2 to the user color index.
+    let computerColorIdx = (userColorIdx + 2) >= colorSequence.length ? userColorIdx - 2 : userColorIdx + 2;
+
+    return [color, colorSequence[computerColorIdx]];
+  }
   function handleSelectionClick(e) {
     const el = e.currentTarget;
     // Toggle checkbox flag
@@ -59,9 +76,7 @@
   function handlePlayBtnClick() {
     if (!selectedColor) { return false; }
 
-    splashScreenEl.classList.add("d-none");
-    appEl.classList.remove("d-none");
-    hasGameStarted = true;
+    initGamePlay();
   }
   function handleAppBackBtnClick() {
     const isAppLogout = window.confirm("Do you wish to exit this game?");
@@ -77,8 +92,11 @@
     csContainerEl.classList.add("d-none");
     ctaButtonContainerEl.classList.add("d-none");
     heroBtnContainerEl.classList.remove("d-none");
+    // Show all color tokens
+    document.querySelectorAll(".js-token").forEach(node => node.classList.remove("d-none"));
     playBtnEl.disabled = true;
     selectedColor = "";
+    computerColor = "";
     // Reset all color selection nodes
     colorSelectionList.forEach((selectionEl) => selectionEl.dataset["flag"] = "0");
   }
@@ -116,6 +134,32 @@
     appBackBtnEl.addEventListener("click", handleAppBackBtnClick, false);
     playBtnEl.addEventListener("click", handlePlayBtnClick, false);
     backgroundPlayEl.addEventListener("click", handleBgPlayClick, false);
+  }
+
+  /*** Initialise Main Gameplay ***/
+  function hideUnusedColorTokens(colorsArr) {
+    if (!colorsArr.length) return false;
+
+    colorsArr.forEach(color => {
+      document.querySelector(`.js-token-${color}-1`).classList.add("d-none");
+      document.querySelector(`.js-token-${color}-2`).classList.add("d-none");
+      document.querySelector(`.js-token-${color}-3`).classList.add("d-none");
+      document.querySelector(`.js-token-${color}-4`).classList.add("d-none");
+    });
+  }
+  function initGamePlay() {
+    const rivalColorsArr = getRivalColors(selectedColor);
+    const unusedColorsArr = colorSequence.filter(item => rivalColorsArr.indexOf(item) === -1);
+
+    splashScreenEl.classList.add("d-none");
+    appEl.classList.remove("d-none");
+    hideUnusedColorTokens(unusedColorsArr);
+    hasGameStarted = true;
+    computerColor = rivalColorsArr[1];
+
+    console.log("user color: ", selectedColor);
+    console.log("computer color: ", computerColor);
+    console.log("unused colors: ", unusedColorsArr);
   }
 
   console.log("Ludo game JS loaded.");
