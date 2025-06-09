@@ -23,7 +23,9 @@
   const bgPlayIconPath = new URL("assets/icon-video-play.png", import.meta.url);
   const bgPauseIconPath = new URL("assets/icon-video-pause.png", import.meta.url);
   const gameMusicPath = new URL('assets/game-music.mp3', import.meta.url);
+  const interactionMusicPath = new URL("https://zahinize.github.io/tic-tac-toe/player-o-click.908137e5.mp3");
   const gameAudio = new Audio(gameMusicPath);
+  const interactionAudio = new Audio(interactionMusicPath);
 
   function getRivalColors(color) {
     if (color == "") return null;
@@ -115,6 +117,9 @@
     playAudio(gameAudio, true);
     console.log("background play click:");
   }
+  function handlePageInteractionClick() {
+    playAudio(interactionAudio);
+  }
   function pauseAudio(audioRef) {
     audioRef.pause();
   }
@@ -128,6 +133,7 @@
     });
   }
   function setDOMEvents() {
+    document.addEventListener('click', handlePageInteractionClick);
     colorSelectionList.forEach((el) => el.addEventListener("click", handleSelectionClick, false));
     vsComputerEl.addEventListener("click", handleVSComputerClick, false);
     backBtnEl.addEventListener("click", handleBackBtnClick, false);
