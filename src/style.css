@@ -389,7 +389,8 @@ body {
   position: absolute;
   width: 50px;
 }
-.game-track-left > .track-dots {
+/* Track dots - left */
+.game-track-left > .track-dots.bgcolor-blue {
   left: 50px;
   box-shadow: 0 50px 0 var(--color-blue),
   50px 50px 0 var(--color-blue),
@@ -397,7 +398,40 @@ body {
   150px 50px 0 var(--color-blue),
   200px 50px 0 var(--color-blue);
 }
-.game-track-right > .track-dots {
+.game-track-left > .track-dots.bgcolor-green {
+  left: 50px;
+  box-shadow: 0 50px 0 var(--color-green),
+  50px 50px 0 var(--color-green),
+  100px 50px 0 var(--color-green),
+  150px 50px 0 var(--color-green),
+  200px 50px 0 var(--color-green);
+}
+.game-track-left > .track-dots.bgcolor-red {
+  left: 50px;
+  box-shadow: 0 50px 0 var(--color-red),
+  50px 50px 0 var(--color-red),
+  100px 50px 0 var(--color-red),
+  150px 50px 0 var(--color-red),
+  200px 50px 0 var(--color-red);
+}
+.game-track-left > .track-dots.bgcolor-yellow {
+  left: 50px;
+  box-shadow: 0 50px 0 var(--color-yellow),
+  50px 50px 0 var(--color-yellow),
+  100px 50px 0 var(--color-yellow),
+  150px 50px 0 var(--color-yellow),
+  200px 50px 0 var(--color-yellow);
+}
+/* Track dots - right */
+.game-track-right > .track-dots.bgcolor-blue {
+  top: 50px;
+  box-shadow: 50px 0 0 var(--color-blue),
+  100px 0 0 var(--color-blue),
+  150px 0 0 var(--color-blue),
+  200px 0 0 var(--color-blue),
+  200px 50px 0 var(--color-blue);
+}
+.game-track-right > .track-dots.bgcolor-green {
   top: 50px;
   box-shadow: 50px 0 0 var(--color-green),
   100px 0 0 var(--color-green),
@@ -405,7 +439,42 @@ body {
   200px 0 0 var(--color-green),
   200px 50px 0 var(--color-green);
 }
-.game-track-top > .track-dots {
+.game-track-right > .track-dots.bgcolor-red {
+  top: 50px;
+  box-shadow: 50px 0 0 var(--color-red),
+  100px 0 0 var(--color-red),
+  150px 0 0 var(--color-red),
+  200px 0 0 var(--color-red),
+  200px 50px 0 var(--color-red);
+}
+.game-track-right > .track-dots.bgcolor-yellow {
+  top: 50px;
+  box-shadow: 50px 0 0 var(--color-yellow),
+  100px 0 0 var(--color-yellow),
+  150px 0 0 var(--color-yellow),
+  200px 0 0 var(--color-yellow),
+  200px 50px 0 var(--color-yellow);
+}
+/* Track dots - top */
+.game-track-top > .track-dots.bgcolor-blue {
+  left: 100px;
+  top: 50px;
+  box-shadow: -50px 0 0 var(--color-blue),
+  -50px 50px 0 var(--color-blue),
+  -50px 100px 0 var(--color-blue),
+  -50px 150px 0 var(--color-blue),
+  -50px 200px 0 var(--color-blue);
+}
+.game-track-top > .track-dots.bgcolor-green {
+  left: 100px;
+  top: 50px;
+  box-shadow: -50px 0 0 var(--color-green),
+  -50px 50px 0 var(--color-green),
+  -50px 100px 0 var(--color-green),
+  -50px 150px 0 var(--color-green),
+  -50px 200px 0 var(--color-green);
+}
+.game-track-top > .track-dots.bgcolor-red {
   left: 100px;
   top: 50px;
   box-shadow: -50px 0 0 var(--color-red),
@@ -414,7 +483,41 @@ body {
   -50px 150px 0 var(--color-red),
   -50px 200px 0 var(--color-red);
 }
-.game-track-bottom > .track-dots {
+.game-track-top > .track-dots.bgcolor-yellow {
+  left: 100px;
+  top: 50px;
+  box-shadow: -50px 0 0 var(--color-yellow),
+  -50px 50px 0 var(--color-yellow),
+  -50px 100px 0 var(--color-yellow),
+  -50px 150px 0 var(--color-yellow),
+  -50px 200px 0 var(--color-yellow);
+}
+/* Track dots - bottom */
+.game-track-bottom > .track-dots.bgcolor-blue {
+  top: 200px;
+  box-shadow: 50px 0 0 var(--color-blue),
+  50px -50px 0 var(--color-blue),
+  50px -100px 0 var(--color-blue),
+  50px -150px 0 var(--color-blue),
+  50px -200px 0 var(--color-blue);
+}
+.game-track-bottom > .track-dots.bgcolor-green {
+  top: 200px;
+  box-shadow: 50px 0 0 var(--color-green),
+  50px -50px 0 var(--color-green),
+  50px -100px 0 var(--color-green),
+  50px -150px 0 var(--color-green),
+  50px -200px 0 var(--color-green);
+}
+.game-track-bottom > .track-dots.bgcolor-red {
+  top: 200px;
+  box-shadow: 50px 0 0 var(--color-red),
+  50px -50px 0 var(--color-red),
+  50px -100px 0 var(--color-red),
+  50px -150px 0 var(--color-red),
+  50px -200px 0 var(--color-red);
+}
+.game-track-bottom > .track-dots.bgcolor-yellow {
   top: 200px;
   box-shadow: 50px 0 0 var(--color-yellow),
   50px -50px 0 var(--color-yellow),
