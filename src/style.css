@@ -28,6 +28,10 @@ body {
   --bgcolor-blue: #2c3e50;
   --bgcolor-off-white: #DFDBE5;
   --bgcolor-black: #000;
+  --game-fort-br-top: 75px solid var(--color-red);
+  --game-fort-br-right: 75px solid var(--color-green);
+  --game-fort-br-bottom: 75px solid var(--color-yellow);
+  --game-fort-br-left: 75px solid var(--color-blue);
 }
 .protest-guerrilla-regular {
   font-family: "Protest Guerrilla", serif;
@@ -305,16 +309,18 @@ body {
   position: absolute;
   top: 300px;
   width: 150px;
+  z-index: 10000;
 }
 .game-fort::before {
+  border-top: var(--game-fort-br-top);
+  border-right: var(--game-fort-br-right);
+  border-bottom: var(--game-fort-br-bottom);
+  border-left: var(--game-fort-br-left);
   content: "";
   position: absolute;
   width: 0;
   height: 0;
-  border-top: 75px solid var(--color-red);
-  border-right: 75px solid var(--color-green);
-  border-bottom: 75px solid var(--color-yellow);
-  border-left: 75px solid var(--color-blue);
+  z-index: 10000;
 }
 /* Track to run tokens throughout the game */
 .game-track {
@@ -571,72 +577,38 @@ body {
 .game-token:hover > img {
   transform: translateY(-5);
 }
-/** Blue Tokens **/
-.game-token.game-token-blue-1 {
-  left: 75px;
-  top: 75px;
-}
-.game-token.game-token-blue-2 {
-  left: 175px;
-  top: 75px;
-}
-.game-token.game-token-blue-3 {
-  left: 75px;
-  top: 175px;
-}
-.game-token.game-token-blue-4 {
-  left: 175px;
-  top: 175px;
-}
-/** Red Tokens **/
-.game-token.game-token-red-1 {
+/** Game Token - Computer Position **/
+.game-token.game-token-computer-1 {
   left: 525px;
   top: 75px;
 }
-.game-token.game-token-red-2 {
+.game-token.game-token-computer-2 {
   left: 625px;
   top: 75px;
 }
-.game-token.game-token-red-3 {
+.game-token.game-token-computer-3 {
   left: 525px;
   top: 175px;
 }
-.game-token.game-token-red-4 {
+.game-token.game-token-computer-4 {
   left: 625px;
   top: 175px;
 }
-/** Yellow Tokens **/
-.game-token.game-token-yellow-1 {
+/** Game Token - User Position **/
+.game-token.game-token-user-1 {
   left: 75px;
   top: 525px;
 }
-.game-token.game-token-yellow-2 {
+.game-token.game-token-user-2 {
   left: 175px;
   top: 525px;
 }
-.game-token.game-token-yellow-3 {
+.game-token.game-token-user-3 {
   left: 75px;
   top: 625px;
 }
-.game-token.game-token-yellow-4 {
+.game-token.game-token-user-4 {
   left: 175px;
-  top: 625px;
-}
-/** Green Tokens **/
-.game-token.game-token-green-1 {
-  left: 525px;
-  top: 525px;
-}
-.game-token.game-token-green-2 {
-  left: 625px;
-  top: 525px;
-}
-.game-token.game-token-green-3 {
-  left: 525px;
-  top: 625px;
-}
-.game-token.game-token-green-4 {
-  left: 625px;
   top: 625px;
 }
 /** Splash Screen **/
