@@ -2,3 +2,4 @@
 node_modules
 dist/
 misc-info.txt
+.DS_Store
