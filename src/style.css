@@ -667,3 +667,20 @@ body {
   border-bottom-color: var(--color-yellow);
   border-right-color: var(--color-yellow);
 }
+
+/* Media Queries */
+/* Extra-Large (xl) screen breakpoint */
+@media (max-width: 1280px) {
+}
+/* Large (lg) screen breakpoint */
+@media (max-width: 1024px) {
+  .image-hero > img {
+    width: 400px;
+  }
+}
+/* Medium (md) screen breakpoint */
+@media (max-width: 768px) {
+  .image-hero > img {
+    width: 300px;
+  }
+}
