@@ -4,6 +4,7 @@
   let computerColor = '';
   let hasGameStarted = false;
   let isBgPlayStarted = false;
+  const isMobileWidth = window.innerWidth <= 768;
   const BLUE_COLOR = 'blue';
   const RED_COLOR = 'red';
   const GREEN_COLOR = 'green';
@@ -215,11 +216,18 @@
     const borderRightColor = colorMap[unusedColorsArr[1]];
     const borderBottomColor = colorMap[selectedColor];
     const borderLeftColor = colorMap[unusedColorsArr[0]];
+    const borderWidth = isMobileWidth ? '36px' : '75px';
 
-    gameFortEl.style.setProperty('--game-fort-br-top', `75px solid ${borderTopColor}`);
-    gameFortEl.style.setProperty('--game-fort-br-right', `75px solid ${borderRightColor}`);
-    gameFortEl.style.setProperty('--game-fort-br-bottom', `75px solid ${borderBottomColor}`);
-    gameFortEl.style.setProperty('--game-fort-br-left', `75px solid ${borderLeftColor}`);
+    gameFortEl.style.setProperty('--game-fort-br-top', `${borderWidth} solid ${borderTopColor}`);
+    gameFortEl.style.setProperty(
+      '--game-fort-br-right',
+      `${borderWidth} solid ${borderRightColor}`,
+    );
+    gameFortEl.style.setProperty(
+      '--game-fort-br-bottom',
+      `${borderWidth} solid ${borderBottomColor}`,
+    );
+    gameFortEl.style.setProperty('--game-fort-br-left', `${borderWidth} solid ${borderLeftColor}`);
   }
   function updateGameHouseStyles(selector, newColor) {
     const el = document.querySelector(selector);

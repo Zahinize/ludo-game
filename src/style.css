@@ -3,7 +3,7 @@
   box-sizing: border-box;
   border: 0;
   color: #404040;
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-weight: 400;
   font-style: normal;
   margin: 0;
@@ -15,18 +15,18 @@ body {
 }
 /* Utility Classes */
 :root {
-  --color-blue: #29ADFF;
-  --color-red: #EA1D23;
-  --color-green: #00A347;
-  --color-yellow: #DABC0F;
-  --color-white: #FFF;
-  --color-grey: #A8A9A8;
+  --color-blue: #29adff;
+  --color-red: #ea1d23;
+  --color-green: #00a347;
+  --color-yellow: #dabc0f;
+  --color-white: #fff;
+  --color-grey: #a8a9a8;
   --color-222: #222;
   --color-btn-gradient-start: #5adaff;
   --color-btn-gradient-end: #5468ff;
   --color-btn-boxshadow: #3c4fe0;
   --bgcolor-blue: #2c3e50;
-  --bgcolor-off-white: #DFDBE5;
+  --bgcolor-off-white: #dfdbe5;
   --bgcolor-black: #000;
   --game-fort-br-top: 75px solid var(--color-red);
   --game-fort-br-right: 75px solid var(--color-green);
@@ -34,7 +34,7 @@ body {
   --game-fort-br-left: 75px solid var(--color-blue);
 }
 .protest-guerrilla-regular {
-  font-family: "Protest Guerrilla", serif;
+  font-family: 'Protest Guerrilla', serif;
   font-weight: 400;
   font-style: normal;
 }
@@ -193,7 +193,7 @@ body {
 }
 .bg-primary {
   background-color: var(--bgcolor-off-white);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='%239C92AC' fill-opacity='0.24'%3E%3Cpath fill-rule='evenodd' d='M0 0h40v40H0V0zm40 40h40v40H40V40zm0-40h2l-2 2V0zm0 4l4-4h2l-6 6V4zm0 4l8-8h2L40 10V8zm0 4L52 0h2L40 14v-2zm0 4L56 0h2L40 18v-2zm0 4L60 0h2L40 22v-2zm0 4L64 0h2L40 26v-2zm0 4L68 0h2L40 30v-2zm0 4L72 0h2L40 34v-2zm0 4L76 0h2L40 38v-2zm0 4L80 0v2L42 40h-2zm4 0L80 4v2L46 40h-2zm4 0L80 8v2L50 40h-2zm4 0l28-28v2L54 40h-2zm4 0l24-24v2L58 40h-2zm4 0l20-20v2L62 40h-2zm4 0l16-16v2L66 40h-2zm4 0l12-12v2L70 40h-2zm4 0l8-8v2l-6 6h-2zm4 0l4-4v2l-2 2h-2z'/%3E%3C/g%3E%3C/svg%3E");  
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='%239C92AC' fill-opacity='0.24'%3E%3Cpath fill-rule='evenodd' d='M0 0h40v40H0V0zm40 40h40v40H40V40zm0-40h2l-2 2V0zm0 4l4-4h2l-6 6V4zm0 4l8-8h2L40 10V8zm0 4L52 0h2L40 14v-2zm0 4L56 0h2L40 18v-2zm0 4L60 0h2L40 22v-2zm0 4L64 0h2L40 26v-2zm0 4L68 0h2L40 30v-2zm0 4L72 0h2L40 34v-2zm0 4L76 0h2L40 38v-2zm0 4L80 0v2L42 40h-2zm4 0L80 4v2L46 40h-2zm4 0L80 8v2L50 40h-2zm4 0l28-28v2L54 40h-2zm4 0l24-24v2L58 40h-2zm4 0l20-20v2L62 40h-2zm4 0l16-16v2L66 40h-2zm4 0l12-12v2L70 40h-2zm4 0l8-8v2l-6 6h-2zm4 0l4-4v2l-2 2h-2z'/%3E%3C/g%3E%3C/svg%3E");
 }
 .bg-white {
   background: var(--color-white);
@@ -205,26 +205,47 @@ body {
   text-decoration: none;
 }
 .tr-all {
-  transition: all .1s ease-in;
+  transition: all 0.1s ease-in;
 }
 /* Animations */
 @keyframes bounce {
-  70% { transform:translateY(0%); }
-  80% { transform:translateY(-15%); }
-  90% { transform:translateY(0%); }
-  95% { transform:translateY(-7%); }
-  97% { transform:translateY(0%); }
-  99% { transform:translateY(-3%); }
-  100% { transform:translateY(0); }
+  70% {
+    transform: translateY(0%);
+  }
+  80% {
+    transform: translateY(-15%);
+  }
+  90% {
+    transform: translateY(0%);
+  }
+  95% {
+    transform: translateY(-7%);
+  }
+  97% {
+    transform: translateY(0%);
+  }
+  99% {
+    transform: translateY(-3%);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
 /* Button classes */
 .button {
   align-items: center;
   appearance: none;
-  background-image: radial-gradient(100% 100% at 100% 0, var(--color-btn-gradient-start) 0, var(--color-btn-gradient-end) 100%);
+  background-image: radial-gradient(
+    100% 100% at 100% 0,
+    var(--color-btn-gradient-start) 0,
+    var(--color-btn-gradient-end) 100%
+  );
   border: 0;
   border-radius: 6px;
-  box-shadow: rgba(45, 35, 66, .4) 0 2px 4px,rgba(45, 35, 66, .3) 0 7px 13px -3px,rgba(58, 65, 111, .5) 0 -3px 0 inset;
+  box-shadow:
+    rgba(45, 35, 66, 0.4) 0 2px 4px,
+    rgba(45, 35, 66, 0.3) 0 7px 13px -3px,
+    rgba(58, 65, 111, 0.5) 0 -3px 0 inset;
   box-sizing: border-box;
   color: #fff;
   cursor: pointer;
@@ -238,20 +259,28 @@ body {
   position: relative;
   text-align: left;
   text-decoration: none;
-  transition: box-shadow .15s,transform .15s;
+  transition:
+    box-shadow 0.15s,
+    transform 0.15s;
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
   white-space: nowrap;
-  will-change: box-shadow,transform;
+  will-change: box-shadow, transform;
   font-size: 18px;
 }
 .button:focus {
-  box-shadow: var(--color-btn-boxshadow) 0 0 0 1.5px inset, 
-  rgba(45, 35, 66, .4) 0 2px 4px, rgba(45, 35, 66, .3) 0 7px 13px -3px, var(--color-btn-boxshadow) 0 -3px 0 inset;
+  box-shadow:
+    var(--color-btn-boxshadow) 0 0 0 1.5px inset,
+    rgba(45, 35, 66, 0.4) 0 2px 4px,
+    rgba(45, 35, 66, 0.3) 0 7px 13px -3px,
+    var(--color-btn-boxshadow) 0 -3px 0 inset;
 }
 .button:hover {
-  box-shadow: rgba(45, 35, 66, .4) 0 4px 8px, rgba(45, 35, 66, .3) 0 7px 13px -3px, var(--color-btn-boxshadow) 0 -3px 0 inset;
+  box-shadow:
+    rgba(45, 35, 66, 0.4) 0 4px 8px,
+    rgba(45, 35, 66, 0.3) 0 7px 13px -3px,
+    var(--color-btn-boxshadow) 0 -3px 0 inset;
   transform: translateY(-2px);
 }
 .button:active {
@@ -316,7 +345,7 @@ body {
   border-right: var(--game-fort-br-right);
   border-bottom: var(--game-fort-br-bottom);
   border-left: var(--game-fort-br-left);
-  content: "";
+  content: '';
   position: absolute;
   width: 0;
   height: 0;
@@ -398,140 +427,156 @@ body {
 /* Track dots - left */
 .game-track-left > .track-dots.bgcolor-blue {
   left: 50px;
-  box-shadow: 0 50px 0 var(--color-blue),
-  50px 50px 0 var(--color-blue),
-  100px 50px 0 var(--color-blue),
-  150px 50px 0 var(--color-blue),
-  200px 50px 0 var(--color-blue);
+  box-shadow:
+    0 50px 0 var(--color-blue),
+    50px 50px 0 var(--color-blue),
+    100px 50px 0 var(--color-blue),
+    150px 50px 0 var(--color-blue),
+    200px 50px 0 var(--color-blue);
 }
 .game-track-left > .track-dots.bgcolor-green {
   left: 50px;
-  box-shadow: 0 50px 0 var(--color-green),
-  50px 50px 0 var(--color-green),
-  100px 50px 0 var(--color-green),
-  150px 50px 0 var(--color-green),
-  200px 50px 0 var(--color-green);
+  box-shadow:
+    0 50px 0 var(--color-green),
+    50px 50px 0 var(--color-green),
+    100px 50px 0 var(--color-green),
+    150px 50px 0 var(--color-green),
+    200px 50px 0 var(--color-green);
 }
 .game-track-left > .track-dots.bgcolor-red {
   left: 50px;
-  box-shadow: 0 50px 0 var(--color-red),
-  50px 50px 0 var(--color-red),
-  100px 50px 0 var(--color-red),
-  150px 50px 0 var(--color-red),
-  200px 50px 0 var(--color-red);
+  box-shadow:
+    0 50px 0 var(--color-red),
+    50px 50px 0 var(--color-red),
+    100px 50px 0 var(--color-red),
+    150px 50px 0 var(--color-red),
+    200px 50px 0 var(--color-red);
 }
 .game-track-left > .track-dots.bgcolor-yellow {
   left: 50px;
-  box-shadow: 0 50px 0 var(--color-yellow),
-  50px 50px 0 var(--color-yellow),
-  100px 50px 0 var(--color-yellow),
-  150px 50px 0 var(--color-yellow),
-  200px 50px 0 var(--color-yellow);
+  box-shadow:
+    0 50px 0 var(--color-yellow),
+    50px 50px 0 var(--color-yellow),
+    100px 50px 0 var(--color-yellow),
+    150px 50px 0 var(--color-yellow),
+    200px 50px 0 var(--color-yellow);
 }
 /* Track dots - right */
 .game-track-right > .track-dots.bgcolor-blue {
   top: 50px;
-  box-shadow: 50px 0 0 var(--color-blue),
-  100px 0 0 var(--color-blue),
-  150px 0 0 var(--color-blue),
-  200px 0 0 var(--color-blue),
-  200px 50px 0 var(--color-blue);
+  box-shadow:
+    50px 0 0 var(--color-blue),
+    100px 0 0 var(--color-blue),
+    150px 0 0 var(--color-blue),
+    200px 0 0 var(--color-blue),
+    200px 50px 0 var(--color-blue);
 }
 .game-track-right > .track-dots.bgcolor-green {
   top: 50px;
-  box-shadow: 50px 0 0 var(--color-green),
-  100px 0 0 var(--color-green),
-  150px 0 0 var(--color-green),
-  200px 0 0 var(--color-green),
-  200px 50px 0 var(--color-green);
+  box-shadow:
+    50px 0 0 var(--color-green),
+    100px 0 0 var(--color-green),
+    150px 0 0 var(--color-green),
+    200px 0 0 var(--color-green),
+    200px 50px 0 var(--color-green);
 }
 .game-track-right > .track-dots.bgcolor-red {
   top: 50px;
-  box-shadow: 50px 0 0 var(--color-red),
-  100px 0 0 var(--color-red),
-  150px 0 0 var(--color-red),
-  200px 0 0 var(--color-red),
-  200px 50px 0 var(--color-red);
+  box-shadow:
+    50px 0 0 var(--color-red),
+    100px 0 0 var(--color-red),
+    150px 0 0 var(--color-red),
+    200px 0 0 var(--color-red),
+    200px 50px 0 var(--color-red);
 }
 .game-track-right > .track-dots.bgcolor-yellow {
   top: 50px;
-  box-shadow: 50px 0 0 var(--color-yellow),
-  100px 0 0 var(--color-yellow),
-  150px 0 0 var(--color-yellow),
-  200px 0 0 var(--color-yellow),
-  200px 50px 0 var(--color-yellow);
+  box-shadow:
+    50px 0 0 var(--color-yellow),
+    100px 0 0 var(--color-yellow),
+    150px 0 0 var(--color-yellow),
+    200px 0 0 var(--color-yellow),
+    200px 50px 0 var(--color-yellow);
 }
 /* Track dots - top */
 .game-track-top > .track-dots.bgcolor-blue {
   left: 100px;
   top: 50px;
-  box-shadow: -50px 0 0 var(--color-blue),
-  -50px 50px 0 var(--color-blue),
-  -50px 100px 0 var(--color-blue),
-  -50px 150px 0 var(--color-blue),
-  -50px 200px 0 var(--color-blue);
+  box-shadow:
+    -50px 0 0 var(--color-blue),
+    -50px 50px 0 var(--color-blue),
+    -50px 100px 0 var(--color-blue),
+    -50px 150px 0 var(--color-blue),
+    -50px 200px 0 var(--color-blue);
 }
 .game-track-top > .track-dots.bgcolor-green {
   left: 100px;
   top: 50px;
-  box-shadow: -50px 0 0 var(--color-green),
-  -50px 50px 0 var(--color-green),
-  -50px 100px 0 var(--color-green),
-  -50px 150px 0 var(--color-green),
-  -50px 200px 0 var(--color-green);
+  box-shadow:
+    -50px 0 0 var(--color-green),
+    -50px 50px 0 var(--color-green),
+    -50px 100px 0 var(--color-green),
+    -50px 150px 0 var(--color-green),
+    -50px 200px 0 var(--color-green);
 }
 .game-track-top > .track-dots.bgcolor-red {
   left: 100px;
   top: 50px;
-  box-shadow: -50px 0 0 var(--color-red),
-  -50px 50px 0 var(--color-red),
-  -50px 100px 0 var(--color-red),
-  -50px 150px 0 var(--color-red),
-  -50px 200px 0 var(--color-red);
+  box-shadow:
+    -50px 0 0 var(--color-red),
+    -50px 50px 0 var(--color-red),
+    -50px 100px 0 var(--color-red),
+    -50px 150px 0 var(--color-red),
+    -50px 200px 0 var(--color-red);
 }
 .game-track-top > .track-dots.bgcolor-yellow {
   left: 100px;
   top: 50px;
-  box-shadow: -50px 0 0 var(--color-yellow),
-  -50px 50px 0 var(--color-yellow),
-  -50px 100px 0 var(--color-yellow),
-  -50px 150px 0 var(--color-yellow),
-  -50px 200px 0 var(--color-yellow);
+  box-shadow:
+    -50px 0 0 var(--color-yellow),
+    -50px 50px 0 var(--color-yellow),
+    -50px 100px 0 var(--color-yellow),
+    -50px 150px 0 var(--color-yellow),
+    -50px 200px 0 var(--color-yellow);
 }
 /* Track dots - bottom */
 .game-track-bottom > .track-dots.bgcolor-blue {
   top: 200px;
-  box-shadow: 50px 0 0 var(--color-blue),
-  50px -50px 0 var(--color-blue),
-  50px -100px 0 var(--color-blue),
-  50px -150px 0 var(--color-blue),
-  50px -200px 0 var(--color-blue);
+  box-shadow:
+    50px 0 0 var(--color-blue),
+    50px -50px 0 var(--color-blue),
+    50px -100px 0 var(--color-blue),
+    50px -150px 0 var(--color-blue),
+    50px -200px 0 var(--color-blue);
 }
 .game-track-bottom > .track-dots.bgcolor-green {
   top: 200px;
-  box-shadow: 50px 0 0 var(--color-green),
-  50px -50px 0 var(--color-green),
-  50px -100px 0 var(--color-green),
-  50px -150px 0 var(--color-green),
-  50px -200px 0 var(--color-green);
+  box-shadow:
+    50px 0 0 var(--color-green),
+    50px -50px 0 var(--color-green),
+    50px -100px 0 var(--color-green),
+    50px -150px 0 var(--color-green),
+    50px -200px 0 var(--color-green);
 }
 .game-track-bottom > .track-dots.bgcolor-red {
   top: 200px;
-  box-shadow: 50px 0 0 var(--color-red),
-  50px -50px 0 var(--color-red),
-  50px -100px 0 var(--color-red),
-  50px -150px 0 var(--color-red),
-  50px -200px 0 var(--color-red);
+  box-shadow:
+    50px 0 0 var(--color-red),
+    50px -50px 0 var(--color-red),
+    50px -100px 0 var(--color-red),
+    50px -150px 0 var(--color-red),
+    50px -200px 0 var(--color-red);
 }
 .game-track-bottom > .track-dots.bgcolor-yellow {
   top: 200px;
-  box-shadow: 50px 0 0 var(--color-yellow),
-  50px -50px 0 var(--color-yellow),
-  50px -100px 0 var(--color-yellow),
-  50px -150px 0 var(--color-yellow),
-  50px -200px 0 var(--color-yellow);
+  box-shadow:
+    50px 0 0 var(--color-yellow),
+    50px -50px 0 var(--color-yellow),
+    50px -100px 0 var(--color-yellow),
+    50px -150px 0 var(--color-yellow),
+    50px -200px 0 var(--color-yellow);
 }
-/* Track icons to assist token in their journey */
+/* Track icons to assist tokens in their journey */
 .track-icon,
 .game-token {
   position: absolute;
@@ -568,11 +613,11 @@ body {
 }
 .game-token {
   cursor: pointer;
-  transition: all .25s ease-in;
+  transition: all 0.25s ease-in;
   z-index: 10000;
 }
 .game-token > img {
-  transition: all .25s ease-in;
+  transition: all 0.25s ease-in;
 }
 .game-token:hover > img {
   transform: translateY(-5);
@@ -633,10 +678,10 @@ body {
   border-right: 7px solid #78b13f;
 }
 /* Checkbox toggle based on attribute selectors */
-[data-flag="0"] > .color-select > .color-select-check {
+[data-flag='0'] > .color-select > .color-select-check {
   display: none !important;
 }
-[data-flag="1"] > .color-select > .color-select-check {
+[data-flag='1'] > .color-select > .color-select-check {
   display: inline-block !important;
 }
 .color-select.color-select-blue {
@@ -678,9 +723,309 @@ body {
     width: 400px;
   }
 }
+/* Tablet screen breakpoint */
+@media (max-width: 992px) {
+}
+
 /* Medium (md) screen breakpoint */
 @media (max-width: 768px) {
+  /** Game responsive layout **/
   .image-hero > img {
     width: 300px;
+  }
+  .game-wrapper {
+    height: 360px;
+    width: 360px;
+  }
+  .game-house {
+    width: 144px;
+    height: 144px;
+  }
+  .token-container {
+    width: 96px;
+    height: 96px;
+  }
+  .token {
+    width: 24px;
+    height: 24px;
+  }
+  .game-track {
+    border-width: 1px;
+  }
+  .game-fort {
+    height: 72px;
+    width: 72px;
+    left: 144px;
+    top: 144px;
+  }
+  .game-track-left,
+  .game-track-right {
+    height: 72px;
+    width: 144px;
+    top: 144px;
+  }
+  .game-track.game-track-top,
+  .game-track.game-track-bottom {
+    left: 144px;
+    height: 144px;
+    width: 72px;
+  }
+  .game-track.game-track-bottom {
+    top: 216px;
+  }
+  /* Game track arrow icons */
+  .game-track-left > .track-arrow {
+    top: 24px;
+  }
+  .game-track-right > .track-arrow {
+    left: 120px;
+    top: 24px;
+  }
+  .game-track-bottom > .track-arrow {
+    left: 24px;
+    top: 120px;
+  }
+  .game-track-top > .track-arrow {
+    left: 24px;
+  }
+  /* Game track star icons */
+  .game-track-left > .track-star {
+    left: 48px;
+    top: 48px;
+  }
+  .game-track-right > .track-star {
+    left: 72px;
+  }
+  .game-track-top > .track-star {
+    top: 48px;
+  }
+  .game-track-bottom > .track-star {
+    left: 48px;
+    top: 72px;
+  }
+  /* Game track vertical and horizontal lines */
+  .track-line-h:first-child {
+    top: 24px;
+  }
+  .track-line-h:nth-child(2) {
+    top: 48px;
+  }
+  .track-line-h:nth-child(3) {
+    top: 72px;
+  }
+  .track-line-h:nth-child(4) {
+    top: 96px;
+  }
+  .track-line-h:nth-child(5) {
+    top: 120px;
+  }
+  .track-line-v.track-line-1 {
+    left: 24px;
+  }
+  .track-line-v.track-line-2 {
+    left: 48px;
+  }
+  .track-line-v.track-line-3 {
+    left: 72px;
+  }
+  .track-line-v.track-line-4 {
+    left: 96px;
+  }
+  .track-line-v.track-line-5 {
+    left: 120px;
+  }
+  .track-dots {
+    height: 24px;
+    width: 24px;
+  }
+  .track-icon,
+  .game-token {
+    height: 24px;
+    width: 24px;
+  }
+  /* Game user and computer tokens */
+  .game-token.game-token-user-1 {
+    top: 245px;
+    left: 36px;
+  }
+  .game-token.game-token-user-2 {
+    top: 245px;
+    left: 84px;
+  }
+  .game-token.game-token-user-3 {
+    left: 36px;
+    top: 294px;
+  }
+  .game-token.game-token-user-4 {
+    left: 84px;
+    top: 294px;
+  }
+  .game-token.game-token-computer-1 {
+    left: 252px;
+    top: 30px;
+  }
+  .game-token.game-token-computer-2 {
+    left: 300px;
+    top: 30px;
+  }
+  .game-token.game-token-computer-3 {
+    left: 252px;
+    top: 79px;
+  }
+  .game-token.game-token-computer-4 {
+    left: 300px;
+    top: 79px;
+  }
+  /** Track Dots - Left **/
+  .game-track-left > .track-dots.bgcolor-blue {
+    left: 24px;
+    box-shadow:
+      0 24px 0 var(--color-blue),
+      24px 24px 0 var(--color-blue),
+      48px 24px 0 var(--color-blue),
+      72px 24px 0 var(--color-blue),
+      96px 24px 0 var(--color-blue);
+  }
+  .game-track-left > .track-dots.bgcolor-green {
+    left: 24px;
+    box-shadow:
+      0 24px 0 var(--color-green),
+      24px 24px 0 var(--color-green),
+      48px 24px 0 var(--color-green),
+      72px 24px 0 var(--color-green),
+      96px 24px 0 var(--color-green);
+  }
+  .game-track-left > .track-dots.bgcolor-red {
+    left: 24px;
+    box-shadow:
+      0 24px 0 var(--color-red),
+      24px 24px 0 var(--color-red),
+      48px 24px 0 var(--color-red),
+      72px 24px 0 var(--color-red),
+      96px 24px 0 var(--color-red);
+  }
+  .game-track-left > .track-dots.bgcolor-yellow {
+    left: 24px;
+    box-shadow:
+      0 24px 0 var(--color-yellow),
+      24px 24px 0 var(--color-yellow),
+      48px 24px 0 var(--color-yellow),
+      72px 24px 0 var(--color-yellow),
+      96px 24px 0 var(--color-yellow);
+  }
+  /** Track dots - right **/
+  .game-track-right > .track-dots.bgcolor-blue {
+    top: 24px;
+    box-shadow:
+      24px 0 0 var(--color-blue),
+      48px 0 0 var(--color-blue),
+      72px 0 0 var(--color-blue),
+      96px 0 0 var(--color-blue),
+      96px 24px 0 var(--color-blue);
+  }
+  .game-track-right > .track-dots.bgcolor-green {
+    top: 24px;
+    box-shadow:
+      24px 0 0 var(--color-green),
+      48px 0 0 var(--color-green),
+      72px 0 0 var(--color-green),
+      96px 0 0 var(--color-green),
+      96px 24px 0 var(--color-green);
+  }
+  .game-track-right > .track-dots.bgcolor-red {
+    top: 24px;
+    box-shadow:
+      24px 0 0 var(--color-red),
+      48px 0 0 var(--color-red),
+      72px 0 0 var(--color-red),
+      96px 0 0 var(--color-red),
+      96px 24px 0 var(--color-red);
+  }
+  .game-track-right > .track-dots.bgcolor-yellow {
+    top: 24px;
+    box-shadow:
+      24px 0 0 var(--color-yellow),
+      48px 0 0 var(--color-yellow),
+      72px 0 0 var(--color-yellow),
+      96px 0 0 var(--color-yellow),
+      96px 24px 0 var(--color-yellow);
+  }
+  /* Track dots - top */
+  .game-track-top > .track-dots.bgcolor-blue {
+    left: 48px;
+    top: 24px;
+    box-shadow:
+      -24px 0 0 var(--color-blue),
+      -24px 24px 0 var(--color-blue),
+      -24px 48px 0 var(--color-blue),
+      -24px 72px 0 var(--color-blue),
+      -24px 96px 0 var(--color-blue);
+  }
+  .game-track-top > .track-dots.bgcolor-green {
+    left: 48px;
+    top: 24px;
+    box-shadow:
+      -24px 0 0 var(--color-green),
+      -24px 24px 0 var(--color-green),
+      -24px 48px 0 var(--color-green),
+      -24px 72px 0 var(--color-green),
+      -24px 96px 0 var(--color-green);
+  }
+  .game-track-top > .track-dots.bgcolor-red {
+    left: 48px;
+    top: 24px;
+    box-shadow:
+      -24px 0 0 var(--color-red),
+      -24px 24px 0 var(--color-red),
+      -24px 48px 0 var(--color-red),
+      -24px 72px 0 var(--color-red),
+      -24px 96px 0 var(--color-red);
+  }
+  .game-track-top > .track-dots.bgcolor-yellow {
+    left: 48px;
+    top: 24px;
+    box-shadow:
+      -24px 0 0 var(--color-yellow),
+      -24px 24px 0 var(--color-yellow),
+      -24px 48px 0 var(--color-yellow),
+      -24px 72px 0 var(--color-yellow),
+      -24px 96px 0 var(--color-yellow);
+  }
+  /* Track dots - bottom */
+  .game-track-bottom > .track-dots.bgcolor-blue {
+    top: 96px;
+    box-shadow:
+      24px 0 0 var(--color-blue),
+      24px -24px 0 var(--color-blue),
+      24px -48px 0 var(--color-blue),
+      24px -72px 0 var(--color-blue),
+      24px -96px 0 var(--color-blue);
+  }
+  .game-track-bottom > .track-dots.bgcolor-green {
+    top: 96px;
+    box-shadow:
+      24px 0 0 var(--color-green),
+      24px -24px 0 var(--color-green),
+      24px -48px 0 var(--color-green),
+      24px -72px 0 var(--color-green),
+      24px -96px 0 var(--color-green);
+  }
+  .game-track-bottom > .track-dots.bgcolor-red {
+    top: 96px;
+    box-shadow:
+      24px 0 0 var(--color-red),
+      24px -24px 0 var(--color-red),
+      24px -48px 0 var(--color-red),
+      24px -72px 0 var(--color-red),
+      24px -96px 0 var(--color-red);
+  }
+  .game-track-bottom > .track-dots.bgcolor-yellow {
+    top: 96px;
+    box-shadow:
+      24px 0 0 var(--color-yellow),
+      24px -24px 0 var(--color-yellow),
+      24px -48px 0 var(--color-yellow),
+      24px -72px 0 var(--color-yellow),
+      24px -96px 0 var(--color-yellow);
   }
 }
