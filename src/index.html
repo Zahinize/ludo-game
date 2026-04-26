@@ -66,11 +66,73 @@
           </button>
         </div>
 
+        <!-- Person details screen -->
+        <!-- User will enter his/her name and choose an avatar -->
+        <div class="m-t40 js-pi-wrapper">
+          <div class="p-20 br-5 bg-white bx-blue">
+            <h2 class="protest-guerrilla-regular d-flex d-y-center d-x-center">Your Name</h2>
+            <div class="m-t10 d-flex d-y-center d-x-center">
+              <input
+                type="text"
+                name="pi-name"
+                class="bx-blur p-10 js-pi-name-input"
+                placeholder="Enter your name"
+              />
+            </div>
+            <h2 class="protest-guerrilla-regular d-flex d-y-center d-x-center m-t30">
+              Your Avatar
+            </h2>
+            <div class="m-t10 d-flex d-y-center d-x-center d-x-space-around">
+              <div
+                data-avatar="male"
+                class="d-flex d-x-center d-y-center cr-pointer br-round bx-blur avatar js-avatar"
+              >
+                <img
+                  src="./assets/icon-avatar-boy.png"
+                  width="48"
+                  height="48"
+                  class=""
+                  alt="Avatar Boy"
+                />
+              </div>
+              <div
+                data-avatar="female"
+                class="d-flex d-x-center d-y-center cr-pointer br-round bx-blur avatar js-avatar"
+              >
+                <img
+                  src="./assets/icon-avatar-girl.png"
+                  width="48"
+                  height="48"
+                  class=""
+                  alt="Avatar Girl"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="m-t40 d-flex d-x-center js-pi-cta-buttons">
+            <button class="button d-flex d-y-center d-x-center m-r20 js-pi-back-btn">
+              <img
+                src="./assets/icon-back.png"
+                width="30"
+                height="30"
+                class=""
+                alt="PI Back icon"
+              />
+            </button>
+            <button
+              disabled
+              class="button protest-guerrilla-regular d-flex d-x-center d-y-center js-pi-next"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+
         <!-- Color selection screen -->
         <div class="js-cs-wrapper d-none">
-          <div class="m-t40 p-20 br-5 bg-white color-selection">
+          <div class="m-t40 p-20 br-5 bg-white bx-blue">
             <h2 class="protest-guerrilla-regular d-flex d-y-center d-x-center">
-              SELECT YOUR COLOR
+              Select Your Color
             </h2>
             <div class="m-t20 d-flex d-y-center d-x-center">
               <div

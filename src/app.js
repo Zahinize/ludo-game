@@ -1,7 +1,12 @@
 (function () {
   /** Set Global variables and cache DOM element refs **/
+  /** Onboarding: Selected token color **/
   let selectedColor = '';
   let computerColor = '';
+  /** Onboarding: User name and avatar info **/
+  let userName = '';
+  let userAvatar = '';
+  let userAvatarURL = '';
   let hasGameStarted = false;
   let isBgPlayStarted = false;
   const isMobileWidth = window.innerWidth <= 768;
@@ -16,6 +21,7 @@
     [BLUE_COLOR]: '#29ADFF',
     [YELLOW_COLOR]: '#DABC0F',
   };
+  /** DOM element Refs **/
   const vsComputerEl = document.getElementById('vs-computer');
   const colorSelectionList = document.querySelectorAll('.js-color-selection');
   const csContainerEl = document.querySelector('.js-cs-wrapper');
@@ -27,6 +33,9 @@
   const splashScreenEl = document.querySelector('.js-splashScreen');
   const appEl = document.querySelector('.js-app');
   const backgroundPlayEl = document.querySelector('.js-icon-bg-play');
+  const userNameInputEl = document.querySelector('.js-pi-name-input');
+  const userAvatarList = document.querySelectorAll('.js-avatar');
+  /** Image and Audio Refs **/
   const bgPlayIconPath = new URL('assets/icon-video-play.png', import.meta.url);
   const bgPauseIconPath = new URL('assets/icon-video-pause.png', import.meta.url);
   const gameMusicPath = new URL('assets/game-music.mp3', import.meta.url);
@@ -151,6 +160,22 @@
   function handlePageInteractionClick() {
     playAudio(interactionAudio);
   }
+  function handleUserNameInteraction(e) {
+    userName = e.target.value;
+  }
+  function handleUserAvatarClick(e) {
+    const el = e.currentTarget;
+
+    // Reset 'avatar-active' classname
+    document.querySelectorAll('.js-avatar').forEach((node) => {
+      node.classList.remove('avatar-active');
+    });
+    el.classList.add('avatar-active');
+    // Set user avatar
+    userAvatar = el.dataset['avatar'];
+    // Set user avatar URL
+    userAvatarURL = el.querySelector('img').getAttribute('src');
+  }
   function pauseAudio(audioRef) {
     audioRef.pause();
   }
@@ -169,6 +194,9 @@
     appBackBtnEl.addEventListener('click', handleAppBackBtnClick, false);
     playBtnEl.addEventListener('click', handlePlayBtnClick, false);
     backgroundPlayEl.addEventListener('click', handleBgPlayClick, false);
+    userNameInputEl.addEventListener('keypress', handleUserNameInteraction, false);
+    userNameInputEl.addEventListener('change', handleUserNameInteraction, false);
+    userAvatarList.forEach((el) => el.addEventListener('click', handleUserAvatarClick, false));
   }
 
   /*** Initialise Main Gameplay ***/

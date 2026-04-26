@@ -83,6 +83,9 @@ body {
 .m-t20 {
   margin-top: 20px !important;
 }
+.m-t30 {
+  margin-top: 30px !important;
+}
 .m-t40 {
   margin-top: 40px !important;
 }
@@ -193,6 +196,12 @@ body {
 }
 .color-dark-blue {
   color: var(--bgcolor-blue);
+}
+.bx-blue {
+  box-shadow: 0 0 0 5px var(--bgcolor-blue);
+}
+.bx-blur {
+  box-shadow: 0 0 5px 3px #e5e5e5;
 }
 .h-min {
   min-height: 100vh;
@@ -308,6 +317,13 @@ body {
   color: var(--color-white);
   height: 70px;
   width: 100%;
+}
+.avatar {
+  height: 50px;
+  width: 50px;
+}
+.avatar.avatar-active {
+  box-shadow: 0 0 0 5px var(--color-blue);
 }
 .game-wrapper {
   background: var(--color-white);
@@ -669,10 +685,6 @@ body {
 .image-hero > img {
   width: 500px;
   height: auto;
-}
-/* Color Selection */
-.color-selection {
-  box-shadow: 0 0 0 5px var(--bgcolor-blue);
 }
 .color-select {
   height: 35px;
