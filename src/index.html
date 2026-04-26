@@ -14,6 +14,8 @@
   </head>
   <body>
     <div class="h-min bg-primary dark-mode js-app-wrapper">
+      <!-- Splashscreen: First screen every user lands upon -->
+      <!-- This screen contains Header, Hero Image, and Game Mode Selection -->
       <div id="splashScreen" class="d-flex d-column d-y-center js-splashScreen">
         <header class="header d-flex d-x-space-between d-y-center">
           <div class="p-20"></div>
@@ -63,95 +65,105 @@
             VS Computer
           </button>
         </div>
-        <div class="m-t40 p-20 br-5 bg-white color-selection d-none js-cs-wrapper">
-          <h2 class="protest-guerrilla-regular d-flex d-y-center d-x-center">SELECT YOUR COLOR</h2>
-          <div class="m-t20 d-flex d-y-center d-x-center">
-            <div
-              data-flag="0"
-              data-color="blue"
-              class="d-flex d-column d-x-center d-y-center cr-pointer js-color-selection"
-            >
-              <img
-                width="60"
-                height="60"
-                src="./assets/icon-token-blue.png"
-                title="Blue token"
-                class=""
-              />
+
+        <!-- Color section screen -->
+        <div class="js-cs-wrapper d-none">
+          <div class="m-t40 p-20 br-5 bg-white color-selection">
+            <h2 class="protest-guerrilla-regular d-flex d-y-center d-x-center">
+              SELECT YOUR COLOR
+            </h2>
+            <div class="m-t20 d-flex d-y-center d-x-center">
               <div
-                class="color-select color-select-blue d-flex d-x-center d-y-center br-round m-t10"
+                data-flag="0"
+                data-color="blue"
+                class="d-flex d-column d-x-center d-y-center cr-pointer js-color-selection"
               >
-                <div class="color-select-check js-cs-check-blue"></div>
+                <img
+                  width="60"
+                  height="60"
+                  src="./assets/icon-token-blue.png"
+                  title="Blue token"
+                  class=""
+                />
+                <div
+                  class="color-select color-select-blue d-flex d-x-center d-y-center br-round m-t10"
+                >
+                  <div class="color-select-check js-cs-check-blue"></div>
+                </div>
               </div>
-            </div>
-            <div
-              data-flag="0"
-              data-color="red"
-              class="d-flex d-column d-x-center d-y-center cr-pointer js-color-selection"
-            >
-              <img
-                width="60"
-                height="60"
-                src="./assets/icon-token-red.png"
-                title="Red token"
-                class=""
-              />
               <div
-                class="color-select color-select-red d-flex d-x-center d-y-center br-round m-t10"
+                data-flag="0"
+                data-color="red"
+                class="d-flex d-column d-x-center d-y-center cr-pointer js-color-selection"
               >
-                <div class="color-select-check js-cs-check-red"></div>
+                <img
+                  width="60"
+                  height="60"
+                  src="./assets/icon-token-red.png"
+                  title="Red token"
+                  class=""
+                />
+                <div
+                  class="color-select color-select-red d-flex d-x-center d-y-center br-round m-t10"
+                >
+                  <div class="color-select-check js-cs-check-red"></div>
+                </div>
               </div>
-            </div>
-            <div
-              data-flag="0"
-              data-color="green"
-              class="d-flex d-column d-x-center d-y-center cr-pointer js-color-selection"
-            >
-              <img
-                width="60"
-                height="60"
-                src="./assets/icon-token-green.png"
-                title="Green token"
-                class=""
-              />
               <div
-                class="color-select color-select-green d-flex d-x-center d-y-center br-round m-t10"
+                data-flag="0"
+                data-color="green"
+                class="d-flex d-column d-x-center d-y-center cr-pointer js-color-selection"
               >
-                <div class="color-select-check js-cs-check-green"></div>
+                <img
+                  width="60"
+                  height="60"
+                  src="./assets/icon-token-green.png"
+                  title="Green token"
+                  class=""
+                />
+                <div
+                  class="color-select color-select-green d-flex d-x-center d-y-center br-round m-t10"
+                >
+                  <div class="color-select-check js-cs-check-green"></div>
+                </div>
               </div>
-            </div>
-            <div
-              data-flag="0"
-              data-color="yellow"
-              class="d-flex d-column d-x-center d-y-center cr-pointer js-color-selection"
-            >
-              <img
-                width="60"
-                height="60"
-                src="./assets/icon-token-yellow.png"
-                title="Yellow token"
-                class=""
-              />
               <div
-                class="color-select color-select-yellow d-flex d-x-center d-y-center br-round m-t10"
+                data-flag="0"
+                data-color="yellow"
+                class="d-flex d-column d-x-center d-y-center cr-pointer js-color-selection"
               >
-                <div class="color-select-check js-cs-check-yellow"></div>
+                <img
+                  width="60"
+                  height="60"
+                  src="./assets/icon-token-yellow.png"
+                  title="Yellow token"
+                  class=""
+                />
+                <div
+                  class="color-select color-select-yellow d-flex d-x-center d-y-center br-round m-t10"
+                >
+                  <div class="color-select-check js-cs-check-yellow"></div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="m-t40 d-flex d-none js-cta-buttons">
-          <button class="button d-flex d-y-center d-x-center m-r20 js-back-btn">
-            <img src="./assets/icon-back.png" width="30" height="30" class="" alt="Back icon" />
-          </button>
-          <button
-            disabled
-            class="button protest-guerrilla-regular d-flex d-x-center d-y-center js-play-btn"
-          >
-            PLAY
-          </button>
+          <div class="m-t40 d-flex d-x-center d-none js-cta-buttons">
+            <button class="button d-flex d-y-center d-x-center m-r20 js-back-btn">
+              <img src="./assets/icon-back.png" width="30" height="30" class="" alt="Back icon" />
+            </button>
+            <button
+              disabled
+              class="button protest-guerrilla-regular d-flex d-x-center d-y-center js-play-btn"
+            >
+              PLAY
+            </button>
+          </div>
         </div>
       </div>
+
+      <!-- Main application area -->
+      <!-- In this screen, the main game interface will be displayed. 
+       The user will be able to interact with the game board and make moves. -->
       <div id="app" class="d-flex d-column d-y-center d-none js-app">
         <header class="header d-flex d-x-space-between d-y-center">
           <button class="button d-flex d-y-center d-x-center p-10 m-l10 m-r20 js-app-back-btn">
@@ -517,6 +529,19 @@
             />
           </div>
         </div>
+      </div>
+
+      <!-- Credits section at the page bottom -->
+      <div id="credits" class="d-flex d-x-center m-b40 m-t50">
+        <h3 class="d-flex d-x-center d-y-center font-l color-dark-blue">
+          Made with <img class="m-l5 m-r5" width="20" height="20" src="./assets/heart.png" /> by
+          <a
+            href="https://www.linkedin.com/in/zahinalwa/"
+            target="_blank"
+            class="color-green font-w-b m-l5 txt-no-underline"
+            >Zahin.
+          </a>
+        </h3>
       </div>
     </div>
     <script type="module" src="./app.js"></script>

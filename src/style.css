@@ -86,6 +86,9 @@ body {
 .m-t40 {
   margin-top: 40px !important;
 }
+.m-t50 {
+  margin-top: 50px !important;
+}
 .m-r5 {
   margin-right: 5px !important;
 }
@@ -184,6 +187,12 @@ body {
 }
 .color-222 {
   color: var(--color-222);
+}
+.color-green {
+  color: var(--color-green);
+}
+.color-dark-blue {
+  color: var(--bgcolor-blue);
 }
 .h-min {
   min-height: 100vh;
