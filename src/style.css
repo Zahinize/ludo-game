@@ -318,6 +318,9 @@ body {
   height: 70px;
   width: 100%;
 }
+.input {
+  width: 200px;
+}
 .avatar {
   height: 50px;
   width: 50px;
