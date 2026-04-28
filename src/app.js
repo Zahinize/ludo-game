@@ -22,19 +22,28 @@
     [YELLOW_COLOR]: '#DABC0F',
   };
   /** DOM element Refs **/
-  const vsComputerEl = document.getElementById('vs-computer');
-  const colorSelectionList = document.querySelectorAll('.js-color-selection');
-  const csContainerEl = document.querySelector('.js-cs-wrapper');
-  const heroBtnContainerEl = document.querySelector('.js-hero-buttons');
-  const ctaButtonContainerEl = document.querySelector('.js-cta-buttons');
-  const backBtnEl = document.querySelector('.js-back-btn');
-  const appBackBtnEl = document.querySelector('.js-app-back-btn');
-  const playBtnEl = document.querySelector('.js-play-btn');
-  const splashScreenEl = document.querySelector('.js-splashScreen');
-  const appEl = document.querySelector('.js-app');
-  const backgroundPlayEl = document.querySelector('.js-icon-bg-play');
-  const userNameInputEl = document.querySelector('.js-pi-name-input');
-  const userAvatarList = document.querySelectorAll('.js-avatar');
+  const $q = (sel) => document.querySelector(sel);
+  const $qall = (sel) => document.querySelectorAll(sel);
+  const $id = (id) => document.getElementById(id);
+  /** Onboarding Splashscreen **/
+  const splashScreenEl = $q('.js-splashScreen');
+  const vsComputerEl = $id('vs-computer');
+  const heroBtnContainerEl = $q('.js-hero-buttons');
+  const backgroundPlayEl = $q('.js-icon-bg-play');
+  /** Onboarding screen: Color Selection **/
+  const colorSelectionList = $qall('.js-color-selection');
+  const csContainerEl = $q('.js-cs-wrapper');
+  const backBtnEl = $q('.js-back-btn');
+  const playBtnEl = $q('.js-play-btn');
+  /** Onboarding screen: Personal Information **/
+  const piWrapper = $q('.js-pi-wrapper');
+  const userNameInputEl = $q('.js-pi-name-input');
+  const userAvatarList = $qall('.js-avatar');
+  const piBackBtn = $q('.js-pi-back-btn');
+  const piNextBtn = $q('.js-pi-next');
+  /** Main App screen **/
+  const appBackBtnEl = $q('.js-app-back-btn');
+  const appEl = $q('.js-app');
   /** Image and Audio Refs **/
   const bgPlayIconPath = new URL('assets/icon-video-play.png', import.meta.url);
   const bgPauseIconPath = new URL('assets/icon-video-pause.png', import.meta.url);
@@ -45,6 +54,7 @@
   const gameAudio = new Audio(gameMusicPath);
   const interactionAudio = new Audio(interactionMusicPath);
 
+  /** Miscellaneous functions **/
   function getActiveColors(color) {
     if (color == '') return null;
     color = color.toLowerCase();
@@ -57,6 +67,37 @@
 
     return [color, colorSequence[computerColorIdx]];
   }
+  function togglePINextVisibility() {
+    if (userName && userAvatar && userAvatarURL) {
+      piNextBtn.disabled = false;
+      return;
+    }
+
+    piNextBtn.disabled = true;
+  }
+
+  /** Reset UI screens - State and UI **/
+  function resetPIScreen() {
+    // Reset state
+    userName = '';
+    userAvatar = '';
+    userAvatarURL = '';
+    // Reset UI
+    userNameInputEl.value = '';
+    $qall('.js-avatar').forEach((node) => {
+      node.classList.remove('avatar-active');
+    });
+    piNextBtn.disabled = true;
+  }
+  function resetColorSelectScreen() {
+    // Reset state
+    playBtnEl.disabled = true;
+    selectedColor = '';
+    // Reset all color selection nodes
+    colorSelectionList.forEach((selectionEl) => (selectionEl.dataset['flag'] = '0'));
+  }
+
+  /** Event Handlers **/
   function handleSelectionClick(e) {
     const el = e.currentTarget;
     // Toggle checkbox flag
@@ -80,21 +121,42 @@
   }
   function handleVSComputerClick() {
     heroBtnContainerEl.classList.add('d-none');
+    piWrapper.classList.remove('d-none');
+  }
+  function handlePIBackBtnClick() {
+    resetPIScreen();
+    // Toggle containers visibility
+    piWrapper.classList.add('d-none');
+    heroBtnContainerEl.classList.remove('d-none');
+  }
+  function setUserNameInputError() {
+    userName = '';
+    userNameInputEl.classList.add('bx-red');
+    userNameInputEl.focus();
+  }
+  function handlePINextBtnClick() {
+    // User name state validation
+    if (
+      !userName ||
+      userNameInputEl.value.trim() === '' ||
+      userName.length < 3 ||
+      userName.length > 12
+    ) {
+      alert('Please enter your user name between 3-12 characters.');
+      setUserNameInputError();
+      return false;
+    }
+
+    userNameInputEl.classList.remove('bx-red');
+    piWrapper.classList.add('d-none');
+    /** Color Selection Screen: Prepare this screen for the end user with a state and UI reset **/
+    resetColorSelectScreen();
     csContainerEl.classList.remove('d-none');
-    ctaButtonContainerEl.classList.remove('d-none');
-    playBtnEl.disabled = true;
-    selectedColor = '';
-    // Reset all color selection nodes
-    colorSelectionList.forEach((selectionEl) => (selectionEl.dataset['flag'] = '0'));
   }
   function handleBackBtnClick() {
-    playBtnEl.disabled = true;
-    selectedColor = '';
-    // Reset all color selection nodes
-    colorSelectionList.forEach((selectionEl) => (selectionEl.dataset['flag'] = '0'));
-    heroBtnContainerEl.classList.remove('d-none');
+    resetColorSelectScreen();
+    piWrapper.classList.remove('d-none');
     csContainerEl.classList.add('d-none');
-    ctaButtonContainerEl.classList.add('d-none');
   }
   function handlePlayBtnClick() {
     if (!selectedColor) {
@@ -115,10 +177,9 @@
     splashScreenEl.classList.remove('d-none');
     // Reset user onboarding
     csContainerEl.classList.add('d-none');
-    ctaButtonContainerEl.classList.add('d-none');
     heroBtnContainerEl.classList.remove('d-none');
     // Show all color tokens
-    document.querySelectorAll('.js-token').forEach((node) => {
+    $qall('.js-token').forEach((node) => {
       node.classList.remove('d-none');
       const computerClsName = Array.from(node.classList).find((item) =>
         item.includes('game-token-computer-'),
@@ -136,11 +197,10 @@
         node.classList.remove(userClsName);
       }
     });
-    playBtnEl.disabled = true;
-    selectedColor = '';
+    // Reset onboarding screens
+    resetColorSelectScreen();
+    resetPIScreen();
     computerColor = '';
-    // Reset all color selection nodes
-    colorSelectionList.forEach((selectionEl) => (selectionEl.dataset['flag'] = '0'));
   }
   function handleBgPlayClick(e) {
     const el = e.currentTarget;
@@ -162,12 +222,14 @@
   }
   function handleUserNameInteraction(e) {
     userName = e.target.value;
+    /** TODO: Implement a debounce function (~ 250 ms) to properly check the PI next button visibility */
+    togglePINextVisibility();
   }
   function handleUserAvatarClick(e) {
     const el = e.currentTarget;
 
     // Reset 'avatar-active' classname
-    document.querySelectorAll('.js-avatar').forEach((node) => {
+    $qall('.js-avatar').forEach((node) => {
       node.classList.remove('avatar-active');
     });
     el.classList.add('avatar-active');
@@ -175,7 +237,9 @@
     userAvatar = el.dataset['avatar'];
     // Set user avatar URL
     userAvatarURL = el.querySelector('img').getAttribute('src');
+    togglePINextVisibility();
   }
+
   function pauseAudio(audioRef) {
     audioRef.pause();
   }
@@ -194,6 +258,9 @@
     appBackBtnEl.addEventListener('click', handleAppBackBtnClick, false);
     playBtnEl.addEventListener('click', handlePlayBtnClick, false);
     backgroundPlayEl.addEventListener('click', handleBgPlayClick, false);
+    // Onboarding: Personal Info (user name and avatar) screen
+    piBackBtn.addEventListener('click', handlePIBackBtnClick, false);
+    piNextBtn.addEventListener('click', handlePINextBtnClick, false);
     userNameInputEl.addEventListener('keypress', handleUserNameInteraction, false);
     userNameInputEl.addEventListener('change', handleUserNameInteraction, false);
     userAvatarList.forEach((el) => el.addEventListener('click', handleUserAvatarClick, false));
@@ -204,42 +271,26 @@
     if (!colorsArr.length) return false;
 
     colorsArr.forEach((color) => {
-      document.querySelector(`.js-token-${color}-1`).classList.add('d-none');
-      document.querySelector(`.js-token-${color}-2`).classList.add('d-none');
-      document.querySelector(`.js-token-${color}-3`).classList.add('d-none');
-      document.querySelector(`.js-token-${color}-4`).classList.add('d-none');
+      $q(`.js-token-${color}-1`).classList.add('d-none');
+      $q(`.js-token-${color}-2`).classList.add('d-none');
+      $q(`.js-token-${color}-3`).classList.add('d-none');
+      $q(`.js-token-${color}-4`).classList.add('d-none');
     });
   }
   function updateGameTokenStyles(selectedColor = '', computerColor = '') {
     // Update game token positions for computer player
-    document
-      .querySelector(`.js-token.js-token-${computerColor}-1`)
-      .classList.add('game-token-computer-1');
-    document
-      .querySelector(`.js-token.js-token-${computerColor}-2`)
-      .classList.add('game-token-computer-2');
-    document
-      .querySelector(`.js-token.js-token-${computerColor}-3`)
-      .classList.add('game-token-computer-3');
-    document
-      .querySelector(`.js-token.js-token-${computerColor}-4`)
-      .classList.add('game-token-computer-4');
+    $q(`.js-token.js-token-${computerColor}-1`).classList.add('game-token-computer-1');
+    $q(`.js-token.js-token-${computerColor}-2`).classList.add('game-token-computer-2');
+    $q(`.js-token.js-token-${computerColor}-3`).classList.add('game-token-computer-3');
+    $q(`.js-token.js-token-${computerColor}-4`).classList.add('game-token-computer-4');
     // Update game token positions for user player
-    document
-      .querySelector(`.js-token.js-token-${selectedColor}-1`)
-      .classList.add('game-token-user-1');
-    document
-      .querySelector(`.js-token.js-token-${selectedColor}-2`)
-      .classList.add('game-token-user-2');
-    document
-      .querySelector(`.js-token.js-token-${selectedColor}-3`)
-      .classList.add('game-token-user-3');
-    document
-      .querySelector(`.js-token.js-token-${selectedColor}-4`)
-      .classList.add('game-token-user-4');
+    $q(`.js-token.js-token-${selectedColor}-1`).classList.add('game-token-user-1');
+    $q(`.js-token.js-token-${selectedColor}-2`).classList.add('game-token-user-2');
+    $q(`.js-token.js-token-${selectedColor}-3`).classList.add('game-token-user-3');
+    $q(`.js-token.js-token-${selectedColor}-4`).classList.add('game-token-user-4');
   }
   function updateGameFortStyles(selectedColor = '', computerColor = '', unusedColorsArr = []) {
-    const gameFortEl = document.querySelector('.js-game-fort');
+    const gameFortEl = $q('.js-game-fort');
     const borderTopColor = colorMap[computerColor];
     const borderRightColor = colorMap[unusedColorsArr[1]];
     const borderBottomColor = colorMap[selectedColor];
@@ -258,7 +309,7 @@
     gameFortEl.style.setProperty('--game-fort-br-left', `${borderWidth} solid ${borderLeftColor}`);
   }
   function updateGameHouseStyles(selector, newColor) {
-    const el = document.querySelector(selector);
+    const el = $q(selector);
     const newColorClsName = `bgcolor-${newColor}`;
     const currentColorClsName = Array.from(el.classList).find((item) => item.includes('bgcolor-'));
 
@@ -268,7 +319,7 @@
     });
   }
   function updateGameTrackStyles(selector, newColor) {
-    const el = document.querySelector(selector).querySelector('.track-dots');
+    const el = $q(selector).querySelector('.track-dots');
     const newColorClsName = `bgcolor-${newColor}`;
     const currentColorClsName = Array.from(el.classList).find((item) => item.includes('bgcolor-'));
 

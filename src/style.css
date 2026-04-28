@@ -101,6 +101,9 @@ body {
 .m-r20 {
   margin-right: 20px !important;
 }
+.m-r30 {
+  margin-right: 30px !important;
+}
 .m-r40 {
   margin-right: 40px !important;
 }
@@ -203,6 +206,9 @@ body {
 .bx-blur {
   box-shadow: 0 0 5px 3px #e5e5e5;
 }
+.bx-red {
+  box-shadow: 0 0 5px 3px var(--color-red);
+}
 .h-min {
   min-height: 100vh;
 }
@@ -225,7 +231,21 @@ body {
 .tr-all {
   transition: all 0.1s ease-in;
 }
+.shadow-pulse {
+  animation: shadow-pulse 1.5s infinite;
+}
+.ani-bounce {
+  animation: bounce 2s infinite;
+}
 /* Animations */
+@keyframes shadow-pulse {
+  0% {
+    box-shadow: 0 0 0 0px rgba(0, 123, 255, 0.7);
+  }
+  100% {
+    box-shadow: 0 0 0 20px rgba(0, 123, 255, 0);
+  }
+}
 @keyframes bounce {
   70% {
     transform: translateY(0%);
@@ -319,7 +339,7 @@ body {
   width: 100%;
 }
 .input {
-  width: 200px;
+  width: 250px;
 }
 .avatar {
   height: 50px;

@@ -52,7 +52,7 @@
             Online Multiplayer
           </button>
           <button
-            class="button protest-guerrilla-regular d-flex d-column d-y-center"
+            class="button protest-guerrilla-regular ani-bounce d-flex d-column d-y-center"
             id="vs-computer"
           >
             <img
@@ -68,24 +68,25 @@
 
         <!-- Person details screen -->
         <!-- User will enter his/her name and choose an avatar -->
-        <div class="m-t40 js-pi-wrapper">
+        <div class="m-t40 js-pi-wrapper d-none">
           <div class="p-20 br-5 bg-white bx-blue">
-            <h2 class="protest-guerrilla-regular d-flex d-y-center d-x-center">Your Name</h2>
+            <h2 class="protest-guerrilla-regular d-flex d-y-center d-x-center">Your User Name</h2>
             <div class="m-t10 d-flex d-y-center d-x-center">
               <input
                 type="text"
                 name="pi-name"
+                maxlength="12"
                 class="input bx-blur p-10 js-pi-name-input"
-                placeholder="Enter your name"
+                placeholder="Enter user name in 3-12 characters"
               />
             </div>
             <h2 class="protest-guerrilla-regular d-flex d-y-center d-x-center m-t30">
               Your Avatar
             </h2>
-            <div class="m-t10 d-flex d-y-center d-x-center d-x-space-around">
+            <div class="m-t10 d-flex d-y-center d-x-center">
               <div
                 data-avatar="male"
-                class="d-flex d-x-center d-y-center cr-pointer br-round bx-blur avatar js-avatar"
+                class="d-flex d-x-center d-y-center m-r30 cr-pointer br-round bx-blur avatar js-avatar"
               >
                 <img
                   src="./assets/icon-avatar-boy.png"
@@ -209,7 +210,7 @@
               </div>
             </div>
           </div>
-          <div class="m-t40 d-flex d-x-center d-none js-cta-buttons">
+          <div class="m-t40 d-flex d-x-center">
             <button class="button d-flex d-y-center d-x-center m-r20 js-back-btn">
               <img src="./assets/icon-back.png" width="30" height="30" class="" alt="Back icon" />
             </button>
