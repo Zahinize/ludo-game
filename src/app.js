@@ -69,11 +69,27 @@
   }
   function togglePINextVisibility() {
     if (userName && userAvatar && userAvatarURL) {
-      piNextBtn.disabled = false;
+      enablePINextBtn();
       return;
     }
 
+    disablePINextBtn();
+  }
+  function disablePINextBtn() {
     piNextBtn.disabled = true;
+    piNextBtn.classList.remove('ani-bounce');
+  }
+  function enablePINextBtn() {
+    piNextBtn.disabled = false;
+    piNextBtn.classList.add('ani-bounce');
+  }
+  function disablePlayBtn() {
+    playBtnEl.disabled = true;
+    playBtnEl.classList.remove('ani-bounce');
+  }
+  function enablePlayBtn() {
+    playBtnEl.disabled = false;
+    playBtnEl.classList.add('ani-bounce');
   }
 
   /** Reset UI screens - State and UI **/
@@ -87,11 +103,11 @@
     $qall('.js-avatar').forEach((node) => {
       node.classList.remove('avatar-active');
     });
-    piNextBtn.disabled = true;
+    disablePINextBtn();
   }
   function resetColorSelectScreen() {
     // Reset state
-    playBtnEl.disabled = true;
+    disablePlayBtn();
     selectedColor = '';
     // Reset all color selection nodes
     colorSelectionList.forEach((selectionEl) => (selectionEl.dataset['flag'] = '0'));
@@ -105,10 +121,10 @@
 
     el.dataset['flag'] = toggledFlag;
     if (toggledFlag) {
-      playBtnEl.disabled = false;
+      enablePlayBtn();
       selectedColor = el.dataset['color'];
     } else {
-      playBtnEl.disabled = true;
+      disablePlayBtn();
       selectedColor = '';
     }
     // Reset flags of other color selection nodes
@@ -144,6 +160,7 @@
     ) {
       alert('Please enter your user name between 3-12 characters.');
       setUserNameInputError();
+      piNextBtn.classList.remove('ani-bounce');
       return false;
     }
 
