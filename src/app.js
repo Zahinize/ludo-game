@@ -1,12 +1,15 @@
 (function () {
   /** Set Global variables and cache DOM element refs **/
+  const LS_USER_INFO_KEY = '_LH_D_';
+  const ls = window.localStorage;
   /** Onboarding: Selected token color **/
   let _selectedColor = '';
   let _computerColor = '';
   /** Onboarding: User name and avatar info **/
-  let _userName = '';
-  let _userAvatar = '';
-  let _userAvatarURL = '';
+  let _personalData = getStorage(LS_USER_INFO_KEY);
+  let _userName = _personalData?.userName || '';
+  let _userAvatar = _personalData?.userAvatar || '';
+  let _userAvatarURL = _personalData?.userAvatarURL || '';
   let _hasGameStarted = false;
   let _isBgPlayStarted = false;
   const _isMobileWidth = window.innerWidth <= 768;
@@ -21,8 +24,6 @@
     [BLUE_COLOR]: '#29ADFF',
     [YELLOW_COLOR]: '#DABC0F',
   };
-  const LS_USER_INFO_KEY = '_LH_D_';
-  const ls = window.localStorage;
   /** DOM element Refs **/
   const $q = (sel) => document.querySelector(sel);
   const $qall = (sel) => document.querySelectorAll(sel);
@@ -56,7 +57,7 @@
 
   /** Miscellaneous functions **/
   function getStorage(key) {
-    return ls.getItem(key);
+    return JSON.parse(ls.getItem(key));
   }
   function setStorage(key, value) {
     ls.setItem(key, value);
@@ -107,6 +108,22 @@
     playBtnEl.classList.add('ani-bounce');
   }
 
+  /** Populate PI Screen if localstorage data exists **/
+  function populatePIScreen() {
+    let piData = _personalData;
+    if (!piData?.userName || !piData?.userAvatar || !piData?.userAvatarURL) {
+      console.log('No personal data found in storage to populate PI screen.');
+      return false;
+    }
+
+    userNameInputEl.value = piData.userName;
+    const avatarEl = $q(`.js-avatar[data-avatar="${piData.userAvatar}"]`);
+    avatarEl
+      ? avatarEl.classList.add('avatar-active')
+      : console.log('No avatar element found to set active state.');
+    enablePINextBtn();
+  }
+
   /** Reset UI screens - State and UI **/
   function resetPIScreen() {
     // Reset state
@@ -155,7 +172,7 @@
     piWrapper.classList.remove('d-none');
   }
   function handlePIBackBtnClick() {
-    resetPIScreen();
+    // resetPIScreen();
     // Toggle containers visibility
     piWrapper.classList.add('d-none');
     heroBtnContainerEl.classList.remove('d-none');
@@ -231,7 +248,7 @@
     });
     // Reset onboarding screens
     resetColorSelectScreen();
-    resetPIScreen();
+    // resetPIScreen();
     _computerColor = '';
   }
   function handleBgPlayClick(e) {
@@ -412,4 +429,5 @@
 
   console.log('Ludo game JS loaded.');
   setDOMEvents();
+  populatePIScreen();
 })();
