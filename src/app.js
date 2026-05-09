@@ -48,9 +48,7 @@
   const bgPlayIconPath = new URL('assets/icon-video-play.png', import.meta.url);
   const bgPauseIconPath = new URL('assets/icon-video-pause.png', import.meta.url);
   const gameMusicPath = new URL('assets/game-music.mp3', import.meta.url);
-  const interactionMusicPath = new URL(
-    'https://zahinize.github.io/tic-tac-toe/player-o-click.908137e5.mp3',
-  );
+  const interactionMusicPath = new URL('assets/button-tap-sound.mp3', import.meta.url);
   const gameAudio = new Audio(gameMusicPath);
   const interactionAudio = new Audio(interactionMusicPath);
 
@@ -234,7 +232,10 @@
     playAudio(gameAudio, true);
     console.log('background play click:');
   }
-  function handlePageInteractionClick() {
+  function handlePageInteractionClick(e) {
+    const isSoundEl = e.target.classList.contains('js-sound') || e.target.closest('.js-sound');
+
+    if (!isSoundEl) return false;
     playAudio(interactionAudio);
   }
   function handleUserNameInteraction(e) {

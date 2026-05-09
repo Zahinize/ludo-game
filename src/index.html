@@ -26,7 +26,7 @@
             <img src="./assets/icon-logo.png" height="70" class="m-r5" alt="Main logo" />
             Ludo Hero
           </h1>
-          <div class="d-flex d-y-center d-x-center m-r20 cr-pointer js-icon-bg-play">
+          <div class="d-flex d-y-center d-x-center m-r20 cr-pointer js-icon-bg-play js-sound">
             <img
               src="./assets/icon-video-play.png"
               width="40"
@@ -55,7 +55,7 @@
             Online Multiplayer
           </button>
           <button
-            class="button protest-guerrilla-regular ani-bounce d-flex d-column d-y-center"
+            class="button protest-guerrilla-regular ani-bounce d-flex d-column d-y-center js-sound"
             id="vs-computer"
           >
             <img
@@ -79,7 +79,7 @@
                 type="text"
                 name="pi-name"
                 maxlength="12"
-                class="input font-l bx-blur p-10 js-pi-name-input"
+                class="input font-l bx-blur p-10 js-pi-name-input js-sound"
                 placeholder="Enter user name in 3-12 characters"
               />
             </div>
@@ -89,7 +89,7 @@
             <div class="m-t10 d-flex d-y-center d-x-center">
               <div
                 data-avatar="male"
-                class="d-flex d-x-center d-y-center m-r30 cr-pointer br-round bx-blur avatar js-avatar"
+                class="d-flex d-x-center d-y-center m-r30 cr-pointer br-round bx-blur avatar js-avatar js-sound"
               >
                 <img
                   src="./assets/icon-avatar-boy.png"
@@ -101,7 +101,7 @@
               </div>
               <div
                 data-avatar="female"
-                class="d-flex d-x-center d-y-center cr-pointer br-round bx-blur avatar js-avatar"
+                class="d-flex d-x-center d-y-center cr-pointer br-round bx-blur avatar js-avatar js-sound"
               >
                 <img
                   src="./assets/icon-avatar-girl.png"
@@ -113,7 +113,7 @@
               </div>
             </div>
           </div>
-          <div class="m-t40 d-flex d-x-center js-pi-cta-buttons">
+          <div class="m-t40 d-flex d-x-center js-pi-cta-buttons js-sound">
             <button class="button d-flex d-y-center d-x-center m-r20 js-pi-back-btn">
               <img
                 src="./assets/icon-back.png"
@@ -142,7 +142,7 @@
               <div
                 data-flag="0"
                 data-color="blue"
-                class="d-flex d-column d-x-center d-y-center cr-pointer js-color-selection"
+                class="d-flex d-column d-x-center d-y-center cr-pointer js-color-selection js-sound"
               >
                 <img
                   width="60"
@@ -160,7 +160,7 @@
               <div
                 data-flag="0"
                 data-color="red"
-                class="d-flex d-column d-x-center d-y-center cr-pointer js-color-selection"
+                class="d-flex d-column d-x-center d-y-center cr-pointer js-color-selection js-sound"
               >
                 <img
                   width="60"
@@ -178,7 +178,7 @@
               <div
                 data-flag="0"
                 data-color="green"
-                class="d-flex d-column d-x-center d-y-center cr-pointer js-color-selection"
+                class="d-flex d-column d-x-center d-y-center cr-pointer js-color-selection js-sound"
               >
                 <img
                   width="60"
@@ -196,7 +196,7 @@
               <div
                 data-flag="0"
                 data-color="yellow"
-                class="d-flex d-column d-x-center d-y-center cr-pointer js-color-selection"
+                class="d-flex d-column d-x-center d-y-center cr-pointer js-color-selection js-sound"
               >
                 <img
                   width="60"
@@ -214,12 +214,12 @@
             </div>
           </div>
           <div class="m-t40 d-flex d-x-center">
-            <button class="button d-flex d-y-center d-x-center m-r20 js-back-btn">
+            <button class="button d-flex d-y-center d-x-center m-r20 js-back-btn js-sound">
               <img src="./assets/icon-back.png" width="30" height="30" class="" alt="Back icon" />
             </button>
             <button
               disabled
-              class="button protest-guerrilla-regular d-flex d-x-center d-y-center js-play-btn"
+              class="button protest-guerrilla-regular d-flex d-x-center d-y-center js-play-btn js-sound"
             >
               PLAY
             </button>
@@ -232,7 +232,9 @@
        The user will be able to interact with the game board and make moves. -->
       <div id="app" class="d-flex d-column d-y-center d-none js-app">
         <header class="header d-flex d-x-space-between d-y-center">
-          <button class="button d-flex d-y-center d-x-center p-10 m-l10 m-r20 js-app-back-btn">
+          <button
+            class="button d-flex d-y-center d-x-center p-10 m-l10 m-r20 js-app-back-btn js-sound"
+          >
             <img src="./assets/icon-back.png" width="30" height="30" class="" alt="Back icon" />
           </button>
           <h1 class="d-flex d-y-center protest-guerrilla-regular color-white p-20 font-xl">
@@ -413,7 +415,7 @@
           </div>
           <!--Ludo game blue tokens-->
           <div
-            class="game-token game-token-blue-1 d-flex d-x-center d-y-center js-token js-token-blue-1"
+            class="game-token game-token-blue-1 d-flex d-x-center d-y-center js-token js-token-blue-1 js-sound"
           >
             <img
               srcset="./assets/icon-token-blue-30.png 30w, ./assets/icon-token-blue.png 60w"
@@ -424,7 +426,7 @@
             />
           </div>
           <div
-            class="game-token game-token-blue-2 d-flex d-x-center d-y-center js-token js-token-blue-2"
+            class="game-token game-token-blue-2 d-flex d-x-center d-y-center js-token js-token-blue-2 js-sound"
           >
             <img
               srcset="./assets/icon-token-blue-30.png 30w, ./assets/icon-token-blue.png 60w"
@@ -435,7 +437,7 @@
             />
           </div>
           <div
-            class="game-token game-token-blue-3 d-flex d-x-center d-y-center js-token js-token-blue-3"
+            class="game-token game-token-blue-3 d-flex d-x-center d-y-center js-token js-token-blue-3 js-sound"
           >
             <img
               srcset="./assets/icon-token-blue-30.png 30w, ./assets/icon-token-blue.png 60w"
@@ -446,7 +448,7 @@
             />
           </div>
           <div
-            class="game-token game-token-blue-4 d-flex d-x-center d-y-center js-token js-token-blue-4"
+            class="game-token game-token-blue-4 d-flex d-x-center d-y-center js-token js-token-blue-4 js-sound"
           >
             <img
               srcset="./assets/icon-token-blue-30.png 30w, ./assets/icon-token-blue.png 60w"
@@ -459,7 +461,7 @@
 
           <!--Ludo game red tokens-->
           <div
-            class="game-token game-token-red-1 d-flex d-x-center d-y-center js-token js-token-red-1"
+            class="game-token game-token-red-1 d-flex d-x-center d-y-center js-token js-token-red-1 js-sound"
           >
             <img
               srcset="./assets/icon-token-red-30.png 30w, ./assets/icon-token-red.png 60w"
@@ -470,7 +472,7 @@
             />
           </div>
           <div
-            class="game-token game-token-red-2 d-flex d-x-center d-y-center js-token js-token-red-2"
+            class="game-token game-token-red-2 d-flex d-x-center d-y-center js-token js-token-red-2 js-sound"
           >
             <img
               srcset="./assets/icon-token-red-30.png 30w, ./assets/icon-token-red.png 60w"
@@ -481,7 +483,7 @@
             />
           </div>
           <div
-            class="game-token game-token-red-3 d-flex d-x-center d-y-center js-token js-token-red-3"
+            class="game-token game-token-red-3 d-flex d-x-center d-y-center js-token js-token-red-3 js-sound"
           >
             <img
               srcset="./assets/icon-token-red-30.png 30w, ./assets/icon-token-red.png 60w"
@@ -492,7 +494,7 @@
             />
           </div>
           <div
-            class="game-token game-token-red-4 d-flex d-x-center d-y-center js-token js-token-red-4"
+            class="game-token game-token-red-4 d-flex d-x-center d-y-center js-token js-token-red-4 js-sound"
           >
             <img
               srcset="./assets/icon-token-red-30.png 30w, ./assets/icon-token-red.png 60w"
@@ -505,7 +507,7 @@
 
           <!--Ludo game yellow tokens-->
           <div
-            class="game-token game-token-yellow-1 d-flex d-x-center d-y-center js-token js-token-yellow-1"
+            class="game-token game-token-yellow-1 d-flex d-x-center d-y-center js-token js-token-yellow-1 js-sound"
           >
             <img
               srcset="./assets/icon-token-yellow-30.png 30w, ./assets/icon-token-yellow.png 60w"
@@ -516,7 +518,7 @@
             />
           </div>
           <div
-            class="game-token game-token-yellow-2 d-flex d-x-center d-y-center js-token js-token-yellow-2"
+            class="game-token game-token-yellow-2 d-flex d-x-center d-y-center js-token js-token-yellow-2 js-sound"
           >
             <img
               srcset="./assets/icon-token-yellow-30.png 30w, ./assets/icon-token-yellow.png 60w"
@@ -527,7 +529,7 @@
             />
           </div>
           <div
-            class="game-token game-token-yellow-3 d-flex d-x-center d-y-center js-token js-token-yellow-3"
+            class="game-token game-token-yellow-3 d-flex d-x-center d-y-center js-token js-token-yellow-3 js-sound"
           >
             <img
               srcset="./assets/icon-token-yellow-30.png 30w, ./assets/icon-token-yellow.png 60w"
@@ -538,7 +540,7 @@
             />
           </div>
           <div
-            class="game-token game-token-yellow-4 d-flex d-x-center d-y-center js-token js-token-yellow-4"
+            class="game-token game-token-yellow-4 d-flex d-x-center d-y-center js-token js-token-yellow-4 js-sound"
           >
             <img
               srcset="./assets/icon-token-yellow-30.png 30w, ./assets/icon-token-yellow.png 60w"
@@ -551,7 +553,7 @@
 
           <!--Ludo game green tokens-->
           <div
-            class="game-token game-token-green-1 d-flex d-x-center d-y-center js-token js-token-green-1"
+            class="game-token game-token-green-1 d-flex d-x-center d-y-center js-token js-token-green-1 js-sound"
           >
             <img
               srcset="./assets/icon-token-green-30.png 30w, ./assets/icon-token-green.png 60w"
@@ -562,7 +564,7 @@
             />
           </div>
           <div
-            class="game-token game-token-green-2 d-flex d-x-center d-y-center js-token js-token-green-2"
+            class="game-token game-token-green-2 d-flex d-x-center d-y-center js-token js-token-green-2 js-sound"
           >
             <img
               srcset="./assets/icon-token-green-30.png 30w, ./assets/icon-token-green.png 60w"
@@ -573,7 +575,7 @@
             />
           </div>
           <div
-            class="game-token game-token-green-3 d-flex d-x-center d-y-center js-token js-token-green-3"
+            class="game-token game-token-green-3 d-flex d-x-center d-y-center js-token js-token-green-3 js-sound"
           >
             <img
               srcset="./assets/icon-token-green-30.png 30w, ./assets/icon-token-green.png 60w"
@@ -584,7 +586,7 @@
             />
           </div>
           <div
-            class="game-token game-token-green-4 d-flex d-x-center d-y-center js-token js-token-green-4"
+            class="game-token game-token-green-4 d-flex d-x-center d-y-center js-token js-token-green-4 js-sound"
           >
             <img
               srcset="./assets/icon-token-green-30.png 30w, ./assets/icon-token-green.png 60w"
@@ -604,7 +606,7 @@
           <a
             href="https://www.linkedin.com/in/zahinalwa/"
             target="_blank"
-            class="color-green font-w-b m-l5 txt-no-underline"
+            class="color-green font-w-b m-l5 txt-no-underline js-sound"
             >Zahin.
           </a>
         </h3>
