@@ -1,15 +1,15 @@
 (function () {
   /** Set Global variables and cache DOM element refs **/
   /** Onboarding: Selected token color **/
-  let selectedColor = '';
-  let computerColor = '';
+  let _selectedColor = '';
+  let _computerColor = '';
   /** Onboarding: User name and avatar info **/
-  let userName = '';
-  let userAvatar = '';
-  let userAvatarURL = '';
-  let hasGameStarted = false;
-  let isBgPlayStarted = false;
-  const isMobileWidth = window.innerWidth <= 768;
+  let _userName = '';
+  let _userAvatar = '';
+  let _userAvatarURL = '';
+  let _hasGameStarted = false;
+  let _isBgPlayStarted = false;
+  const _isMobileWidth = window.innerWidth <= 768;
   const BLUE_COLOR = 'blue';
   const RED_COLOR = 'red';
   const GREEN_COLOR = 'green';
@@ -21,6 +21,8 @@
     [BLUE_COLOR]: '#29ADFF',
     [YELLOW_COLOR]: '#DABC0F',
   };
+  const LS_USER_INFO_KEY = '_LH_D_';
+  const ls = window.localStorage;
   /** DOM element Refs **/
   const $q = (sel) => document.querySelector(sel);
   const $qall = (sel) => document.querySelectorAll(sel);
@@ -53,6 +55,21 @@
   const interactionAudio = new Audio(interactionMusicPath);
 
   /** Miscellaneous functions **/
+  function getStorage(key) {
+    return ls.getItem(key);
+  }
+  function setStorage(key, value) {
+    ls.setItem(key, value);
+  }
+  function setUserInfoInStorage(key, _userName, _userAvatar, _userAvatarURL) {
+    const data = {
+      userName: _userName,
+      userAvatar: _userAvatar,
+      userAvatarURL: _userAvatarURL,
+    };
+
+    setStorage(key, JSON.stringify(data));
+  }
   function getActiveColors(color) {
     if (color == '') return null;
     color = color.toLowerCase();
@@ -66,7 +83,7 @@
     return [color, colorSequence[computerColorIdx]];
   }
   function togglePINextVisibility() {
-    if (userName && userAvatar && userAvatarURL) {
+    if (_userName && _userAvatar && _userAvatarURL) {
       enablePINextBtn();
       return;
     }
@@ -93,9 +110,9 @@
   /** Reset UI screens - State and UI **/
   function resetPIScreen() {
     // Reset state
-    userName = '';
-    userAvatar = '';
-    userAvatarURL = '';
+    _userName = '';
+    _userAvatar = '';
+    _userAvatarURL = '';
     // Reset UI
     userNameInputEl.value = '';
     $qall('.js-avatar').forEach((node) => {
@@ -106,7 +123,7 @@
   function resetColorSelectScreen() {
     // Reset state
     disablePlayBtn();
-    selectedColor = '';
+    _selectedColor = '';
     // Reset all color selection nodes
     colorSelectionList.forEach((selectionEl) => (selectionEl.dataset['flag'] = '0'));
   }
@@ -120,14 +137,14 @@
     el.dataset['flag'] = toggledFlag;
     if (toggledFlag) {
       enablePlayBtn();
-      selectedColor = el.dataset['color'];
+      _selectedColor = el.dataset['color'];
     } else {
       disablePlayBtn();
-      selectedColor = '';
+      _selectedColor = '';
     }
     // Reset flags of other color selection nodes
     colorSelectionList.forEach((selectionEl) => {
-      if (selectionEl.dataset['color'] === selectedColor) {
+      if (selectionEl.dataset['color'] === _selectedColor) {
         return;
       }
       selectionEl.dataset['flag'] = '0';
@@ -144,17 +161,17 @@
     heroBtnContainerEl.classList.remove('d-none');
   }
   function setUserNameInputError() {
-    userName = '';
+    _userName = '';
     userNameInputEl.classList.add('bx-red');
     userNameInputEl.focus();
   }
   function handlePINextBtnClick() {
     // User name state validation
     if (
-      !userName ||
+      !_userName ||
       userNameInputEl.value.trim() === '' ||
-      userName.length < 3 ||
-      userName.length > 12
+      _userName.length < 3 ||
+      _userName.length > 12
     ) {
       alert('Please enter your user name between 3-12 characters.');
       setUserNameInputError();
@@ -174,7 +191,7 @@
     csContainerEl.classList.add('d-none');
   }
   function handlePlayBtnClick() {
-    if (!selectedColor) {
+    if (!_selectedColor) {
       return false;
     }
 
@@ -187,7 +204,7 @@
       return false;
     }
 
-    hasGameStarted = false;
+    _hasGameStarted = false;
     appEl.classList.add('d-none');
     splashScreenEl.classList.remove('d-none');
     // Reset user onboarding
@@ -215,14 +232,14 @@
     // Reset onboarding screens
     resetColorSelectScreen();
     resetPIScreen();
-    computerColor = '';
+    _computerColor = '';
   }
   function handleBgPlayClick(e) {
     const el = e.currentTarget;
     const img = el.querySelector('.icon-bg-play');
 
-    isBgPlayStarted = !isBgPlayStarted;
-    if (!isBgPlayStarted) {
+    _isBgPlayStarted = !_isBgPlayStarted;
+    if (!_isBgPlayStarted) {
       img.src = bgPlayIconPath;
       pauseAudio(gameAudio);
       return;
@@ -239,7 +256,7 @@
     playAudio(interactionAudio);
   }
   function handleUserNameInteraction(e) {
-    userName = e.target.value;
+    _userName = e.target.value;
     /** TODO: Implement a debounce function (~ 250 ms) to properly check the PI next button visibility */
     togglePINextVisibility();
   }
@@ -252,9 +269,9 @@
     });
     el.classList.add('avatar-active');
     // Set user avatar
-    userAvatar = el.dataset['avatar'];
+    _userAvatar = el.dataset['avatar'];
     // Set user avatar URL
-    userAvatarURL = el.querySelector('img').getAttribute('src');
+    _userAvatarURL = el.querySelector('img').getAttribute('src');
     togglePINextVisibility();
   }
 
@@ -295,25 +312,25 @@
       $q(`.js-token-${color}-4`).classList.add('d-none');
     });
   }
-  function updateGameTokenStyles(selectedColor = '', computerColor = '') {
+  function updateGameTokenStyles(_selectedColor = '', _computerColor = '') {
     // Update game token positions for computer player
-    $q(`.js-token.js-token-${computerColor}-1`).classList.add('game-token-computer-1');
-    $q(`.js-token.js-token-${computerColor}-2`).classList.add('game-token-computer-2');
-    $q(`.js-token.js-token-${computerColor}-3`).classList.add('game-token-computer-3');
-    $q(`.js-token.js-token-${computerColor}-4`).classList.add('game-token-computer-4');
+    $q(`.js-token.js-token-${_computerColor}-1`).classList.add('game-token-computer-1');
+    $q(`.js-token.js-token-${_computerColor}-2`).classList.add('game-token-computer-2');
+    $q(`.js-token.js-token-${_computerColor}-3`).classList.add('game-token-computer-3');
+    $q(`.js-token.js-token-${_computerColor}-4`).classList.add('game-token-computer-4');
     // Update game token positions for user player
-    $q(`.js-token.js-token-${selectedColor}-1`).classList.add('game-token-user-1');
-    $q(`.js-token.js-token-${selectedColor}-2`).classList.add('game-token-user-2');
-    $q(`.js-token.js-token-${selectedColor}-3`).classList.add('game-token-user-3');
-    $q(`.js-token.js-token-${selectedColor}-4`).classList.add('game-token-user-4');
+    $q(`.js-token.js-token-${_selectedColor}-1`).classList.add('game-token-user-1');
+    $q(`.js-token.js-token-${_selectedColor}-2`).classList.add('game-token-user-2');
+    $q(`.js-token.js-token-${_selectedColor}-3`).classList.add('game-token-user-3');
+    $q(`.js-token.js-token-${_selectedColor}-4`).classList.add('game-token-user-4');
   }
-  function updateGameFortStyles(selectedColor = '', computerColor = '', unusedColorsArr = []) {
+  function updateGameFortStyles(_selectedColor = '', _computerColor = '', unusedColorsArr = []) {
     const gameFortEl = $q('.js-game-fort');
-    const borderTopColor = colorMap[computerColor];
+    const borderTopColor = colorMap[_computerColor];
     const borderRightColor = colorMap[unusedColorsArr[1]];
-    const borderBottomColor = colorMap[selectedColor];
+    const borderBottomColor = colorMap[_selectedColor];
     const borderLeftColor = colorMap[unusedColorsArr[0]];
-    const borderWidth = isMobileWidth ? '36px' : '75px';
+    const borderWidth = _isMobileWidth ? '36px' : '75px';
 
     gameFortEl.style.setProperty('--game-fort-br-top', `${borderWidth} solid ${borderTopColor}`);
     gameFortEl.style.setProperty(
@@ -344,44 +361,53 @@
     // Update game track colors for all players
     el.classList.replace(currentColorClsName, newColorClsName);
   }
-  function setupLayout(selectedColor = '', computerColor = '', unusedColorsArr = []) {
+  function setupLayout(_selectedColor = '', _computerColor = '', unusedColorsArr = []) {
     // Update game house colors for computer player
-    updateGameHouseStyles('.game-house:nth-of-type(2)', computerColor);
+    updateGameHouseStyles('.game-house:nth-of-type(2)', _computerColor);
     // Update game house colors for user player
-    updateGameHouseStyles('.game-house:nth-of-type(3)', selectedColor);
+    updateGameHouseStyles('.game-house:nth-of-type(3)', _selectedColor);
     // Update game house colors for unused top-left player
     updateGameHouseStyles('.game-house:nth-of-type(1)', unusedColorsArr[0]);
     // Update game house colors for unused bottom-right player
     updateGameHouseStyles('.game-house:nth-of-type(4)', unusedColorsArr[1]);
 
     // Update game track colors for computer player
-    updateGameTrackStyles('.game-track.game-track-top', computerColor);
+    updateGameTrackStyles('.game-track.game-track-top', _computerColor);
     // Update game track colors for user player
-    updateGameTrackStyles('.game-track.game-track-bottom', selectedColor);
+    updateGameTrackStyles('.game-track.game-track-bottom', _selectedColor);
     // Update game track colors for unused top-left player
     updateGameTrackStyles('.game-track.game-track-left', unusedColorsArr[0]);
     // Update game track colors for unused bottom-right player
     updateGameTrackStyles('.game-track.game-track-right', unusedColorsArr[1]);
 
     // Update game token styles
-    updateGameTokenStyles(selectedColor, computerColor);
+    updateGameTokenStyles(_selectedColor, _computerColor);
     // Update game fort styles
-    updateGameFortStyles(selectedColor, computerColor, unusedColorsArr);
+    updateGameFortStyles(_selectedColor, _computerColor, unusedColorsArr);
   }
   function initGamePlay() {
-    const activeColorsArr = getActiveColors(selectedColor);
+    const activeColorsArr = getActiveColors(_selectedColor);
     const unusedColorsArr = colorSequence.filter((item) => activeColorsArr.indexOf(item) === -1);
 
     splashScreenEl.classList.add('d-none');
     appEl.classList.remove('d-none');
     hideUnusedColorTokens(unusedColorsArr);
-    hasGameStarted = true;
-    computerColor = activeColorsArr[1];
-    setupLayout(selectedColor, computerColor, unusedColorsArr);
+    _hasGameStarted = true;
+    _computerColor = activeColorsArr[1];
+    setupLayout(_selectedColor, _computerColor, unusedColorsArr);
+    setUserInfoInStorage(LS_USER_INFO_KEY, _userName, _userAvatar, _userAvatarURL);
 
-    console.log('user color: ', selectedColor);
-    console.log('computer color: ', computerColor);
+    console.log('user color: ', _selectedColor);
+    console.log('computer color: ', _computerColor);
     console.log('unused colors: ', unusedColorsArr);
+    console.log(
+      'username: ',
+      _userName,
+      ', _userAvatar: ',
+      _userAvatar,
+      ', _userAvatarURL: ',
+      _userAvatarURL,
+    );
   }
 
   console.log('Ludo game JS loaded.');
