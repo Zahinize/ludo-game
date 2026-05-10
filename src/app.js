@@ -12,6 +12,29 @@
   let _userAvatarURL = _personalData?.userAvatarURL || '';
   let _hasGameStarted = false;
   let _isBgPlayStarted = false;
+  /** Computer avatars/villians **/
+  const computerAvatars = [
+    {
+      name: 'Alien',
+      url: new URL('assets/icon-avatar-alien.png', import.meta.url).pathname,
+    },
+    {
+      name: 'Anonymous',
+      url: new URL('assets/icon-avatar-anonymous.png', import.meta.url).pathname,
+    },
+    {
+      name: 'Iron Man',
+      url: new URL('assets/icon-avatar-ironman.png', import.meta.url).pathname,
+    },
+    {
+      name: 'Snowball',
+      url: new URL('assets/icon-avatar-snowball.png', import.meta.url).pathname,
+    },
+    {
+      name: 'Walter White',
+      url: new URL('assets/icon-avatar-walter-white.png', import.meta.url).pathname,
+    },
+  ];
   const _isMobileWidth = window.innerWidth <= 768;
   const BLUE_COLOR = 'blue';
   const RED_COLOR = 'red';
@@ -405,6 +428,8 @@
   function initGamePlay() {
     const activeColorsArr = getActiveColors(_selectedColor);
     const unusedColorsArr = colorSequence.filter((item) => activeColorsArr.indexOf(item) === -1);
+    const { name: computerAvatar = '', url: computerAvatarURL = '' } =
+      computerAvatars[Math.floor(Math.random() * 5)];
 
     splashScreenEl.classList.add('d-none');
     appEl.classList.remove('d-none');
@@ -425,6 +450,7 @@
       ', _userAvatarURL: ',
       _userAvatarURL,
     );
+    console.log('computer Avatar: ', computerAvatar, ', computer avatar URL: ', computerAvatarURL);
   }
 
   console.log('Ludo game JS loaded.');
