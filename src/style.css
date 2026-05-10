@@ -680,36 +680,36 @@ body {
 /** Game Token - Computer Position **/
 .game-token.game-token-computer-1 {
   left: 525px;
-  top: 75px;
+  top: 61px;
 }
 .game-token.game-token-computer-2 {
   left: 625px;
-  top: 75px;
+  top: 61px;
 }
 .game-token.game-token-computer-3 {
   left: 525px;
-  top: 175px;
+  top: 161px;
 }
 .game-token.game-token-computer-4 {
   left: 625px;
-  top: 175px;
+  top: 161px;
 }
 /** Game Token - User Position **/
 .game-token.game-token-user-1 {
   left: 75px;
-  top: 525px;
+  top: 511px;
 }
 .game-token.game-token-user-2 {
   left: 175px;
-  top: 525px;
+  top: 511px;
 }
 .game-token.game-token-user-3 {
   left: 75px;
-  top: 625px;
+  top: 611px;
 }
 .game-token.game-token-user-4 {
   left: 175px;
-  top: 625px;
+  top: 611px;
 }
 /** Splash Screen **/
 .image-hero > img {
