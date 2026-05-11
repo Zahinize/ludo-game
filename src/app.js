@@ -35,7 +35,7 @@
       url: new URL('assets/icon-avatar-walter-white.png', import.meta.url).pathname,
     },
   ];
-  const _isMobileWidth = window.innerWidth <= 768;
+  const _isTabletWidth = window.innerWidth <= 992;
   const BLUE_COLOR = 'blue';
   const RED_COLOR = 'red';
   const GREEN_COLOR = 'green';
@@ -370,7 +370,7 @@
     const borderRightColor = colorMap[unusedColorsArr[1]];
     const borderBottomColor = colorMap[_selectedColor];
     const borderLeftColor = colorMap[unusedColorsArr[0]];
-    const borderWidth = _isMobileWidth ? '36px' : '75px';
+    const borderWidth = _isTabletWidth ? '36px' : '75px';
 
     gameFortEl.style.setProperty('--game-fort-br-top', `${borderWidth} solid ${borderTopColor}`);
     gameFortEl.style.setProperty(

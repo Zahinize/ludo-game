@@ -364,14 +364,13 @@ body {
 }
 .app-avatar {
   position: absolute;
-  min-width: 150px;
 }
 .app-avatar.app-avatar-user {
   bottom: 0;
-  left: -170px;
+  left: -140px;
 }
 .app-avatar.app-avatar-computer {
-  right: -170px;
+  right: -140px;
 }
 .game-wrapper {
   background: var(--color-white);
@@ -794,10 +793,6 @@ body {
 }
 /* Tablet screen breakpoint */
 @media (max-width: 992px) {
-}
-
-/* Medium (md) screen breakpoint */
-@media (max-width: 768px) {
   /** Game responsive layout **/
   .image-hero > img {
     width: 300px;
@@ -1096,5 +1091,30 @@ body {
       24px -48px 0 var(--color-yellow),
       24px -72px 0 var(--color-yellow),
       24px -96px 0 var(--color-yellow);
+  }
+}
+
+/* Mobile screen breakpoint */
+@media (max-width: 768px) {
+  /* NOTE: Make vertical space for user & computer avatars on mobile screens */
+  .game-wrapper {
+    margin-top: 110px !important;
+    margin-bottom: 100px !important;
+  }
+  .app-avatar.app-avatar-user {
+    left: 0;
+    bottom: -110px;
+  }
+  .app-avatar.app-avatar-computer {
+    right: 0;
+    top: -95px;
+  }
+
+  .avatar-xl {
+    height: 58px;
+    width: 58px;
+  }
+  .sm\:font-l {
+    font-size: 16px !important;
   }
 }
