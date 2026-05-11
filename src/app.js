@@ -12,27 +12,46 @@
   let _userAvatarURL = _personalData?.userAvatarURL || '';
   let _hasGameStarted = false;
   let _isBgPlayStarted = false;
-  /** Computer avatars/villians **/
+  /** User & Computer avatars **/
+  const userAvatars = [
+    {
+      name: 'Boy',
+      gender: 'male',
+      url_48: new URL('assets/icon-avatar-boy.png', import.meta.url).pathname,
+      url_96: new URL('assets/icon-avatar-boy-96.png', import.meta.url).pathname,
+    },
+    {
+      name: 'Girl',
+      gender: 'female',
+      url_48: new URL('assets/icon-avatar-girl.png', import.meta.url).pathname,
+      url_96: new URL('assets/icon-avatar-girl-96.png', import.meta.url).pathname,
+    },
+  ];
   const computerAvatars = [
     {
       name: 'Alien',
-      url: new URL('assets/icon-avatar-alien.png', import.meta.url).pathname,
+      url_48: new URL('assets/icon-avatar-alien.png', import.meta.url).pathname,
+      url_96: new URL('assets/icon-avatar-alien-96.png', import.meta.url).pathname,
     },
     {
       name: 'Anonymous',
-      url: new URL('assets/icon-avatar-anonymous.png', import.meta.url).pathname,
+      url_48: new URL('assets/icon-avatar-anonymous.png', import.meta.url).pathname,
+      url_96: new URL('assets/icon-avatar-anonymous-96.png', import.meta.url).pathname,
     },
     {
       name: 'Iron Man',
-      url: new URL('assets/icon-avatar-ironman.png', import.meta.url).pathname,
+      url_48: new URL('assets/icon-avatar-ironman.png', import.meta.url).pathname,
+      url_96: new URL('assets/icon-avatar-ironman-96.png', import.meta.url).pathname,
     },
     {
       name: 'Snowball',
-      url: new URL('assets/icon-avatar-snowball.png', import.meta.url).pathname,
+      url_48: new URL('assets/icon-avatar-snowball.png', import.meta.url).pathname,
+      url_96: new URL('assets/icon-avatar-snowball-96.png', import.meta.url).pathname,
     },
     {
       name: 'Walter White',
-      url: new URL('assets/icon-avatar-walter-white.png', import.meta.url).pathname,
+      url_48: new URL('assets/icon-avatar-walter-white.png', import.meta.url).pathname,
+      url_96: new URL('assets/icon-avatar-walter-white-96.png', import.meta.url).pathname,
     },
   ];
   const _isTabletWidth = window.innerWidth <= 992;
@@ -70,6 +89,10 @@
   /** Main App screen **/
   const appBackBtnEl = $q('.js-app-back-btn');
   const appEl = $q('.js-app');
+  const userAvatarImgEl = $q('.js-avatar-user-img');
+  const userAvatarTxtEl = $q('.js-avatar-user-text');
+  const computerAvatarImgEl = $q('.js-avatar-computer-img');
+  const computerAvatarTxtEl = $q('.js-avatar-computer-text');
   /** Image and Audio Refs **/
   const bgPlayIconPath = new URL('assets/icon-video-play.png', import.meta.url);
   const bgPauseIconPath = new URL('assets/icon-video-pause.png', import.meta.url);
@@ -425,19 +448,48 @@
     // Update game fort styles
     updateGameFortStyles(_selectedColor, _computerColor, unusedColorsArr);
   }
+  function setupUserAvatar(name, gender) {
+    const {
+      name: avatarName = '',
+      url_48 = '',
+      url_96 = '',
+    } = userAvatars.find((avatar) => avatar.gender === gender);
+    const srcset = `${url_48} 48w, ${url_96} 96w`;
+    const imgAlt = `Avatar ${avatarName}`;
+
+    userAvatarImgEl.setAttribute('srcset', srcset);
+    userAvatarImgEl.setAttribute('src', url_96);
+    userAvatarImgEl.setAttribute('alt', imgAlt);
+    userAvatarTxtEl.textContent = name;
+  }
+  function setupComputerAvatar(name, url_48, url_96) {
+    const srcset = `${url_48} 48w, ${url_96} 96w`;
+    const imgAlt = `Avatar ${name}`;
+
+    computerAvatarImgEl.setAttribute('srcset', srcset);
+    computerAvatarImgEl.setAttribute('src', url_96);
+    computerAvatarImgEl.setAttribute('alt', imgAlt);
+    computerAvatarTxtEl.textContent = name;
+  }
   function initGamePlay() {
     const activeColorsArr = getActiveColors(_selectedColor);
     const unusedColorsArr = colorSequence.filter((item) => activeColorsArr.indexOf(item) === -1);
-    const { name: computerAvatar = '', url: computerAvatarURL = '' } =
-      computerAvatars[Math.floor(Math.random() * 5)];
+    const {
+      name: computerAvatar = '',
+      url_48: computerAvatarURL48 = '',
+      url_96: computerAvatarURL96 = '',
+    } = computerAvatars[Math.floor(Math.random() * 5)];
 
-    splashScreenEl.classList.add('d-none');
-    appEl.classList.remove('d-none');
     hideUnusedColorTokens(unusedColorsArr);
     _hasGameStarted = true;
     _computerColor = activeColorsArr[1];
     setupLayout(_selectedColor, _computerColor, unusedColorsArr);
     setUserInfoInStorage(LS_USER_INFO_KEY, _userName, _userAvatar, _userAvatarURL);
+    setupUserAvatar(_userName, _userAvatar);
+    setupComputerAvatar(computerAvatar, computerAvatarURL48, computerAvatarURL96);
+    // Hide Onboarding screen and show main App screen
+    splashScreenEl.classList.add('d-none');
+    appEl.classList.remove('d-none');
 
     console.log('user color: ', _selectedColor);
     console.log('computer color: ', _computerColor);
@@ -450,7 +502,12 @@
       ', _userAvatarURL: ',
       _userAvatarURL,
     );
-    console.log('computer Avatar: ', computerAvatar, ', computer avatar URL: ', computerAvatarURL);
+    console.log(
+      'computer Avatar: ',
+      computerAvatar,
+      ', computer avatar URL: ',
+      computerAvatarURL96,
+    );
   }
 
   console.log('Ludo game JS loaded.');
