@@ -1098,7 +1098,7 @@ body {
 @media (max-width: 768px) {
   /* NOTE: Make vertical space for user & computer avatars on mobile screens */
   .game-wrapper {
-    margin-top: 110px !important;
+    margin-top: 120px !important;
     margin-bottom: 100px !important;
   }
   .app-avatar.app-avatar-user {
