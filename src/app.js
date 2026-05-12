@@ -471,6 +471,29 @@
     computerAvatarImgEl.setAttribute('alt', imgAlt);
     computerAvatarTxtEl.textContent = name;
   }
+  /**
+   * Shows the "GAME START" animation once.
+   * Call this after onboarding is complete.
+   */
+  function showGameStartAnimation() {
+    const overlay = document.getElementById('game-start-overlay');
+
+    // Show overlay
+    overlay.classList.remove('hidden');
+
+    // Restart animation if called multiple times
+    overlay.classList.remove('show');
+    void overlay.offsetWidth; // Force reflow
+    overlay.classList.add('show');
+
+    // Hide overlay after animation completes
+    const DURATION = 2800; // Must match CSS animation duration
+    setTimeout(() => {
+      overlay.classList.remove('show');
+      overlay.classList.add('hidden');
+    }, DURATION);
+  }
+
   function initGamePlay() {
     const activeColorsArr = getActiveColors(_selectedColor);
     const unusedColorsArr = colorSequence.filter((item) => activeColorsArr.indexOf(item) === -1);
@@ -490,6 +513,8 @@
     // Hide Onboarding screen and show main App screen
     splashScreenEl.classList.add('d-none');
     appEl.classList.remove('d-none');
+    // Show Game start animation
+    showGameStartAnimation();
 
     console.log('user color: ', _selectedColor);
     console.log('computer color: ', _computerColor);

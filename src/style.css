@@ -278,6 +278,63 @@ body {
     transform: scale(1) translateY(0);
   }
 }
+/*
+Timeline:
+0–15%   Pop in
+15–60%  Blink 3 times
+60–100% Ease out and fade away
+*/
+@keyframes gameStartAnimation {
+  /* Pop in */
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  10% {
+    transform: scale(1.25);
+    opacity: 1;
+  }
+  15% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  /* Blink #1 */
+  22% {
+    opacity: 0;
+  }
+  28% {
+    opacity: 1;
+  }
+
+  /* Blink #2 */
+  35% {
+    opacity: 0;
+  }
+  41% {
+    opacity: 1;
+  }
+
+  /* Blink #3 */
+  48% {
+    opacity: 0;
+  }
+  54% {
+    opacity: 1;
+  }
+
+  /* Hold briefly */
+  65% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  /* Smooth easing out */
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
 
 /* Button classes */
 .button {
@@ -779,6 +836,39 @@ body {
 .color-select-yellow > .color-select-check {
   border-bottom-color: var(--color-yellow);
   border-right-color: var(--color-yellow);
+}
+/* Full-screen overlay */
+.game-start-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 99999;
+  pointer-events: none;
+}
+/* Hidden state */
+.game-start-overlay.hidden {
+  display: none;
+}
+/* Animated text */
+.game-start-text {
+  font-size: clamp(2.5rem, 8vw, 6rem);
+  font-weight: 900;
+  color: #ffd700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  text-shadow:
+    0 0 10px rgba(255, 215, 0, 0.8),
+    0 0 25px rgba(255, 120, 0, 0.6),
+    4px 4px 0 #b22222;
+  transform: scale(0.3);
+  opacity: 0;
+}
+/* Trigger this class from JavaScript */
+.game-start-overlay.show .game-start-text {
+  animation: gameStartAnimation 2.8s forwards;
 }
 
 /* Media Queries */
