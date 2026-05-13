@@ -98,8 +98,10 @@
   const bgPauseIconPath = new URL('assets/icon-video-pause.png', import.meta.url);
   const gameMusicPath = new URL('assets/game-music.mp3', import.meta.url);
   const interactionMusicPath = new URL('assets/button-tap-sound.mp3', import.meta.url);
+  const gameStartMusicPath = new URL('assets/game-start-sound.mp3', import.meta.url);
   const gameAudio = new Audio(gameMusicPath);
   const interactionAudio = new Audio(interactionMusicPath);
+  const gameStartAudio = new Audio(gameStartMusicPath);
 
   /** Miscellaneous functions **/
   function getStorage(key) {
@@ -515,6 +517,8 @@
     appEl.classList.remove('d-none');
     // Show Game start animation
     showGameStartAnimation();
+    gameStartAudio.currentTime = 0;
+    playAudio(gameStartAudio);
 
     console.log('user color: ', _selectedColor);
     console.log('computer color: ', _computerColor);
