@@ -10,8 +10,24 @@
   let _userName = _personalData?.userName || '';
   let _userAvatar = _personalData?.userAvatar || '';
   let _userAvatarURL = _personalData?.userAvatarURL || '';
-  let _hasGameStarted = false;
   let _isBgPlayStarted = false;
+  /** Main Gameplay **/
+  let gameState = {
+    hasGameStarted: false,
+    activeTurn: 'user', // which player has the current turn, user/computer
+    userDice: {
+      first: null,
+      second: null,
+    },
+    computerDice: {
+      first: null,
+      second: null,
+    },
+    userTokens: {},
+    computerTokens: {},
+    winner: null,
+  };
+
   /** User & Computer avatars **/
   const userAvatars = [
     {
@@ -269,7 +285,7 @@
       return false;
     }
 
-    _hasGameStarted = false;
+    gameState.hasGameStarted = false;
     appEl.classList.add('d-none');
     splashScreenEl.classList.remove('d-none');
     // Reset user onboarding
@@ -338,6 +354,12 @@
     // Set user avatar URL
     _userAvatarURL = el.querySelector('img').getAttribute('src');
     togglePINextVisibility();
+  }
+  function handleUserTokenClick(e) {
+    console.log('user token click: ', e.target);
+  }
+  function handleComputerTokenClick(e) {
+    console.log('computer token click: ', e.target);
   }
 
   function pauseAudio(audioRef) {
@@ -473,6 +495,123 @@
     computerAvatarImgEl.setAttribute('alt', imgAlt);
     computerAvatarTxtEl.textContent = name;
   }
+  function setUserTokens() {
+    const firstToken = $q('.game-token.game-token-user-1');
+    const secondToken = $q('.game-token.game-token-user-2');
+    const thirdToken = $q('.game-token.game-token-user-3');
+    const fourthToken = $q('.game-token.game-token-user-4');
+
+    gameState.userTokens = {
+      first: {
+        el: firstToken,
+        baseX: firstToken.getBoundingClientRect().left,
+        baseY: firstToken.getBoundingClientRect().top,
+        left: firstToken.getBoundingClientRect().left,
+        top: firstToken.getBoundingClientRect().top,
+        isClosed: true,
+        isOpen: false,
+        isSafe: false,
+        isReached: false,
+      },
+      second: {
+        el: secondToken,
+        baseX: secondToken.getBoundingClientRect().left,
+        baseY: secondToken.getBoundingClientRect().top,
+        left: secondToken.getBoundingClientRect().left,
+        top: secondToken.getBoundingClientRect().top,
+        isClosed: true,
+        isOpen: false,
+        isSafe: false,
+        isReached: false,
+      },
+      third: {
+        el: thirdToken,
+        baseX: thirdToken.getBoundingClientRect().left,
+        baseY: thirdToken.getBoundingClientRect().top,
+        left: thirdToken.getBoundingClientRect().left,
+        top: thirdToken.getBoundingClientRect().top,
+        isClosed: true,
+        isOpen: false,
+        isSafe: false,
+        isReached: false,
+      },
+      fourth: {
+        el: fourthToken,
+        baseX: fourthToken.getBoundingClientRect().left,
+        baseY: fourthToken.getBoundingClientRect().top,
+        left: fourthToken.getBoundingClientRect().left,
+        top: fourthToken.getBoundingClientRect().top,
+        isClosed: true,
+        isOpen: false,
+        isSafe: false,
+        isReached: false,
+      },
+    };
+
+    firstToken.addEventListener('click', handleUserTokenClick, false);
+    secondToken.addEventListener('click', handleUserTokenClick, false);
+    thirdToken.addEventListener('click', handleUserTokenClick, false);
+    fourthToken.addEventListener('click', handleUserTokenClick, false);
+  }
+  function setComputerTokens() {
+    const firstToken = $q('.game-token.game-token-computer-1');
+    const secondToken = $q('.game-token.game-token-computer-2');
+    const thirdToken = $q('.game-token.game-token-computer-3');
+    const fourthToken = $q('.game-token.game-token-computer-4');
+
+    gameState.computerTokens = {
+      first: {
+        el: firstToken,
+        baseX: firstToken.getBoundingClientRect().left,
+        baseY: firstToken.getBoundingClientRect().top,
+        left: firstToken.getBoundingClientRect().left,
+        top: firstToken.getBoundingClientRect().top,
+        isClosed: true,
+        isOpen: false,
+        isSafe: false,
+        isReached: false,
+      },
+      second: {
+        el: secondToken,
+        baseX: secondToken.getBoundingClientRect().left,
+        baseY: secondToken.getBoundingClientRect().top,
+        left: secondToken.getBoundingClientRect().left,
+        top: secondToken.getBoundingClientRect().top,
+        isClosed: true,
+        isOpen: false,
+        isSafe: false,
+        isReached: false,
+      },
+      third: {
+        el: thirdToken,
+        baseX: thirdToken.getBoundingClientRect().left,
+        baseY: thirdToken.getBoundingClientRect().top,
+        left: thirdToken.getBoundingClientRect().left,
+        top: thirdToken.getBoundingClientRect().top,
+        isClosed: true,
+        isOpen: false,
+        isSafe: false,
+        isReached: false,
+      },
+      fourth: {
+        el: fourthToken,
+        baseX: fourthToken.getBoundingClientRect().left,
+        baseY: fourthToken.getBoundingClientRect().top,
+        left: fourthToken.getBoundingClientRect().left,
+        top: fourthToken.getBoundingClientRect().top,
+        isClosed: true,
+        isOpen: false,
+        isSafe: false,
+        isReached: false,
+      },
+    };
+
+    firstToken.addEventListener('click', handleComputerTokenClick, false);
+    secondToken.addEventListener('click', handleComputerTokenClick, false);
+    thirdToken.addEventListener('click', handleComputerTokenClick, false);
+    fourthToken.addEventListener('click', handleComputerTokenClick, false);
+  }
+
   /**
    * Shows the "GAME START" animation once.
    * Call this after onboarding is complete.
@@ -506,7 +645,7 @@
     } = computerAvatars[Math.floor(Math.random() * 5)];
 
     hideUnusedColorTokens(unusedColorsArr);
-    _hasGameStarted = true;
+    gameState.hasGameStarted = true;
     _computerColor = activeColorsArr[1];
     setupLayout(_selectedColor, _computerColor, unusedColorsArr);
     setUserInfoInStorage(LS_USER_INFO_KEY, _userName, _userAvatar, _userAvatarURL);
@@ -519,23 +658,25 @@
     showGameStartAnimation();
     gameStartAudio.currentTime = 0;
     playAudio(gameStartAudio);
+    // Cache user and computer token details (DOM refs and states)
+    setUserTokens();
+    setComputerTokens();
 
     console.log('user color: ', _selectedColor);
     console.log('computer color: ', _computerColor);
     console.log('unused colors: ', unusedColorsArr);
-    console.log(
-      'username: ',
-      _userName,
-      ', _userAvatar: ',
-      _userAvatar,
-      ', _userAvatarURL: ',
-      _userAvatarURL,
-    );
+    console.log('username: ', _userName, ', _userAvatar: ', _userAvatar);
     console.log(
       'computer Avatar: ',
       computerAvatar,
       ', computer avatar URL: ',
       computerAvatarURL96,
+    );
+    console.log(
+      'user tokens: ',
+      gameState.userTokens,
+      ', computer tokens: ',
+      gameState.computerTokens,
     );
   }
 
