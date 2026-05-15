@@ -1,3 +1,25 @@
+@keyframes diceTumble {
+  0% {
+    transform: rotateX(-20deg) rotateY(25deg) rotateZ(0deg) translateY(0);
+  }
+
+  18% {
+    transform: rotateX(240deg) rotateY(180deg) rotateZ(90deg) translateY(-12px);
+  }
+
+  45% {
+    transform: rotateX(620deg) rotateY(520deg) rotateZ(180deg) translateY(-22px);
+  }
+
+  72% {
+    transform: rotateX(980deg) rotateY(860deg) rotateZ(300deg) translateY(-8px);
+  }
+
+  100% {
+    transform: rotateX(1260deg) rotateY(1080deg) rotateZ(360deg) translateY(0);
+  }
+}
+
 .roll-btn {
   border: 0;
   border-radius: 999px;
@@ -117,25 +139,60 @@
   width: 100%;
 }
 
-@keyframes diceTumble {
-  0% {
-    transform: rotateX(-20deg) rotateY(25deg) rotateZ(0deg) translateY(0);
+/* Tablet screen breakpoint */
+@media (max-width: 992px) {
+  .dice-user-container {
+    bottom: 140px;
+    left: -185px;
   }
-
-  18% {
-    transform: rotateX(240deg) rotateY(180deg) rotateZ(90deg) translateY(-12px);
+  .dice-computer-container {
+    top: 140px;
+    right: -185px;
   }
-
-  45% {
-    transform: rotateX(620deg) rotateY(520deg) rotateZ(180deg) translateY(-22px);
+  .dice {
+    --size: 56px;
   }
-
-  72% {
-    transform: rotateX(980deg) rotateY(860deg) rotateZ(300deg) translateY(-8px);
+  .dice-shadow {
+    width: 80px;
   }
-
-  100% {
-    transform: rotateX(1260deg) rotateY(1080deg) rotateZ(360deg) translateY(0);
+  .pip {
+    height: 8px;
+    width: 8px;
+  }
+}
+/* Mobile screen breakpoint */
+@media (max-width: 768px) {
+  .dice-user-container {
+    bottom: -130px;
+    left: 60px;
+  }
+  .dice-computer-container {
+    top: -123px;
+    right: 75px;
+  }
+  .dice-wrapper {
+    gap: 10px;
+    padding: 20px;
+  }
+  .dice-scene {
+    gap: 10px;
+  }
+  .dice {
+    --size: 46px;
+  }
+  .face {
+    border-radius: 14px;
+  }
+  .dice-shadow {
+    left: 5px;
+    top: -8px;
+    width: 70px;
+  }
+  .dice-shadow ~ .dice-shadow {
+    left: 45%;
+  }
+  .roll-btn {
+    font-size: 12px;
   }
 }
 
