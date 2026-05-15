@@ -1,7 +1,7 @@
 import DiceRoller from './dice';
+import { defaultGameState, LS_USER_INFO_KEY } from './constants';
 
 /** Set Global variables and cache DOM element refs **/
-const LS_USER_INFO_KEY = '_LH_D_';
 const ls = window.localStorage;
 /** Onboarding: Selected token color **/
 let _selectedColor = '';
@@ -13,21 +13,9 @@ let _userAvatar = _personalData?.userAvatar || '';
 let _userAvatarURL = _personalData?.userAvatarURL || '';
 let _isBgPlayStarted = false;
 /** Main Gameplay **/
-let gameState = {
-  hasGameStarted: false,
-  activeTurn: 'user', // which player has the current turn, user/computer
-  userDice: {
-    first: null,
-    second: null,
-  },
-  computerDice: {
-    first: null,
-    second: null,
-  },
-  userTokens: {},
-  computerTokens: {},
-  winner: null,
-};
+let gameState = structuredClone(defaultGameState);
+let _userDice = null;
+let _computerDice = null;
 
 /** User & Computer avatars **/
 const userAvatars = [
@@ -286,7 +274,15 @@ function handleAppBackBtnClick() {
     return false;
   }
 
-  gameState.hasGameStarted = false;
+  // Reset Game State
+  gameState = structuredClone(defaultGameState);
+  // Reset user dice refs and UI
+  _userDice.destroy();
+  _userDice = null;
+  // Reset computer dice refs and UI
+  _computerDice.destroy();
+  _computerDice = null;
+  // Hide App screen and show user onboarding screen
   appEl.classList.add('d-none');
   splashScreenEl.classList.remove('d-none');
   // Reset user onboarding
@@ -611,27 +607,27 @@ function setComputerTokens() {
 }
 function setupUserDice() {
   // Create the user dice instance with selectors
-  const roller = new DiceRoller('User Dice', 'dice1', 'dice2', 'dice-roll-btn', 'dice-roll-audio');
-  roller.buildDice(roller.dice1);
-  roller.buildDice(roller.dice2);
-  roller.setDiceValue(roller.dice1);
-  roller.setDiceValue(roller.dice2);
-  roller.attachRollBtnClick();
+  _userDice = new DiceRoller('User Dice', 'dice1', 'dice2', 'dice-roll-btn', 'dice-roll-audio');
+  _userDice.buildDice(_userDice.dice1);
+  _userDice.buildDice(_userDice.dice2);
+  _userDice.setDiceValue(_userDice.dice1);
+  _userDice.setDiceValue(_userDice.dice2);
+  _userDice.attachRollBtn();
 }
 function setupComputerDice() {
   // Create the computer dice instance with selectors
-  const roller2 = new DiceRoller(
+  _computerDice = new DiceRoller(
     'Computer Dice',
     'dice3',
     'dice4',
     'dice-roll-btn-2',
     'dice-roll-audio-2',
   );
-  roller2.buildDice(roller2.dice1);
-  roller2.buildDice(roller2.dice2);
-  roller2.setDiceValue(roller2.dice1);
-  roller2.setDiceValue(roller2.dice2);
-  roller2.attachRollBtnClick();
+  _computerDice.buildDice(_computerDice.dice1);
+  _computerDice.buildDice(_computerDice.dice2);
+  _computerDice.setDiceValue(_computerDice.dice1);
+  _computerDice.setDiceValue(_computerDice.dice2);
+  _computerDice.attachRollBtn();
 }
 
 /**

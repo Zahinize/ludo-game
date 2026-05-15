@@ -146,7 +146,6 @@ function rollBothDice(dice1, dice2, audioEl, callback = (payload) => console.log
       total: dice1Value + dice2Value,
     };
 
-    console.log('Rolled:', payload);
     callback(payload);
   }, 950);
 }
@@ -154,27 +153,64 @@ function rollBothDice(dice1, dice2, audioEl, callback = (payload) => console.log
 class DiceRoller {
   constructor(name, dice1Sel, dice2Sel, rollBtnSel, rollAudioSel) {
     this.name = name;
+    this.rollBtnId = rollBtnSel;
     this.dice1 = document.getElementById(dice1Sel);
     this.dice2 = document.getElementById(dice2Sel);
-    this.rollBtn = document.getElementById(rollBtnSel);
     this.rollAudio = document.getElementById(rollAudioSel);
+
+    // Create ONE stable bound handler
+    this._boundHandleRollBtnClick = this.handleRollBtnClick.bind(this);
+    this.rollBtn = null;
   }
+
   buildDice(diceEl) {
     buildDice(diceEl);
   }
+
   setDiceValue(diceEl) {
     setDiceValue(diceEl, 1);
   }
-  attachRollBtnClick() {
-    const ref = this;
-    // Button hook
-    ref.rollBtn.addEventListener('click', () => {
-      ref.rollBtn.disabled = true; // Prevent spamming rolls
-      rollBothDice(ref.dice1, ref.dice2, ref.rollAudio, ({ dice1, dice2, total }) => {
-        ref.rollBtn.disabled = false;
-        console.log(`${ref.name}: ${dice1}, Dice 2: ${dice2}, Total: ${total}`);
-      });
+
+  handleRollBtnClick() {
+    this.rollBtn.disabled = true;
+
+    rollBothDice(this.dice1, this.dice2, this.rollAudio, ({ dice1, dice2, total }) => {
+      this.rollBtn.disabled = false;
+      console.log(`${this.name}: ${dice1}, ${dice2}, Total: ${total}`);
     });
+  }
+
+  attachRollBtn() {
+    this.rollBtn = document.getElementById(this.rollBtnId);
+
+    if (!this.rollBtn) return;
+    this.rollBtn.addEventListener('click', this._boundHandleRollBtnClick, false);
+  }
+
+  detachRollBtn() {
+    if (!this.rollBtn) return;
+
+    this.rollBtn.removeEventListener('click', this._boundHandleRollBtnClick, false);
+  }
+
+  destroy() {
+    // Remove event listener first
+    this.detachRollBtn();
+
+    // Clear DOM references
+    if (this.dice1) {
+      this.dice1.innerHTML = '';
+      this.dice1 = null;
+    }
+
+    if (this.dice2) {
+      this.dice2.innerHTML = '';
+      this.dice2 = null;
+    }
+
+    this.rollBtn = null;
+    this.rollAudio = null;
+    this._boundHandleRollBtnClick = null;
   }
 }
 
