@@ -1,0 +1,148 @@
+.roll-btn {
+  border: 0;
+  border-radius: 999px;
+  padding: 12px 24px;
+  font:
+    700 15px/1 system-ui,
+    sans-serif;
+  color: #fff;
+  cursor: pointer;
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+  box-shadow: 0 12px 28px rgba(37, 99, 235, 0.28);
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+.roll-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 34px rgba(37, 99, 235, 0.34);
+}
+.roll-btn:active {
+  transform: scale(0.98);
+}
+.roll-btn:disabled {
+  opacity: 0.5;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.dice-wrapper {
+  display: grid;
+  /* place-items: center; */
+  gap: 15px;
+  padding: 30px;
+}
+.dice-scene {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  perspective: none;
+  perspective-origin: center -40px;
+}
+
+.dice-shadow {
+  left: 12px;
+  position: absolute;
+  width: 100px;
+  height: 24px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.25), transparent 70%);
+  filter: blur(4px);
+  transform: translateY(64px);
+  pointer-events: none;
+  top: 25px;
+}
+.dice-shadow ~ .dice-shadow {
+  left: 50%;
+}
+.dice {
+  --size: 66px;
+  --half: calc(var(--size) / 2);
+  position: relative;
+  width: var(--size);
+  height: var(--size);
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: transform 0.95s cubic-bezier(0.22, 0.85, 0.18, 1);
+}
+.face {
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  /* Smooth beveled edges */
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.95), transparent 35%),
+    linear-gradient(145deg, #ffffff 0%, #f6f8fb 55%, #e7edf5 100%);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  box-shadow:
+    inset 0 2px 4px rgba(255, 255, 255, 0.9),
+    inset 0 -8px 14px rgba(15, 23, 42, 0.05),
+    0 2px 4px rgba(15, 23, 42, 0.06);
+  backface-visibility: hidden;
+}
+.face.front {
+  transform: rotateY(0deg) translateZ(var(--half));
+}
+.face.back {
+  transform: rotateY(180deg) translateZ(var(--half));
+}
+.face.right {
+  transform: rotateY(90deg) translateZ(var(--half));
+}
+.face.left {
+  transform: rotateY(-90deg) translateZ(var(--half));
+}
+.face.top {
+  transform: rotateX(90deg) translateZ(var(--half));
+}
+.face.bottom {
+  transform: rotateX(-90deg) translateZ(var(--half));
+}
+.pip {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #2f2f2f 0%, #111 60%, #000 100%);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.12),
+    0 1px 2px rgba(0, 0, 0, 0.25);
+  transform: translate(-50%, -50%);
+}
+.dice.rolling {
+  animation: diceTumble 0.95s cubic-bezier(0.22, 0.85, 0.18, 1);
+}
+.spacer {
+  height: 25vh;
+  width: 100%;
+}
+
+@keyframes diceTumble {
+  0% {
+    transform: rotateX(-20deg) rotateY(25deg) rotateZ(0deg) translateY(0);
+  }
+
+  18% {
+    transform: rotateX(240deg) rotateY(180deg) rotateZ(90deg) translateY(-12px);
+  }
+
+  45% {
+    transform: rotateX(620deg) rotateY(520deg) rotateZ(180deg) translateY(-22px);
+  }
+
+  72% {
+    transform: rotateX(980deg) rotateY(860deg) rotateZ(300deg) translateY(-8px);
+  }
+
+  100% {
+    transform: rotateX(1260deg) rotateY(1080deg) rotateZ(360deg) translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dice,
+  .dice.rolling {
+    animation: none !important;
+    transition: none !important;
+  }
+}

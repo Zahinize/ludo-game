@@ -427,7 +427,7 @@ Timeline:
   left: -140px;
 }
 .app-avatar.app-avatar-computer {
-  right: -140px;
+  right: -150px;
 }
 .game-wrapper {
   background: var(--color-white);
@@ -869,6 +869,17 @@ Timeline:
 /* Trigger this class from JavaScript */
 .game-start-overlay.show .game-start-text {
   animation: gameStartAnimation 2.8s forwards;
+}
+/* Dice UI */
+.dice-user-container {
+  bottom: 150px;
+  left: -205px;
+  position: absolute;
+}
+.dice-computer-container {
+  position: absolute;
+  right: -205px;
+  top: 150px;
 }
 
 /* Media Queries */

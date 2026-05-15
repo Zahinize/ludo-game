@@ -13,7 +13,7 @@
       href="https://fonts.googleapis.com/css2?family=Protest+Guerrilla&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="./css/main.css" />
   </head>
   <body>
     <div class="d-flex d-column h-min bg-primary js-app-wrapper">
@@ -596,6 +596,39 @@
               class="js-green-4"
             />
           </div>
+
+          <!--Dice User & Computer UI-->
+          <div class="dice-user-container">
+            <div class="dice-wrapper">
+              <div class="dice-scene">
+                <div class="dice-shadow"></div>
+                <div class="dice" id="dice1"></div>
+                <div class="dice-shadow"></div>
+                <div class="dice" id="dice2"></div>
+              </div>
+              <button id="dice-roll-btn" class="roll-btn">Roll Dice</button>
+              <audio id="dice-roll-audio" preload="auto">
+                <source src="./assets/ludo_roll_sound.mp3" type="audio/mpeg" />
+              </audio>
+            </div>
+          </div>
+          <div class="dice-computer-container">
+            <div class="dice-wrapper">
+              <div class="dice-scene">
+                <div class="dice-shadow"></div>
+                <div class="dice" id="dice3"></div>
+                <div class="dice-shadow"></div>
+                <div class="dice" id="dice4"></div>
+              </div>
+              <button id="dice-roll-btn-2" class="roll-btn">Roll Dice</button>
+
+              <audio id="dice-roll-audio-2" preload="auto">
+                <source src="./assets/ludo_roll_sound.mp3" type="audio/mpeg" />
+              </audio>
+            </div>
+          </div>
+
+          <!--App user and computer UI-->
           <div class="app-avatar app-avatar-user d-flex d-column d-y-center js-avatar-user">
             <div class="d-flex d-x-center d-y-center br-round bg-white bx-blue avatar-xl">
               <img
@@ -615,9 +648,12 @@
           <div class="app-avatar app-avatar-computer d-flex d-column d-y-center js-avatar-computer">
             <div class="d-flex d-x-center d-y-center br-round bg-white bx-blue avatar-xl">
               <img
-                srcset="./assets/icon-avatar-girl.png 48w, ./assets/icon-avatar-girl-96.png 96w"
+                srcset="
+                  ./assets/icon-avatar-ironman.png    48w,
+                  ./assets/icon-avatar-ironman-96.png 96w
+                "
                 sizes="(width <= 768px) 48px, 96px"
-                src="./assets/icon-avatar-girl-96.png"
+                src="./assets/icon-avatar-ironman-96.png"
                 class="js-avatar-computer-img"
                 alt="Avatar Girl"
               />

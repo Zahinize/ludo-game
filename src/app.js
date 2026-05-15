@@ -1,686 +1,705 @@
-(function () {
-  /** Set Global variables and cache DOM element refs **/
-  const LS_USER_INFO_KEY = '_LH_D_';
-  const ls = window.localStorage;
-  /** Onboarding: Selected token color **/
-  let _selectedColor = '';
-  let _computerColor = '';
-  /** Onboarding: User name and avatar info **/
-  let _personalData = getStorage(LS_USER_INFO_KEY);
-  let _userName = _personalData?.userName || '';
-  let _userAvatar = _personalData?.userAvatar || '';
-  let _userAvatarURL = _personalData?.userAvatarURL || '';
-  let _isBgPlayStarted = false;
-  /** Main Gameplay **/
-  let gameState = {
-    hasGameStarted: false,
-    activeTurn: 'user', // which player has the current turn, user/computer
-    userDice: {
-      first: null,
-      second: null,
-    },
-    computerDice: {
-      first: null,
-      second: null,
-    },
-    userTokens: {},
-    computerTokens: {},
-    winner: null,
+import DiceRoller from './dice';
+
+/** Set Global variables and cache DOM element refs **/
+const LS_USER_INFO_KEY = '_LH_D_';
+const ls = window.localStorage;
+/** Onboarding: Selected token color **/
+let _selectedColor = '';
+let _computerColor = '';
+/** Onboarding: User name and avatar info **/
+let _personalData = getStorage(LS_USER_INFO_KEY);
+let _userName = _personalData?.userName || '';
+let _userAvatar = _personalData?.userAvatar || '';
+let _userAvatarURL = _personalData?.userAvatarURL || '';
+let _isBgPlayStarted = false;
+/** Main Gameplay **/
+let gameState = {
+  hasGameStarted: false,
+  activeTurn: 'user', // which player has the current turn, user/computer
+  userDice: {
+    first: null,
+    second: null,
+  },
+  computerDice: {
+    first: null,
+    second: null,
+  },
+  userTokens: {},
+  computerTokens: {},
+  winner: null,
+};
+
+/** User & Computer avatars **/
+const userAvatars = [
+  {
+    name: 'Boy',
+    gender: 'male',
+    url_48: new URL('assets/icon-avatar-boy.png', import.meta.url).pathname,
+    url_96: new URL('assets/icon-avatar-boy-96.png', import.meta.url).pathname,
+  },
+  {
+    name: 'Girl',
+    gender: 'female',
+    url_48: new URL('assets/icon-avatar-girl.png', import.meta.url).pathname,
+    url_96: new URL('assets/icon-avatar-girl-96.png', import.meta.url).pathname,
+  },
+];
+const computerAvatars = [
+  {
+    name: 'Alien',
+    url_48: new URL('assets/icon-avatar-alien.png', import.meta.url).pathname,
+    url_96: new URL('assets/icon-avatar-alien-96.png', import.meta.url).pathname,
+  },
+  {
+    name: 'Anonymous',
+    url_48: new URL('assets/icon-avatar-anonymous.png', import.meta.url).pathname,
+    url_96: new URL('assets/icon-avatar-anonymous-96.png', import.meta.url).pathname,
+  },
+  {
+    name: 'Iron Man',
+    url_48: new URL('assets/icon-avatar-ironman.png', import.meta.url).pathname,
+    url_96: new URL('assets/icon-avatar-ironman-96.png', import.meta.url).pathname,
+  },
+  {
+    name: 'Snowball',
+    url_48: new URL('assets/icon-avatar-snowball.png', import.meta.url).pathname,
+    url_96: new URL('assets/icon-avatar-snowball-96.png', import.meta.url).pathname,
+  },
+  {
+    name: 'Walter White',
+    url_48: new URL('assets/icon-avatar-walter-white.png', import.meta.url).pathname,
+    url_96: new URL('assets/icon-avatar-walter-white-96.png', import.meta.url).pathname,
+  },
+];
+const _isTabletWidth = window.innerWidth <= 992;
+const BLUE_COLOR = 'blue';
+const RED_COLOR = 'red';
+const GREEN_COLOR = 'green';
+const YELLOW_COLOR = 'yellow';
+const colorSequence = [BLUE_COLOR, RED_COLOR, GREEN_COLOR, YELLOW_COLOR];
+const colorMap = {
+  [RED_COLOR]: '#EA1D23',
+  [GREEN_COLOR]: '#00A347',
+  [BLUE_COLOR]: '#29ADFF',
+  [YELLOW_COLOR]: '#DABC0F',
+};
+/** DOM element Refs **/
+const $q = (sel) => document.querySelector(sel);
+const $qall = (sel) => document.querySelectorAll(sel);
+const $id = (id) => document.getElementById(id);
+/** Onboarding Splashscreen **/
+const splashScreenEl = $q('.js-splashScreen');
+const vsComputerEl = $id('vs-computer');
+const heroBtnContainerEl = $q('.js-hero-buttons');
+const backgroundPlayEl = $q('.js-icon-bg-play');
+/** Onboarding screen: Color Selection **/
+const colorSelectionList = $qall('.js-color-selection');
+const csContainerEl = $q('.js-cs-wrapper');
+const backBtnEl = $q('.js-back-btn');
+const playBtnEl = $q('.js-play-btn');
+/** Onboarding screen: Personal Information **/
+const piWrapper = $q('.js-pi-wrapper');
+const userNameInputEl = $q('.js-pi-name-input');
+const userAvatarList = $qall('.js-avatar');
+const piBackBtn = $q('.js-pi-back-btn');
+const piNextBtn = $q('.js-pi-next');
+/** Main App screen **/
+const appBackBtnEl = $q('.js-app-back-btn');
+const appEl = $q('.js-app');
+const userAvatarImgEl = $q('.js-avatar-user-img');
+const userAvatarTxtEl = $q('.js-avatar-user-text');
+const computerAvatarImgEl = $q('.js-avatar-computer-img');
+const computerAvatarTxtEl = $q('.js-avatar-computer-text');
+/** Image and Audio Refs **/
+const bgPlayIconPath = new URL('assets/icon-video-play.png', import.meta.url);
+const bgPauseIconPath = new URL('assets/icon-video-pause.png', import.meta.url);
+const gameMusicPath = new URL('assets/game-music.mp3', import.meta.url);
+const interactionMusicPath = new URL('assets/button-tap-sound.mp3', import.meta.url);
+const gameStartMusicPath = new URL('assets/game-start-sound.mp3', import.meta.url);
+const gameAudio = new Audio(gameMusicPath);
+const interactionAudio = new Audio(interactionMusicPath);
+const gameStartAudio = new Audio(gameStartMusicPath);
+
+/** Miscellaneous functions **/
+function getStorage(key) {
+  return JSON.parse(ls.getItem(key));
+}
+function setStorage(key, value) {
+  ls.setItem(key, value);
+}
+function setUserInfoInStorage(key, _userName, _userAvatar, _userAvatarURL) {
+  const data = {
+    userName: _userName,
+    userAvatar: _userAvatar,
+    userAvatarURL: _userAvatarURL,
   };
 
-  /** User & Computer avatars **/
-  const userAvatars = [
-    {
-      name: 'Boy',
-      gender: 'male',
-      url_48: new URL('assets/icon-avatar-boy.png', import.meta.url).pathname,
-      url_96: new URL('assets/icon-avatar-boy-96.png', import.meta.url).pathname,
-    },
-    {
-      name: 'Girl',
-      gender: 'female',
-      url_48: new URL('assets/icon-avatar-girl.png', import.meta.url).pathname,
-      url_96: new URL('assets/icon-avatar-girl-96.png', import.meta.url).pathname,
-    },
-  ];
-  const computerAvatars = [
-    {
-      name: 'Alien',
-      url_48: new URL('assets/icon-avatar-alien.png', import.meta.url).pathname,
-      url_96: new URL('assets/icon-avatar-alien-96.png', import.meta.url).pathname,
-    },
-    {
-      name: 'Anonymous',
-      url_48: new URL('assets/icon-avatar-anonymous.png', import.meta.url).pathname,
-      url_96: new URL('assets/icon-avatar-anonymous-96.png', import.meta.url).pathname,
-    },
-    {
-      name: 'Iron Man',
-      url_48: new URL('assets/icon-avatar-ironman.png', import.meta.url).pathname,
-      url_96: new URL('assets/icon-avatar-ironman-96.png', import.meta.url).pathname,
-    },
-    {
-      name: 'Snowball',
-      url_48: new URL('assets/icon-avatar-snowball.png', import.meta.url).pathname,
-      url_96: new URL('assets/icon-avatar-snowball-96.png', import.meta.url).pathname,
-    },
-    {
-      name: 'Walter White',
-      url_48: new URL('assets/icon-avatar-walter-white.png', import.meta.url).pathname,
-      url_96: new URL('assets/icon-avatar-walter-white-96.png', import.meta.url).pathname,
-    },
-  ];
-  const _isTabletWidth = window.innerWidth <= 992;
-  const BLUE_COLOR = 'blue';
-  const RED_COLOR = 'red';
-  const GREEN_COLOR = 'green';
-  const YELLOW_COLOR = 'yellow';
-  const colorSequence = [BLUE_COLOR, RED_COLOR, GREEN_COLOR, YELLOW_COLOR];
-  const colorMap = {
-    [RED_COLOR]: '#EA1D23',
-    [GREEN_COLOR]: '#00A347',
-    [BLUE_COLOR]: '#29ADFF',
-    [YELLOW_COLOR]: '#DABC0F',
-  };
-  /** DOM element Refs **/
-  const $q = (sel) => document.querySelector(sel);
-  const $qall = (sel) => document.querySelectorAll(sel);
-  const $id = (id) => document.getElementById(id);
-  /** Onboarding Splashscreen **/
-  const splashScreenEl = $q('.js-splashScreen');
-  const vsComputerEl = $id('vs-computer');
-  const heroBtnContainerEl = $q('.js-hero-buttons');
-  const backgroundPlayEl = $q('.js-icon-bg-play');
-  /** Onboarding screen: Color Selection **/
-  const colorSelectionList = $qall('.js-color-selection');
-  const csContainerEl = $q('.js-cs-wrapper');
-  const backBtnEl = $q('.js-back-btn');
-  const playBtnEl = $q('.js-play-btn');
-  /** Onboarding screen: Personal Information **/
-  const piWrapper = $q('.js-pi-wrapper');
-  const userNameInputEl = $q('.js-pi-name-input');
-  const userAvatarList = $qall('.js-avatar');
-  const piBackBtn = $q('.js-pi-back-btn');
-  const piNextBtn = $q('.js-pi-next');
-  /** Main App screen **/
-  const appBackBtnEl = $q('.js-app-back-btn');
-  const appEl = $q('.js-app');
-  const userAvatarImgEl = $q('.js-avatar-user-img');
-  const userAvatarTxtEl = $q('.js-avatar-user-text');
-  const computerAvatarImgEl = $q('.js-avatar-computer-img');
-  const computerAvatarTxtEl = $q('.js-avatar-computer-text');
-  /** Image and Audio Refs **/
-  const bgPlayIconPath = new URL('assets/icon-video-play.png', import.meta.url);
-  const bgPauseIconPath = new URL('assets/icon-video-pause.png', import.meta.url);
-  const gameMusicPath = new URL('assets/game-music.mp3', import.meta.url);
-  const interactionMusicPath = new URL('assets/button-tap-sound.mp3', import.meta.url);
-  const gameStartMusicPath = new URL('assets/game-start-sound.mp3', import.meta.url);
-  const gameAudio = new Audio(gameMusicPath);
-  const interactionAudio = new Audio(interactionMusicPath);
-  const gameStartAudio = new Audio(gameStartMusicPath);
+  setStorage(key, JSON.stringify(data));
+}
+function getActiveColors(color) {
+  if (color == '') return null;
+  color = color.toLowerCase();
 
-  /** Miscellaneous functions **/
-  function getStorage(key) {
-    return JSON.parse(ls.getItem(key));
-  }
-  function setStorage(key, value) {
-    ls.setItem(key, value);
-  }
-  function setUserInfoInStorage(key, _userName, _userAvatar, _userAvatarURL) {
-    const data = {
-      userName: _userName,
-      userAvatar: _userAvatar,
-      userAvatarURL: _userAvatarURL,
-    };
+  const userColorIdx = colorSequence.indexOf(color);
+  // In our game, the computer will appear diagonally to the end user.
+  // Thus, we can get computer color index by adding 2 to the user color index.
+  let computerColorIdx =
+    userColorIdx + 2 >= colorSequence.length ? userColorIdx - 2 : userColorIdx + 2;
 
-    setStorage(key, JSON.stringify(data));
-  }
-  function getActiveColors(color) {
-    if (color == '') return null;
-    color = color.toLowerCase();
-
-    const userColorIdx = colorSequence.indexOf(color);
-    // In our game, the computer will appear diagonally to the end user.
-    // Thus, we can get computer color index by adding 2 to the user color index.
-    let computerColorIdx =
-      userColorIdx + 2 >= colorSequence.length ? userColorIdx - 2 : userColorIdx + 2;
-
-    return [color, colorSequence[computerColorIdx]];
-  }
-  function togglePINextVisibility() {
-    if (_userName && _userAvatar && _userAvatarURL) {
-      enablePINextBtn();
-      return;
-    }
-
-    disablePINextBtn();
-  }
-  function disablePINextBtn() {
-    piNextBtn.disabled = true;
-    piNextBtn.classList.remove('ani-bounce');
-  }
-  function enablePINextBtn() {
-    piNextBtn.disabled = false;
-    piNextBtn.classList.add('ani-bounce');
-  }
-  function disablePlayBtn() {
-    playBtnEl.disabled = true;
-    playBtnEl.classList.remove('ani-bounce');
-  }
-  function enablePlayBtn() {
-    playBtnEl.disabled = false;
-    playBtnEl.classList.add('ani-bounce');
-  }
-
-  /** Populate PI Screen if localstorage data exists **/
-  function populatePIScreen() {
-    let piData = _personalData;
-    if (!piData?.userName || !piData?.userAvatar || !piData?.userAvatarURL) {
-      console.log('No personal data found in storage to populate PI screen.');
-      return false;
-    }
-
-    userNameInputEl.value = piData.userName;
-    const avatarEl = $q(`.js-avatar[data-avatar="${piData.userAvatar}"]`);
-    avatarEl
-      ? avatarEl.classList.add('avatar-active')
-      : console.log('No avatar element found to set active state.');
+  return [color, colorSequence[computerColorIdx]];
+}
+function togglePINextVisibility() {
+  if (_userName && _userAvatar && _userAvatarURL) {
     enablePINextBtn();
+    return;
   }
 
-  /** Reset UI screens - State and UI **/
-  function resetPIScreen() {
-    // Reset state
-    _userName = '';
-    _userAvatar = '';
-    _userAvatarURL = '';
-    // Reset UI
-    userNameInputEl.value = '';
-    $qall('.js-avatar').forEach((node) => {
-      node.classList.remove('avatar-active');
-    });
-    disablePINextBtn();
+  disablePINextBtn();
+}
+function disablePINextBtn() {
+  piNextBtn.disabled = true;
+  piNextBtn.classList.remove('ani-bounce');
+}
+function enablePINextBtn() {
+  piNextBtn.disabled = false;
+  piNextBtn.classList.add('ani-bounce');
+}
+function disablePlayBtn() {
+  playBtnEl.disabled = true;
+  playBtnEl.classList.remove('ani-bounce');
+}
+function enablePlayBtn() {
+  playBtnEl.disabled = false;
+  playBtnEl.classList.add('ani-bounce');
+}
+
+/** Populate PI Screen if localstorage data exists **/
+function populatePIScreen() {
+  let piData = _personalData;
+  if (!piData?.userName || !piData?.userAvatar || !piData?.userAvatarURL) {
+    console.log('No personal data found in storage to populate PI screen.');
+    return false;
   }
-  function resetColorSelectScreen() {
-    // Reset state
+
+  userNameInputEl.value = piData.userName;
+  const avatarEl = $q(`.js-avatar[data-avatar="${piData.userAvatar}"]`);
+  avatarEl
+    ? avatarEl.classList.add('avatar-active')
+    : console.log('No avatar element found to set active state.');
+  enablePINextBtn();
+}
+
+/** Reset UI screens - State and UI **/
+function resetPIScreen() {
+  // Reset state
+  _userName = '';
+  _userAvatar = '';
+  _userAvatarURL = '';
+  // Reset UI
+  userNameInputEl.value = '';
+  $qall('.js-avatar').forEach((node) => {
+    node.classList.remove('avatar-active');
+  });
+  disablePINextBtn();
+}
+function resetColorSelectScreen() {
+  // Reset state
+  disablePlayBtn();
+  _selectedColor = '';
+  // Reset all color selection nodes
+  colorSelectionList.forEach((selectionEl) => (selectionEl.dataset['flag'] = '0'));
+}
+
+/** Event Handlers **/
+function handleSelectionClick(e) {
+  const el = e.currentTarget;
+  // Toggle checkbox flag
+  const toggledFlag = Number(!Number(el.dataset['flag']));
+
+  el.dataset['flag'] = toggledFlag;
+  if (toggledFlag) {
+    enablePlayBtn();
+    _selectedColor = el.dataset['color'];
+  } else {
     disablePlayBtn();
     _selectedColor = '';
-    // Reset all color selection nodes
-    colorSelectionList.forEach((selectionEl) => (selectionEl.dataset['flag'] = '0'));
   }
-
-  /** Event Handlers **/
-  function handleSelectionClick(e) {
-    const el = e.currentTarget;
-    // Toggle checkbox flag
-    const toggledFlag = Number(!Number(el.dataset['flag']));
-
-    el.dataset['flag'] = toggledFlag;
-    if (toggledFlag) {
-      enablePlayBtn();
-      _selectedColor = el.dataset['color'];
-    } else {
-      disablePlayBtn();
-      _selectedColor = '';
-    }
-    // Reset flags of other color selection nodes
-    colorSelectionList.forEach((selectionEl) => {
-      if (selectionEl.dataset['color'] === _selectedColor) {
-        return;
-      }
-      selectionEl.dataset['flag'] = '0';
-    });
-  }
-  function handleVSComputerClick() {
-    heroBtnContainerEl.classList.add('d-none');
-    piWrapper.classList.remove('d-none');
-  }
-  function handlePIBackBtnClick() {
-    // resetPIScreen();
-    // Toggle containers visibility
-    piWrapper.classList.add('d-none');
-    heroBtnContainerEl.classList.remove('d-none');
-  }
-  function setUserNameInputError() {
-    _userName = '';
-    userNameInputEl.classList.add('bx-red');
-    userNameInputEl.focus();
-  }
-  function handlePINextBtnClick() {
-    // User name state validation
-    if (
-      !_userName ||
-      userNameInputEl.value.trim() === '' ||
-      _userName.length < 3 ||
-      _userName.length > 12
-    ) {
-      alert('Please enter your user name between 3-12 characters.');
-      setUserNameInputError();
-      piNextBtn.classList.remove('ani-bounce');
-      return false;
-    }
-
-    userNameInputEl.classList.remove('bx-red');
-    piWrapper.classList.add('d-none');
-    /** Color Selection Screen: Prepare this screen for the end user with a state and UI reset **/
-    resetColorSelectScreen();
-    csContainerEl.classList.remove('d-none');
-  }
-  function handleBackBtnClick() {
-    resetColorSelectScreen();
-    piWrapper.classList.remove('d-none');
-    csContainerEl.classList.add('d-none');
-  }
-  function handlePlayBtnClick() {
-    if (!_selectedColor) {
-      return false;
-    }
-
-    initGamePlay();
-  }
-  function handleAppBackBtnClick() {
-    const isAppLogout = window.confirm('Do you wish to exit this game?');
-
-    if (!isAppLogout) {
-      return false;
-    }
-
-    gameState.hasGameStarted = false;
-    appEl.classList.add('d-none');
-    splashScreenEl.classList.remove('d-none');
-    // Reset user onboarding
-    csContainerEl.classList.add('d-none');
-    heroBtnContainerEl.classList.remove('d-none');
-    // Show all color tokens
-    $qall('.js-token').forEach((node) => {
-      node.classList.remove('d-none');
-      const computerClsName = Array.from(node.classList).find((item) =>
-        item.includes('game-token-computer-'),
-      );
-      const userClsName = Array.from(node.classList).find((item) =>
-        item.includes('game-token-user-'),
-      );
-
-      // Reset current computer tokens
-      if (computerClsName) {
-        node.classList.remove(computerClsName);
-      }
-      // Reset current user tokens
-      if (userClsName) {
-        node.classList.remove(userClsName);
-      }
-    });
-    // Reset onboarding screens
-    resetColorSelectScreen();
-    // resetPIScreen();
-    _computerColor = '';
-  }
-  function handleBgPlayClick(e) {
-    const el = e.currentTarget;
-    const img = el.querySelector('.icon-bg-play');
-
-    _isBgPlayStarted = !_isBgPlayStarted;
-    if (!_isBgPlayStarted) {
-      img.src = bgPlayIconPath;
-      pauseAudio(gameAudio);
+  // Reset flags of other color selection nodes
+  colorSelectionList.forEach((selectionEl) => {
+    if (selectionEl.dataset['color'] === _selectedColor) {
       return;
     }
-
-    img.src = bgPauseIconPath;
-    playAudio(gameAudio, true);
-    console.log('background play click:');
-  }
-  function handlePageInteractionClick(e) {
-    const isSoundEl = e.target.classList.contains('js-sound') || e.target.closest('.js-sound');
-
-    if (!isSoundEl) return false;
-    playAudio(interactionAudio);
-  }
-  function handleUserNameInteraction(e) {
-    _userName = e.target.value;
-    /** TODO: Implement a debounce function (~ 250 ms) to properly check the PI next button visibility */
-    togglePINextVisibility();
-  }
-  function handleUserAvatarClick(e) {
-    const el = e.currentTarget;
-
-    // Reset 'avatar-active' classname
-    $qall('.js-avatar').forEach((node) => {
-      node.classList.remove('avatar-active');
-    });
-    el.classList.add('avatar-active');
-    // Set user avatar
-    _userAvatar = el.dataset['avatar'];
-    // Set user avatar URL
-    _userAvatarURL = el.querySelector('img').getAttribute('src');
-    togglePINextVisibility();
-  }
-  function handleUserTokenClick(e) {
-    console.log('user token click: ', e.target);
-  }
-  function handleComputerTokenClick(e) {
-    console.log('computer token click: ', e.target);
+    selectionEl.dataset['flag'] = '0';
+  });
+}
+function handleVSComputerClick() {
+  heroBtnContainerEl.classList.add('d-none');
+  piWrapper.classList.remove('d-none');
+}
+function handlePIBackBtnClick() {
+  // resetPIScreen();
+  // Toggle containers visibility
+  piWrapper.classList.add('d-none');
+  heroBtnContainerEl.classList.remove('d-none');
+}
+function setUserNameInputError() {
+  _userName = '';
+  userNameInputEl.classList.add('bx-red');
+  userNameInputEl.focus();
+}
+function handlePINextBtnClick() {
+  // User name state validation
+  if (
+    !_userName ||
+    userNameInputEl.value.trim() === '' ||
+    _userName.length < 3 ||
+    _userName.length > 12
+  ) {
+    alert('Please enter your user name between 3-12 characters.');
+    setUserNameInputError();
+    piNextBtn.classList.remove('ani-bounce');
+    return false;
   }
 
-  function pauseAudio(audioRef) {
-    audioRef.pause();
-  }
-  function playAudio(audioRef, isLoop = false) {
-    audioRef.loop = isLoop;
-
-    audioRef.play().catch((err) => {
-      console.log('Audio is not played ', err);
-    });
-  }
-  function setDOMEvents() {
-    document.addEventListener('click', handlePageInteractionClick);
-    colorSelectionList.forEach((el) => el.addEventListener('click', handleSelectionClick, false));
-    vsComputerEl.addEventListener('click', handleVSComputerClick, false);
-    backBtnEl.addEventListener('click', handleBackBtnClick, false);
-    appBackBtnEl.addEventListener('click', handleAppBackBtnClick, false);
-    playBtnEl.addEventListener('click', handlePlayBtnClick, false);
-    backgroundPlayEl.addEventListener('click', handleBgPlayClick, false);
-    // Onboarding: Personal Info (user name and avatar) screen
-    piBackBtn.addEventListener('click', handlePIBackBtnClick, false);
-    piNextBtn.addEventListener('click', handlePINextBtnClick, false);
-    userNameInputEl.addEventListener('keypress', handleUserNameInteraction, false);
-    userNameInputEl.addEventListener('change', handleUserNameInteraction, false);
-    userAvatarList.forEach((el) => el.addEventListener('click', handleUserAvatarClick, false));
+  userNameInputEl.classList.remove('bx-red');
+  piWrapper.classList.add('d-none');
+  /** Color Selection Screen: Prepare this screen for the end user with a state and UI reset **/
+  resetColorSelectScreen();
+  csContainerEl.classList.remove('d-none');
+}
+function handleBackBtnClick() {
+  resetColorSelectScreen();
+  piWrapper.classList.remove('d-none');
+  csContainerEl.classList.add('d-none');
+}
+function handlePlayBtnClick() {
+  if (!_selectedColor) {
+    return false;
   }
 
-  /*** Initialise Main Gameplay ***/
-  function hideUnusedColorTokens(colorsArr) {
-    if (!colorsArr.length) return false;
+  initGamePlay();
+}
+function handleAppBackBtnClick() {
+  const isAppLogout = window.confirm('Do you wish to exit this game?');
 
-    colorsArr.forEach((color) => {
-      $q(`.js-token-${color}-1`).classList.add('d-none');
-      $q(`.js-token-${color}-2`).classList.add('d-none');
-      $q(`.js-token-${color}-3`).classList.add('d-none');
-      $q(`.js-token-${color}-4`).classList.add('d-none');
-    });
+  if (!isAppLogout) {
+    return false;
   }
-  function updateGameTokenStyles(_selectedColor = '', _computerColor = '') {
-    // Update game token positions for computer player
-    $q(`.js-token.js-token-${_computerColor}-1`).classList.add('game-token-computer-1');
-    $q(`.js-token.js-token-${_computerColor}-2`).classList.add('game-token-computer-2');
-    $q(`.js-token.js-token-${_computerColor}-3`).classList.add('game-token-computer-3');
-    $q(`.js-token.js-token-${_computerColor}-4`).classList.add('game-token-computer-4');
-    // Update game token positions for user player
-    $q(`.js-token.js-token-${_selectedColor}-1`).classList.add('game-token-user-1');
-    $q(`.js-token.js-token-${_selectedColor}-2`).classList.add('game-token-user-2');
-    $q(`.js-token.js-token-${_selectedColor}-3`).classList.add('game-token-user-3');
-    $q(`.js-token.js-token-${_selectedColor}-4`).classList.add('game-token-user-4');
-  }
-  function updateGameFortStyles(_selectedColor = '', _computerColor = '', unusedColorsArr = []) {
-    const gameFortEl = $q('.js-game-fort');
-    const borderTopColor = colorMap[_computerColor];
-    const borderRightColor = colorMap[unusedColorsArr[1]];
-    const borderBottomColor = colorMap[_selectedColor];
-    const borderLeftColor = colorMap[unusedColorsArr[0]];
-    const borderWidth = _isTabletWidth ? '36px' : '75px';
 
-    gameFortEl.style.setProperty('--game-fort-br-top', `${borderWidth} solid ${borderTopColor}`);
-    gameFortEl.style.setProperty(
-      '--game-fort-br-right',
-      `${borderWidth} solid ${borderRightColor}`,
+  gameState.hasGameStarted = false;
+  appEl.classList.add('d-none');
+  splashScreenEl.classList.remove('d-none');
+  // Reset user onboarding
+  csContainerEl.classList.add('d-none');
+  heroBtnContainerEl.classList.remove('d-none');
+  // Show all color tokens
+  $qall('.js-token').forEach((node) => {
+    node.classList.remove('d-none');
+    const computerClsName = Array.from(node.classList).find((item) =>
+      item.includes('game-token-computer-'),
     );
-    gameFortEl.style.setProperty(
-      '--game-fort-br-bottom',
-      `${borderWidth} solid ${borderBottomColor}`,
+    const userClsName = Array.from(node.classList).find((item) =>
+      item.includes('game-token-user-'),
     );
-    gameFortEl.style.setProperty('--game-fort-br-left', `${borderWidth} solid ${borderLeftColor}`);
-  }
-  function updateGameHouseStyles(selector, newColor) {
-    const el = $q(selector);
-    const newColorClsName = `bgcolor-${newColor}`;
-    const currentColorClsName = Array.from(el.classList).find((item) => item.includes('bgcolor-'));
 
-    el.classList.replace(currentColorClsName, newColorClsName);
-    el.querySelectorAll('.token').forEach((node) => {
-      node.classList.replace(currentColorClsName, newColorClsName);
-    });
-  }
-  function updateGameTrackStyles(selector, newColor) {
-    const el = $q(selector).querySelector('.track-dots');
-    const newColorClsName = `bgcolor-${newColor}`;
-    const currentColorClsName = Array.from(el.classList).find((item) => item.includes('bgcolor-'));
+    // Reset current computer tokens
+    if (computerClsName) {
+      node.classList.remove(computerClsName);
+    }
+    // Reset current user tokens
+    if (userClsName) {
+      node.classList.remove(userClsName);
+    }
+  });
+  // Reset onboarding screens
+  resetColorSelectScreen();
+  // resetPIScreen();
+  _computerColor = '';
+}
+function handleBgPlayClick(e) {
+  const el = e.currentTarget;
+  const img = el.querySelector('.icon-bg-play');
 
-    // Update game track colors for all players
-    el.classList.replace(currentColorClsName, newColorClsName);
-  }
-  function setupLayout(_selectedColor = '', _computerColor = '', unusedColorsArr = []) {
-    // Update game house colors for computer player
-    updateGameHouseStyles('.game-house:nth-of-type(2)', _computerColor);
-    // Update game house colors for user player
-    updateGameHouseStyles('.game-house:nth-of-type(3)', _selectedColor);
-    // Update game house colors for unused top-left player
-    updateGameHouseStyles('.game-house:nth-of-type(1)', unusedColorsArr[0]);
-    // Update game house colors for unused bottom-right player
-    updateGameHouseStyles('.game-house:nth-of-type(4)', unusedColorsArr[1]);
-
-    // Update game track colors for computer player
-    updateGameTrackStyles('.game-track.game-track-top', _computerColor);
-    // Update game track colors for user player
-    updateGameTrackStyles('.game-track.game-track-bottom', _selectedColor);
-    // Update game track colors for unused top-left player
-    updateGameTrackStyles('.game-track.game-track-left', unusedColorsArr[0]);
-    // Update game track colors for unused bottom-right player
-    updateGameTrackStyles('.game-track.game-track-right', unusedColorsArr[1]);
-
-    // Update game token styles
-    updateGameTokenStyles(_selectedColor, _computerColor);
-    // Update game fort styles
-    updateGameFortStyles(_selectedColor, _computerColor, unusedColorsArr);
-  }
-  function setupUserAvatar(name, gender) {
-    const {
-      name: avatarName = '',
-      url_48 = '',
-      url_96 = '',
-    } = userAvatars.find((avatar) => avatar.gender === gender);
-    const srcset = `${url_48} 48w, ${url_96} 96w`;
-    const imgAlt = `Avatar ${avatarName}`;
-
-    userAvatarImgEl.setAttribute('srcset', srcset);
-    userAvatarImgEl.setAttribute('src', url_96);
-    userAvatarImgEl.setAttribute('alt', imgAlt);
-    userAvatarTxtEl.textContent = name;
-  }
-  function setupComputerAvatar(name, url_48, url_96) {
-    const srcset = `${url_48} 48w, ${url_96} 96w`;
-    const imgAlt = `Avatar ${name}`;
-
-    computerAvatarImgEl.setAttribute('srcset', srcset);
-    computerAvatarImgEl.setAttribute('src', url_96);
-    computerAvatarImgEl.setAttribute('alt', imgAlt);
-    computerAvatarTxtEl.textContent = name;
-  }
-  function setUserTokens() {
-    const firstToken = $q('.game-token.game-token-user-1');
-    const secondToken = $q('.game-token.game-token-user-2');
-    const thirdToken = $q('.game-token.game-token-user-3');
-    const fourthToken = $q('.game-token.game-token-user-4');
-
-    gameState.userTokens = {
-      first: {
-        el: firstToken,
-        baseX: firstToken.getBoundingClientRect().left,
-        baseY: firstToken.getBoundingClientRect().top,
-        left: firstToken.getBoundingClientRect().left,
-        top: firstToken.getBoundingClientRect().top,
-        isClosed: true,
-        isOpen: false,
-        isSafe: false,
-        isReached: false,
-      },
-      second: {
-        el: secondToken,
-        baseX: secondToken.getBoundingClientRect().left,
-        baseY: secondToken.getBoundingClientRect().top,
-        left: secondToken.getBoundingClientRect().left,
-        top: secondToken.getBoundingClientRect().top,
-        isClosed: true,
-        isOpen: false,
-        isSafe: false,
-        isReached: false,
-      },
-      third: {
-        el: thirdToken,
-        baseX: thirdToken.getBoundingClientRect().left,
-        baseY: thirdToken.getBoundingClientRect().top,
-        left: thirdToken.getBoundingClientRect().left,
-        top: thirdToken.getBoundingClientRect().top,
-        isClosed: true,
-        isOpen: false,
-        isSafe: false,
-        isReached: false,
-      },
-      fourth: {
-        el: fourthToken,
-        baseX: fourthToken.getBoundingClientRect().left,
-        baseY: fourthToken.getBoundingClientRect().top,
-        left: fourthToken.getBoundingClientRect().left,
-        top: fourthToken.getBoundingClientRect().top,
-        isClosed: true,
-        isOpen: false,
-        isSafe: false,
-        isReached: false,
-      },
-    };
-
-    firstToken.addEventListener('click', handleUserTokenClick, false);
-    secondToken.addEventListener('click', handleUserTokenClick, false);
-    thirdToken.addEventListener('click', handleUserTokenClick, false);
-    fourthToken.addEventListener('click', handleUserTokenClick, false);
-  }
-  function setComputerTokens() {
-    const firstToken = $q('.game-token.game-token-computer-1');
-    const secondToken = $q('.game-token.game-token-computer-2');
-    const thirdToken = $q('.game-token.game-token-computer-3');
-    const fourthToken = $q('.game-token.game-token-computer-4');
-
-    gameState.computerTokens = {
-      first: {
-        el: firstToken,
-        baseX: firstToken.getBoundingClientRect().left,
-        baseY: firstToken.getBoundingClientRect().top,
-        left: firstToken.getBoundingClientRect().left,
-        top: firstToken.getBoundingClientRect().top,
-        isClosed: true,
-        isOpen: false,
-        isSafe: false,
-        isReached: false,
-      },
-      second: {
-        el: secondToken,
-        baseX: secondToken.getBoundingClientRect().left,
-        baseY: secondToken.getBoundingClientRect().top,
-        left: secondToken.getBoundingClientRect().left,
-        top: secondToken.getBoundingClientRect().top,
-        isClosed: true,
-        isOpen: false,
-        isSafe: false,
-        isReached: false,
-      },
-      third: {
-        el: thirdToken,
-        baseX: thirdToken.getBoundingClientRect().left,
-        baseY: thirdToken.getBoundingClientRect().top,
-        left: thirdToken.getBoundingClientRect().left,
-        top: thirdToken.getBoundingClientRect().top,
-        isClosed: true,
-        isOpen: false,
-        isSafe: false,
-        isReached: false,
-      },
-      fourth: {
-        el: fourthToken,
-        baseX: fourthToken.getBoundingClientRect().left,
-        baseY: fourthToken.getBoundingClientRect().top,
-        left: fourthToken.getBoundingClientRect().left,
-        top: fourthToken.getBoundingClientRect().top,
-        isClosed: true,
-        isOpen: false,
-        isSafe: false,
-        isReached: false,
-      },
-    };
-
-    firstToken.addEventListener('click', handleComputerTokenClick, false);
-    secondToken.addEventListener('click', handleComputerTokenClick, false);
-    thirdToken.addEventListener('click', handleComputerTokenClick, false);
-    fourthToken.addEventListener('click', handleComputerTokenClick, false);
+  _isBgPlayStarted = !_isBgPlayStarted;
+  if (!_isBgPlayStarted) {
+    img.src = bgPlayIconPath;
+    pauseAudio(gameAudio);
+    return;
   }
 
-  /**
-   * Shows the "GAME START" animation once.
-   * Call this after onboarding is complete.
-   */
-  function showGameStartAnimation() {
-    const overlay = document.getElementById('game-start-overlay');
+  img.src = bgPauseIconPath;
+  playAudio(gameAudio, true);
+  console.log('background play click:');
+}
+function handlePageInteractionClick(e) {
+  const isSoundEl = e.target.classList.contains('js-sound') || e.target.closest('.js-sound');
 
-    // Show overlay
-    overlay.classList.remove('hidden');
+  if (!isSoundEl) return false;
+  playAudio(interactionAudio);
+}
+function handleUserNameInteraction(e) {
+  _userName = e.target.value;
+  /** TODO: Implement a debounce function (~ 250 ms) to properly check the PI next button visibility */
+  togglePINextVisibility();
+}
+function handleUserAvatarClick(e) {
+  const el = e.currentTarget;
 
-    // Restart animation if called multiple times
+  // Reset 'avatar-active' classname
+  $qall('.js-avatar').forEach((node) => {
+    node.classList.remove('avatar-active');
+  });
+  el.classList.add('avatar-active');
+  // Set user avatar
+  _userAvatar = el.dataset['avatar'];
+  // Set user avatar URL
+  _userAvatarURL = el.querySelector('img').getAttribute('src');
+  togglePINextVisibility();
+}
+function handleUserTokenClick(e) {
+  console.log('user token click: ', e.target);
+}
+function handleComputerTokenClick(e) {
+  console.log('computer token click: ', e.target);
+}
+
+function pauseAudio(audioRef) {
+  audioRef.pause();
+}
+function playAudio(audioRef, isLoop = false) {
+  audioRef.loop = isLoop;
+
+  audioRef.play().catch((err) => {
+    console.log('Audio is not played ', err);
+  });
+}
+function setDOMEvents() {
+  document.addEventListener('click', handlePageInteractionClick);
+  colorSelectionList.forEach((el) => el.addEventListener('click', handleSelectionClick, false));
+  vsComputerEl.addEventListener('click', handleVSComputerClick, false);
+  backBtnEl.addEventListener('click', handleBackBtnClick, false);
+  appBackBtnEl.addEventListener('click', handleAppBackBtnClick, false);
+  playBtnEl.addEventListener('click', handlePlayBtnClick, false);
+  backgroundPlayEl.addEventListener('click', handleBgPlayClick, false);
+  // Onboarding: Personal Info (user name and avatar) screen
+  piBackBtn.addEventListener('click', handlePIBackBtnClick, false);
+  piNextBtn.addEventListener('click', handlePINextBtnClick, false);
+  userNameInputEl.addEventListener('keypress', handleUserNameInteraction, false);
+  userNameInputEl.addEventListener('change', handleUserNameInteraction, false);
+  userAvatarList.forEach((el) => el.addEventListener('click', handleUserAvatarClick, false));
+}
+
+/*** Initialise Main Gameplay ***/
+function hideUnusedColorTokens(colorsArr) {
+  if (!colorsArr.length) return false;
+
+  colorsArr.forEach((color) => {
+    $q(`.js-token-${color}-1`).classList.add('d-none');
+    $q(`.js-token-${color}-2`).classList.add('d-none');
+    $q(`.js-token-${color}-3`).classList.add('d-none');
+    $q(`.js-token-${color}-4`).classList.add('d-none');
+  });
+}
+function updateGameTokenStyles(_selectedColor = '', _computerColor = '') {
+  // Update game token positions for computer player
+  $q(`.js-token.js-token-${_computerColor}-1`).classList.add('game-token-computer-1');
+  $q(`.js-token.js-token-${_computerColor}-2`).classList.add('game-token-computer-2');
+  $q(`.js-token.js-token-${_computerColor}-3`).classList.add('game-token-computer-3');
+  $q(`.js-token.js-token-${_computerColor}-4`).classList.add('game-token-computer-4');
+  // Update game token positions for user player
+  $q(`.js-token.js-token-${_selectedColor}-1`).classList.add('game-token-user-1');
+  $q(`.js-token.js-token-${_selectedColor}-2`).classList.add('game-token-user-2');
+  $q(`.js-token.js-token-${_selectedColor}-3`).classList.add('game-token-user-3');
+  $q(`.js-token.js-token-${_selectedColor}-4`).classList.add('game-token-user-4');
+}
+function updateGameFortStyles(_selectedColor = '', _computerColor = '', unusedColorsArr = []) {
+  const gameFortEl = $q('.js-game-fort');
+  const borderTopColor = colorMap[_computerColor];
+  const borderRightColor = colorMap[unusedColorsArr[1]];
+  const borderBottomColor = colorMap[_selectedColor];
+  const borderLeftColor = colorMap[unusedColorsArr[0]];
+  const borderWidth = _isTabletWidth ? '36px' : '75px';
+
+  gameFortEl.style.setProperty('--game-fort-br-top', `${borderWidth} solid ${borderTopColor}`);
+  gameFortEl.style.setProperty('--game-fort-br-right', `${borderWidth} solid ${borderRightColor}`);
+  gameFortEl.style.setProperty(
+    '--game-fort-br-bottom',
+    `${borderWidth} solid ${borderBottomColor}`,
+  );
+  gameFortEl.style.setProperty('--game-fort-br-left', `${borderWidth} solid ${borderLeftColor}`);
+}
+function updateGameHouseStyles(selector, newColor) {
+  const el = $q(selector);
+  const newColorClsName = `bgcolor-${newColor}`;
+  const currentColorClsName = Array.from(el.classList).find((item) => item.includes('bgcolor-'));
+
+  el.classList.replace(currentColorClsName, newColorClsName);
+  el.querySelectorAll('.token').forEach((node) => {
+    node.classList.replace(currentColorClsName, newColorClsName);
+  });
+}
+function updateGameTrackStyles(selector, newColor) {
+  const el = $q(selector).querySelector('.track-dots');
+  const newColorClsName = `bgcolor-${newColor}`;
+  const currentColorClsName = Array.from(el.classList).find((item) => item.includes('bgcolor-'));
+
+  // Update game track colors for all players
+  el.classList.replace(currentColorClsName, newColorClsName);
+}
+function setupLayout(_selectedColor = '', _computerColor = '', unusedColorsArr = []) {
+  // Update game house colors for computer player
+  updateGameHouseStyles('.game-house:nth-of-type(2)', _computerColor);
+  // Update game house colors for user player
+  updateGameHouseStyles('.game-house:nth-of-type(3)', _selectedColor);
+  // Update game house colors for unused top-left player
+  updateGameHouseStyles('.game-house:nth-of-type(1)', unusedColorsArr[0]);
+  // Update game house colors for unused bottom-right player
+  updateGameHouseStyles('.game-house:nth-of-type(4)', unusedColorsArr[1]);
+
+  // Update game track colors for computer player
+  updateGameTrackStyles('.game-track.game-track-top', _computerColor);
+  // Update game track colors for user player
+  updateGameTrackStyles('.game-track.game-track-bottom', _selectedColor);
+  // Update game track colors for unused top-left player
+  updateGameTrackStyles('.game-track.game-track-left', unusedColorsArr[0]);
+  // Update game track colors for unused bottom-right player
+  updateGameTrackStyles('.game-track.game-track-right', unusedColorsArr[1]);
+
+  // Update game token styles
+  updateGameTokenStyles(_selectedColor, _computerColor);
+  // Update game fort styles
+  updateGameFortStyles(_selectedColor, _computerColor, unusedColorsArr);
+}
+function setupUserAvatar(name, gender) {
+  const {
+    name: avatarName = '',
+    url_48 = '',
+    url_96 = '',
+  } = userAvatars.find((avatar) => avatar.gender === gender);
+  const srcset = `${url_48} 48w, ${url_96} 96w`;
+  const imgAlt = `Avatar ${avatarName}`;
+
+  userAvatarImgEl.setAttribute('srcset', srcset);
+  userAvatarImgEl.setAttribute('src', url_96);
+  userAvatarImgEl.setAttribute('alt', imgAlt);
+  userAvatarTxtEl.textContent = name;
+}
+function setupComputerAvatar(name, url_48, url_96) {
+  const srcset = `${url_48} 48w, ${url_96} 96w`;
+  const imgAlt = `Avatar ${name}`;
+
+  computerAvatarImgEl.setAttribute('srcset', srcset);
+  computerAvatarImgEl.setAttribute('src', url_96);
+  computerAvatarImgEl.setAttribute('alt', imgAlt);
+  computerAvatarTxtEl.textContent = name;
+}
+function setUserTokens() {
+  const firstToken = $q('.game-token.game-token-user-1');
+  const secondToken = $q('.game-token.game-token-user-2');
+  const thirdToken = $q('.game-token.game-token-user-3');
+  const fourthToken = $q('.game-token.game-token-user-4');
+
+  gameState.userTokens = {
+    first: {
+      el: firstToken,
+      baseX: firstToken.getBoundingClientRect().left,
+      baseY: firstToken.getBoundingClientRect().top,
+      left: firstToken.getBoundingClientRect().left,
+      top: firstToken.getBoundingClientRect().top,
+      isClosed: true,
+      isOpen: false,
+      isSafe: false,
+      isReached: false,
+    },
+    second: {
+      el: secondToken,
+      baseX: secondToken.getBoundingClientRect().left,
+      baseY: secondToken.getBoundingClientRect().top,
+      left: secondToken.getBoundingClientRect().left,
+      top: secondToken.getBoundingClientRect().top,
+      isClosed: true,
+      isOpen: false,
+      isSafe: false,
+      isReached: false,
+    },
+    third: {
+      el: thirdToken,
+      baseX: thirdToken.getBoundingClientRect().left,
+      baseY: thirdToken.getBoundingClientRect().top,
+      left: thirdToken.getBoundingClientRect().left,
+      top: thirdToken.getBoundingClientRect().top,
+      isClosed: true,
+      isOpen: false,
+      isSafe: false,
+      isReached: false,
+    },
+    fourth: {
+      el: fourthToken,
+      baseX: fourthToken.getBoundingClientRect().left,
+      baseY: fourthToken.getBoundingClientRect().top,
+      left: fourthToken.getBoundingClientRect().left,
+      top: fourthToken.getBoundingClientRect().top,
+      isClosed: true,
+      isOpen: false,
+      isSafe: false,
+      isReached: false,
+    },
+  };
+
+  firstToken.addEventListener('click', handleUserTokenClick, false);
+  secondToken.addEventListener('click', handleUserTokenClick, false);
+  thirdToken.addEventListener('click', handleUserTokenClick, false);
+  fourthToken.addEventListener('click', handleUserTokenClick, false);
+}
+function setComputerTokens() {
+  const firstToken = $q('.game-token.game-token-computer-1');
+  const secondToken = $q('.game-token.game-token-computer-2');
+  const thirdToken = $q('.game-token.game-token-computer-3');
+  const fourthToken = $q('.game-token.game-token-computer-4');
+
+  gameState.computerTokens = {
+    first: {
+      el: firstToken,
+      baseX: firstToken.getBoundingClientRect().left,
+      baseY: firstToken.getBoundingClientRect().top,
+      left: firstToken.getBoundingClientRect().left,
+      top: firstToken.getBoundingClientRect().top,
+      isClosed: true,
+      isOpen: false,
+      isSafe: false,
+      isReached: false,
+    },
+    second: {
+      el: secondToken,
+      baseX: secondToken.getBoundingClientRect().left,
+      baseY: secondToken.getBoundingClientRect().top,
+      left: secondToken.getBoundingClientRect().left,
+      top: secondToken.getBoundingClientRect().top,
+      isClosed: true,
+      isOpen: false,
+      isSafe: false,
+      isReached: false,
+    },
+    third: {
+      el: thirdToken,
+      baseX: thirdToken.getBoundingClientRect().left,
+      baseY: thirdToken.getBoundingClientRect().top,
+      left: thirdToken.getBoundingClientRect().left,
+      top: thirdToken.getBoundingClientRect().top,
+      isClosed: true,
+      isOpen: false,
+      isSafe: false,
+      isReached: false,
+    },
+    fourth: {
+      el: fourthToken,
+      baseX: fourthToken.getBoundingClientRect().left,
+      baseY: fourthToken.getBoundingClientRect().top,
+      left: fourthToken.getBoundingClientRect().left,
+      top: fourthToken.getBoundingClientRect().top,
+      isClosed: true,
+      isOpen: false,
+      isSafe: false,
+      isReached: false,
+    },
+  };
+
+  firstToken.addEventListener('click', handleComputerTokenClick, false);
+  secondToken.addEventListener('click', handleComputerTokenClick, false);
+  thirdToken.addEventListener('click', handleComputerTokenClick, false);
+  fourthToken.addEventListener('click', handleComputerTokenClick, false);
+}
+function setupUserDice() {
+  // Create the user dice instance with selectors
+  const roller = new DiceRoller('User Dice', 'dice1', 'dice2', 'dice-roll-btn', 'dice-roll-audio');
+  roller.buildDice(roller.dice1);
+  roller.buildDice(roller.dice2);
+  roller.setDiceValue(roller.dice1);
+  roller.setDiceValue(roller.dice2);
+  roller.attachRollBtnClick();
+}
+function setupComputerDice() {
+  // Create the computer dice instance with selectors
+  const roller2 = new DiceRoller(
+    'Computer Dice',
+    'dice3',
+    'dice4',
+    'dice-roll-btn-2',
+    'dice-roll-audio-2',
+  );
+  roller2.buildDice(roller2.dice1);
+  roller2.buildDice(roller2.dice2);
+  roller2.setDiceValue(roller2.dice1);
+  roller2.setDiceValue(roller2.dice2);
+  roller2.attachRollBtnClick();
+}
+
+/**
+ * Shows the "GAME START" animation once.
+ * Call this after onboarding is complete.
+ */
+function showGameStartAnimation() {
+  const overlay = document.getElementById('game-start-overlay');
+
+  // Show overlay
+  overlay.classList.remove('hidden');
+
+  // Restart animation if called multiple times
+  overlay.classList.remove('show');
+  void overlay.offsetWidth; // Force reflow
+  overlay.classList.add('show');
+
+  // Hide overlay after animation completes
+  const DURATION = 2800; // Must match CSS animation duration
+  setTimeout(() => {
     overlay.classList.remove('show');
-    void overlay.offsetWidth; // Force reflow
-    overlay.classList.add('show');
+    overlay.classList.add('hidden');
+  }, DURATION);
+}
 
-    // Hide overlay after animation completes
-    const DURATION = 2800; // Must match CSS animation duration
-    setTimeout(() => {
-      overlay.classList.remove('show');
-      overlay.classList.add('hidden');
-    }, DURATION);
-  }
+function initGamePlay() {
+  const activeColorsArr = getActiveColors(_selectedColor);
+  const unusedColorsArr = colorSequence.filter((item) => activeColorsArr.indexOf(item) === -1);
+  const {
+    name: computerAvatar = '',
+    url_48: computerAvatarURL48 = '',
+    url_96: computerAvatarURL96 = '',
+  } = computerAvatars[Math.floor(Math.random() * 5)];
 
-  function initGamePlay() {
-    const activeColorsArr = getActiveColors(_selectedColor);
-    const unusedColorsArr = colorSequence.filter((item) => activeColorsArr.indexOf(item) === -1);
-    const {
-      name: computerAvatar = '',
-      url_48: computerAvatarURL48 = '',
-      url_96: computerAvatarURL96 = '',
-    } = computerAvatars[Math.floor(Math.random() * 5)];
+  hideUnusedColorTokens(unusedColorsArr);
+  gameState.hasGameStarted = true;
+  _computerColor = activeColorsArr[1];
+  setupLayout(_selectedColor, _computerColor, unusedColorsArr);
+  setUserInfoInStorage(LS_USER_INFO_KEY, _userName, _userAvatar, _userAvatarURL);
+  setupUserAvatar(_userName, _userAvatar);
+  setupComputerAvatar(computerAvatar, computerAvatarURL48, computerAvatarURL96);
+  // Hide Onboarding screen and show main App screen
+  splashScreenEl.classList.add('d-none');
+  appEl.classList.remove('d-none');
+  // Show Game start animation
+  showGameStartAnimation();
+  gameStartAudio.currentTime = 0;
+  playAudio(gameStartAudio);
+  // Setup User & Computer dice UI
+  setupUserDice();
+  setupComputerDice();
+  // Cache user and computer token details (DOM refs and states)
+  setUserTokens();
+  setComputerTokens();
 
-    hideUnusedColorTokens(unusedColorsArr);
-    gameState.hasGameStarted = true;
-    _computerColor = activeColorsArr[1];
-    setupLayout(_selectedColor, _computerColor, unusedColorsArr);
-    setUserInfoInStorage(LS_USER_INFO_KEY, _userName, _userAvatar, _userAvatarURL);
-    setupUserAvatar(_userName, _userAvatar);
-    setupComputerAvatar(computerAvatar, computerAvatarURL48, computerAvatarURL96);
-    // Hide Onboarding screen and show main App screen
-    splashScreenEl.classList.add('d-none');
-    appEl.classList.remove('d-none');
-    // Show Game start animation
-    showGameStartAnimation();
-    gameStartAudio.currentTime = 0;
-    playAudio(gameStartAudio);
-    // Cache user and computer token details (DOM refs and states)
-    setUserTokens();
-    setComputerTokens();
+  console.log('user color: ', _selectedColor);
+  console.log('computer color: ', _computerColor);
+  console.log('unused colors: ', unusedColorsArr);
+  console.log('username: ', _userName, ', _userAvatar: ', _userAvatar);
+  console.log('computer Avatar: ', computerAvatar, ', computer avatar URL: ', computerAvatarURL96);
+  console.log(
+    'user tokens: ',
+    gameState.userTokens,
+    ', computer tokens: ',
+    gameState.computerTokens,
+  );
+}
 
-    console.log('user color: ', _selectedColor);
-    console.log('computer color: ', _computerColor);
-    console.log('unused colors: ', unusedColorsArr);
-    console.log('username: ', _userName, ', _userAvatar: ', _userAvatar);
-    console.log(
-      'computer Avatar: ',
-      computerAvatar,
-      ', computer avatar URL: ',
-      computerAvatarURL96,
-    );
-    console.log(
-      'user tokens: ',
-      gameState.userTokens,
-      ', computer tokens: ',
-      gameState.computerTokens,
-    );
-  }
-
-  console.log('Ludo game JS loaded.');
-  setDOMEvents();
-  populatePIScreen();
-})();
+console.log('Ludo game JS loaded.');
+setDOMEvents();
+populatePIScreen();
