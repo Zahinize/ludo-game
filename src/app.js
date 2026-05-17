@@ -1,5 +1,11 @@
 import DiceRoller from './dice';
-import { defaultGameState, LS_USER_INFO_KEY } from './constants';
+import {
+  colorSequence,
+  colorMap,
+  isTabletWidth,
+  defaultGameState,
+  LS_USER_INFO_KEY,
+} from './constants';
 
 /** Set Global variables and cache DOM element refs **/
 const ls = window.localStorage;
@@ -59,18 +65,6 @@ const computerAvatars = [
     url_96: new URL('assets/icon-avatar-walter-white-96.png', import.meta.url).pathname,
   },
 ];
-const _isTabletWidth = window.innerWidth <= 992;
-const BLUE_COLOR = 'blue';
-const RED_COLOR = 'red';
-const GREEN_COLOR = 'green';
-const YELLOW_COLOR = 'yellow';
-const colorSequence = [BLUE_COLOR, RED_COLOR, GREEN_COLOR, YELLOW_COLOR];
-const colorMap = {
-  [RED_COLOR]: '#EA1D23',
-  [GREEN_COLOR]: '#00A347',
-  [BLUE_COLOR]: '#29ADFF',
-  [YELLOW_COLOR]: '#DABC0F',
-};
 /** DOM element Refs **/
 const $q = (sel) => document.querySelector(sel);
 const $qall = (sel) => document.querySelectorAll(sel);
@@ -414,7 +408,7 @@ function updateGameFortStyles(_selectedColor = '', _computerColor = '', unusedCo
   const borderRightColor = colorMap[unusedColorsArr[1]];
   const borderBottomColor = colorMap[_selectedColor];
   const borderLeftColor = colorMap[unusedColorsArr[0]];
-  const borderWidth = _isTabletWidth ? '36px' : '75px';
+  const borderWidth = isTabletWidth ? '36px' : '75px';
 
   gameFortEl.style.setProperty('--game-fort-br-top', `${borderWidth} solid ${borderTopColor}`);
   gameFortEl.style.setProperty('--game-fort-br-right', `${borderWidth} solid ${borderRightColor}`);
