@@ -4,6 +4,8 @@ import {
   colorMap,
   isTabletWidth,
   defaultGameState,
+  userDiceRolledEvent,
+  computerDiceRolledEvent,
   LS_USER_INFO_KEY,
 } from './constants';
 
@@ -92,6 +94,8 @@ const userAvatarImgEl = $q('.js-avatar-user-img');
 const userAvatarTxtEl = $q('.js-avatar-user-text');
 const computerAvatarImgEl = $q('.js-avatar-computer-img');
 const computerAvatarTxtEl = $q('.js-avatar-computer-text');
+const userDiceRollBtnEl = $q('.js-user-dice-btn');
+const computerDiceRollBtnEl = $q('.js-computer-dice-btn');
 /** Image and Audio Refs **/
 const bgPlayIconPath = new URL('assets/icon-video-play.png', import.meta.url);
 const bgPauseIconPath = new URL('assets/icon-video-pause.png', import.meta.url);
@@ -492,6 +496,8 @@ function setUserTokens() {
   gameState.userTokens = {
     first: {
       el: firstToken,
+      // Current index on the ludo path
+      index: 0,
       baseX: firstToken.getBoundingClientRect().left,
       baseY: firstToken.getBoundingClientRect().top,
       left: firstToken.getBoundingClientRect().left,
@@ -499,10 +505,11 @@ function setUserTokens() {
       isClosed: true,
       isOpen: false,
       isSafe: false,
-      isReached: false,
+      isHome: false,
     },
     second: {
       el: secondToken,
+      index: 0,
       baseX: secondToken.getBoundingClientRect().left,
       baseY: secondToken.getBoundingClientRect().top,
       left: secondToken.getBoundingClientRect().left,
@@ -510,10 +517,11 @@ function setUserTokens() {
       isClosed: true,
       isOpen: false,
       isSafe: false,
-      isReached: false,
+      isHome: false,
     },
     third: {
       el: thirdToken,
+      index: 0,
       baseX: thirdToken.getBoundingClientRect().left,
       baseY: thirdToken.getBoundingClientRect().top,
       left: thirdToken.getBoundingClientRect().left,
@@ -521,10 +529,11 @@ function setUserTokens() {
       isClosed: true,
       isOpen: false,
       isSafe: false,
-      isReached: false,
+      isHome: false,
     },
     fourth: {
       el: fourthToken,
+      index: 0,
       baseX: fourthToken.getBoundingClientRect().left,
       baseY: fourthToken.getBoundingClientRect().top,
       left: fourthToken.getBoundingClientRect().left,
@@ -532,7 +541,7 @@ function setUserTokens() {
       isClosed: true,
       isOpen: false,
       isSafe: false,
-      isReached: false,
+      isHome: false,
     },
   };
 
@@ -550,6 +559,7 @@ function setComputerTokens() {
   gameState.computerTokens = {
     first: {
       el: firstToken,
+      index: 0,
       baseX: firstToken.getBoundingClientRect().left,
       baseY: firstToken.getBoundingClientRect().top,
       left: firstToken.getBoundingClientRect().left,
@@ -557,10 +567,11 @@ function setComputerTokens() {
       isClosed: true,
       isOpen: false,
       isSafe: false,
-      isReached: false,
+      isHome: false,
     },
     second: {
       el: secondToken,
+      index: 0,
       baseX: secondToken.getBoundingClientRect().left,
       baseY: secondToken.getBoundingClientRect().top,
       left: secondToken.getBoundingClientRect().left,
@@ -568,10 +579,11 @@ function setComputerTokens() {
       isClosed: true,
       isOpen: false,
       isSafe: false,
-      isReached: false,
+      isHome: false,
     },
     third: {
       el: thirdToken,
+      index: 0,
       baseX: thirdToken.getBoundingClientRect().left,
       baseY: thirdToken.getBoundingClientRect().top,
       left: thirdToken.getBoundingClientRect().left,
@@ -579,10 +591,11 @@ function setComputerTokens() {
       isClosed: true,
       isOpen: false,
       isSafe: false,
-      isReached: false,
+      isHome: false,
     },
     fourth: {
       el: fourthToken,
+      index: 0,
       baseX: fourthToken.getBoundingClientRect().left,
       baseY: fourthToken.getBoundingClientRect().top,
       left: fourthToken.getBoundingClientRect().left,
@@ -590,7 +603,7 @@ function setComputerTokens() {
       isClosed: true,
       isOpen: false,
       isSafe: false,
-      isReached: false,
+      isHome: false,
     },
   };
 
@@ -601,12 +614,21 @@ function setComputerTokens() {
 }
 function setupUserDice() {
   // Create the user dice instance with selectors
-  _userDice = new DiceRoller('User Dice', 'dice1', 'dice2', 'dice-roll-btn', 'dice-roll-audio');
+  _userDice = new DiceRoller(
+    'User Dice',
+    'dice1',
+    'dice2',
+    'dice-roll-btn',
+    'dice-roll-audio',
+    userDiceRolledEvent,
+  );
   _userDice.buildDice(_userDice.dice1);
   _userDice.buildDice(_userDice.dice2);
   _userDice.setDiceValue(_userDice.dice1);
   _userDice.setDiceValue(_userDice.dice2);
   _userDice.attachRollBtn();
+  // Enable User dice roll btn as user will roll the dice first
+  userDiceRollBtnEl.disabled = false;
 }
 function setupComputerDice() {
   // Create the computer dice instance with selectors
@@ -616,14 +638,25 @@ function setupComputerDice() {
     'dice4',
     'dice-roll-btn-2',
     'dice-roll-audio-2',
+    computerDiceRolledEvent,
   );
   _computerDice.buildDice(_computerDice.dice1);
   _computerDice.buildDice(_computerDice.dice2);
   _computerDice.setDiceValue(_computerDice.dice1);
   _computerDice.setDiceValue(_computerDice.dice2);
   _computerDice.attachRollBtn();
+  // Disable Computer dice roll btn as user will roll first
+  computerDiceRollBtnEl.disabled = true;
 }
+function setupCustomEvents() {
+  // Detach custom events first to prevent redundant calls
+  document.removeEventListener(userDiceRolledEvent, handleUserDiceRoll, false);
+  document.removeEventListener(computerDiceRolledEvent, handleComputerDiceRoll, false);
 
+  // Attach user and computer custom events
+  document.addEventListener(userDiceRolledEvent, handleUserDiceRoll, false);
+  document.addEventListener(computerDiceRolledEvent, handleComputerDiceRoll, false);
+}
 /**
  * Shows the "GAME START" animation once.
  * Call this after onboarding is complete.
@@ -645,6 +678,13 @@ function showGameStartAnimation() {
     overlay.classList.remove('show');
     overlay.classList.add('hidden');
   }, DURATION);
+}
+/** User & Computer dice roll custom event handlers **/
+function handleUserDiceRoll(e) {
+  console.log('User dice rolled: ', e.detail);
+}
+function handleComputerDiceRoll(e) {
+  console.log('Computer dice rolled: ', e.detail);
 }
 
 function initGamePlay() {
@@ -676,7 +716,9 @@ function initGamePlay() {
   // Cache user and computer token details (DOM refs and states)
   setUserTokens();
   setComputerTokens();
+  setupCustomEvents();
 
+  // Show data logs for testing/debugging
   console.log('user color: ', _selectedColor);
   console.log('computer color: ', _computerColor);
   console.log('unused colors: ', unusedColorsArr);

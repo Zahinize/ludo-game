@@ -26,6 +26,8 @@ let defaultGameState = {
   winner: null,
 };
 const LS_USER_INFO_KEY = '_LH_D_';
+const userDiceRolledEvent = 'user:dice:rolled';
+const computerDiceRolledEvent = 'computer:dice:rolled';
 const userStateDesktop = [
   { left: '300px', top: '650px', isSafe: true },
   { left: '300px', top: '600px' },
@@ -153,4 +155,6 @@ export {
   LS_USER_INFO_KEY,
   userStateDesktop,
   computerStateDesktop,
+  userDiceRolledEvent,
+  computerDiceRolledEvent,
 };

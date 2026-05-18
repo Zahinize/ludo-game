@@ -151,8 +151,9 @@ function rollBothDice(dice1, dice2, audioEl, callback = (payload) => console.log
 }
 
 class DiceRoller {
-  constructor(name, dice1Sel, dice2Sel, rollBtnSel, rollAudioSel) {
+  constructor(name, dice1Sel, dice2Sel, rollBtnSel, rollAudioSel, diceRollEvent) {
     this.name = name;
+    this.diceRollEvent = diceRollEvent;
     this.rollBtnId = rollBtnSel;
     this.dice1 = document.getElementById(dice1Sel);
     this.dice2 = document.getElementById(dice2Sel);
@@ -177,6 +178,9 @@ class DiceRoller {
     rollBothDice(this.dice1, this.dice2, this.rollAudio, ({ dice1, dice2, total }) => {
       this.rollBtn.disabled = false;
       console.log(`${this.name}: ${dice1}, ${dice2}, Total: ${total}`);
+      document.dispatchEvent(
+        new CustomEvent(this.diceRollEvent, { detail: { dice1, dice2, total } }),
+      );
     });
   }
 
