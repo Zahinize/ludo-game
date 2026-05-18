@@ -326,9 +326,22 @@ function handleBgPlayClick(e) {
   console.log('background play click:');
 }
 function handlePageInteractionClick(e) {
-  const isSoundEl = e.target.classList.contains('js-sound') || e.target.closest('.js-sound');
+  const excludeClassNames = [
+    'game-token-computer-1',
+    'game-token-computer-2',
+    'game-token-computer-3',
+    'game-token-computer-4',
+  ];
+  const elClassList = e.target.classList;
+  const isExcludedClassName = excludeClassNames.reduce((flag, clsName) => {
+    elClassList.contains(clsName) || e.target.parentNode.classList.contains(clsName)
+      ? (flag = true)
+      : null;
+    return flag;
+  }, false);
+  const isSoundEl = elClassList.contains('js-sound') || e.target.closest('.js-sound');
 
-  if (!isSoundEl) return false;
+  if (isExcludedClassName || !isSoundEl) return false;
   playAudio(interactionAudio);
 }
 function handleUserNameInteraction(e) {
@@ -353,10 +366,6 @@ function handleUserAvatarClick(e) {
 function handleUserTokenClick(e) {
   console.log('user token click: ', e.target);
 }
-function handleComputerTokenClick(e) {
-  console.log('computer token click: ', e.target);
-}
-
 function pauseAudio(audioRef) {
   audioRef.pause();
 }
@@ -606,11 +615,6 @@ function setComputerTokens() {
       isHome: false,
     },
   };
-
-  firstToken.addEventListener('click', handleComputerTokenClick, false);
-  secondToken.addEventListener('click', handleComputerTokenClick, false);
-  thirdToken.addEventListener('click', handleComputerTokenClick, false);
-  fourthToken.addEventListener('click', handleComputerTokenClick, false);
 }
 function setupUserDice() {
   // Create the user dice instance with selectors
@@ -627,8 +631,9 @@ function setupUserDice() {
   _userDice.setDiceValue(_userDice.dice1);
   _userDice.setDiceValue(_userDice.dice2);
   _userDice.attachRollBtn();
-  // Enable User dice roll btn as user will roll the dice first
+  // Make user player active as it will start the game
   userDiceRollBtnEl.disabled = false;
+  setActiveTurnUser();
 }
 function setupComputerDice() {
   // Create the computer dice instance with selectors
@@ -647,6 +652,31 @@ function setupComputerDice() {
   _computerDice.attachRollBtn();
   // Disable Computer dice roll btn as user will roll first
   computerDiceRollBtnEl.disabled = true;
+}
+function setActiveTurnUser() {
+  gameState.activeTurn = 'user';
+}
+function setActiveTurnComputer() {
+  gameState.activeTurn = 'computer';
+}
+function checkTokensForOpening() {
+  let gs = gameState;
+  // Reset this arr as it gets called twice for both dice
+  gs.tokenForOpening = [];
+
+  for (let key in gs.userTokens) {
+    let token = gs.userTokens[key];
+    let isValidOpen = token.isClosed && !token.isOpen && !token.isSafe && !token.isHome;
+
+    if (!isValidOpen) {
+      console.log('Token ineligible for opening: ', token);
+      continue;
+    }
+
+    gs.tokenForOpening.push(token);
+  }
+
+  return gs.tokenForOpening;
 }
 function setupCustomEvents() {
   // Detach custom events first to prevent redundant calls
@@ -679,10 +709,43 @@ function showGameStartAnimation() {
     overlay.classList.add('hidden');
   }, DURATION);
 }
-/** User & Computer dice roll custom event handlers **/
+/** User dice roll custom event handler **/
 function handleUserDiceRoll(e) {
   console.log('User dice rolled: ', e.detail);
+  let { dice1, dice2, total } = e.detail;
+
+  if (!dice1 || !dice2) {
+    console.log('Invalid dice values rolled.');
+    return;
+  }
+
+  dice1 = Number(dice1);
+  dice2 = Number(dice2);
+  let gs = gameState;
+  gs.userDice.first = dice1;
+  gs.userDice.second = dice2;
+
+  // Check if tokens are eligible for opening with the current dice values and update the game state accordingly
+  if (gs.tokenOpenArr.indexOf(dice1) > -1 && checkTokensForOpening().length) {
+    gs.tokenEligibleToOpen += 1;
+  }
+  if (gs.tokenOpenArr.indexOf(dice2) > -1 && checkTokensForOpening().length) {
+    gs.tokenEligibleToOpen += 1;
+  }
+
+  // Set eligible tokens active
+  if (gs.tokenForOpening.length && gs.tokenEligibleToOpen) {
+    console.log('Token eligible for opening: ', gs.tokenForOpening);
+    gs.tokenForOpening.forEach((token) => {
+      token.el.classList.add('token-eligible');
+    });
+  }
+
+  // Disable user dice roll button
+  // userDiceRollBtnEl.disabled = true;
+  console.log('current game state: ', gs);
 }
+/** Computer dice roll custom event handler **/
 function handleComputerDiceRoll(e) {
   console.log('Computer dice rolled: ', e.detail);
 }

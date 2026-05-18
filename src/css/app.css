@@ -750,10 +750,18 @@ Timeline:
 
   z-index: 10000;
 }
-/* .game-token > img {
-  transition: all 0.25s ease-in;
-} */
-.game-token:hover > img {
+/* Note: Don't show cursor to computer tokens */
+.game-token.game-token-computer-1,
+.game-token.game-token-computer-2,
+.game-token.game-token-computer-3,
+.game-token.game-token-computer-4 {
+  cursor: none;
+}
+/* Note: Only show hover transition for user tokens */
+.game-token.game-token-user-1:hover > img,
+.game-token.game-token-user-2:hover > img,
+.game-token.game-token-user-3:hover > img,
+.game-token.game-token-user-4:hover > img {
   transform: translateY(-5);
 }
 /** Game Token - Computer Position **/
