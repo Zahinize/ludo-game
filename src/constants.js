@@ -14,8 +14,8 @@ let defaultGameState = {
   hasGameStarted: false,
   activeTurn: 'user', // which player has the current turn, user/computer
   tokenOpenArr: [1, 6],
-  tokenEligibleToOpen: 0,
-  tokenForOpening: [],
+  tokenEligibleArr: [],
+  playerTurns: 0,
   userDice: {
     first: null,
     second: null,

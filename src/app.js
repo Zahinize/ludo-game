@@ -7,6 +7,7 @@ import {
   userDiceRolledEvent,
   computerDiceRolledEvent,
   LS_USER_INFO_KEY,
+  userStateDesktop,
 } from './constants';
 
 /** Set Global variables and cache DOM element refs **/
@@ -364,7 +365,49 @@ function handleUserAvatarClick(e) {
   togglePINextVisibility();
 }
 function handleUserTokenClick(e) {
-  console.log('user token click: ', e.target);
+  const el = e.target;
+  const gs = gameState;
+  const userToken = getTokenById(el, gs.userTokens);
+  const eligibleToken = gs.tokenEligibleArr.find((token) => token.id === userToken.id);
+  const dice = gs.userDice.first || gs.userDice.second;
+  const isTokenEligibleToOpen =
+    eligibleToken &&
+    gs.tokenOpenArr.indexOf(dice) > -1 &&
+    userToken.index === 0 &&
+    userToken.isAtHome &&
+    !userToken.isOpen &&
+    !userToken.isSafe &&
+    !userToken.isAtFort;
+  const pathIndex = isTokenEligibleToOpen ? 0 : dice;
+  const currentState = userStateDesktop[pathIndex];
+
+  if (gs.userDice.first) {
+    // Update user index to new path location
+    userToken.index = pathIndex;
+    userToken.isOpen = true;
+    // Remove 'token-eligible' className from the current element
+    userToken.el.classList.remove('token-eligible');
+    // Move the user token to new path location
+    userToken.el.style.left = currentState.left;
+    userToken.el.style.top = currentState.top;
+    // Decrement player turn by one
+    gs.playerTurns -= 1;
+    gs.userDice.first = null;
+
+    // Reset eligible token className from all tokens
+    gs.tokenEligibleArr.forEach((token) => {
+      token.el.classList.remove('token-eligible');
+    });
+    // Set Eligible tokens for Dice2
+    gs.tokenEligibleArr = getEligibleTokens(gs.userDice.second);
+    // Set eligible tokens active
+    gs.tokenEligibleArr.forEach((token) => {
+      token.el.classList.add('token-eligible');
+    });
+  } else if (gs.userDice.second) {
+  }
+
+  console.log('[UserTokenClick] Current gameState: ', gameState);
 }
 function pauseAudio(audioRef) {
   audioRef.pause();
@@ -496,6 +539,11 @@ function setupComputerAvatar(name, url_48, url_96) {
   computerAvatarImgEl.setAttribute('alt', imgAlt);
   computerAvatarTxtEl.textContent = name;
 }
+function getTokenById(el, tokensObj) {
+  return Object.values(tokensObj).find(
+    (token) => el.classList.contains(token.id) || el.parentNode.classList.contains(token.id),
+  );
+}
 function setUserTokens() {
   const firstToken = $q('.game-token.game-token-user-1');
   const secondToken = $q('.game-token.game-token-user-2');
@@ -505,52 +553,56 @@ function setUserTokens() {
   gameState.userTokens = {
     first: {
       el: firstToken,
+      id: 'game-token-user-1',
       // Current index on the ludo path
       index: 0,
       baseX: firstToken.getBoundingClientRect().left,
       baseY: firstToken.getBoundingClientRect().top,
       left: firstToken.getBoundingClientRect().left,
       top: firstToken.getBoundingClientRect().top,
-      isClosed: true,
+      isAtHome: true,
       isOpen: false,
       isSafe: false,
-      isHome: false,
+      isAtFort: false,
     },
     second: {
       el: secondToken,
+      id: 'game-token-user-2',
       index: 0,
       baseX: secondToken.getBoundingClientRect().left,
       baseY: secondToken.getBoundingClientRect().top,
       left: secondToken.getBoundingClientRect().left,
       top: secondToken.getBoundingClientRect().top,
-      isClosed: true,
+      isAtHome: true,
       isOpen: false,
       isSafe: false,
-      isHome: false,
+      isAtFort: false,
     },
     third: {
       el: thirdToken,
+      id: 'game-token-user-3',
       index: 0,
       baseX: thirdToken.getBoundingClientRect().left,
       baseY: thirdToken.getBoundingClientRect().top,
       left: thirdToken.getBoundingClientRect().left,
       top: thirdToken.getBoundingClientRect().top,
-      isClosed: true,
+      isAtHome: true,
       isOpen: false,
       isSafe: false,
-      isHome: false,
+      isAtFort: false,
     },
     fourth: {
       el: fourthToken,
+      id: 'game-token-user-4',
       index: 0,
       baseX: fourthToken.getBoundingClientRect().left,
       baseY: fourthToken.getBoundingClientRect().top,
       left: fourthToken.getBoundingClientRect().left,
       top: fourthToken.getBoundingClientRect().top,
-      isClosed: true,
+      isAtHome: true,
       isOpen: false,
       isSafe: false,
-      isHome: false,
+      isAtFort: false,
     },
   };
 
@@ -568,51 +620,55 @@ function setComputerTokens() {
   gameState.computerTokens = {
     first: {
       el: firstToken,
+      id: 'game-token-computer-1',
       index: 0,
       baseX: firstToken.getBoundingClientRect().left,
       baseY: firstToken.getBoundingClientRect().top,
       left: firstToken.getBoundingClientRect().left,
       top: firstToken.getBoundingClientRect().top,
-      isClosed: true,
+      isAtHome: true,
       isOpen: false,
       isSafe: false,
-      isHome: false,
+      isAtFort: false,
     },
     second: {
       el: secondToken,
+      id: 'game-token-computer-2',
       index: 0,
       baseX: secondToken.getBoundingClientRect().left,
       baseY: secondToken.getBoundingClientRect().top,
       left: secondToken.getBoundingClientRect().left,
       top: secondToken.getBoundingClientRect().top,
-      isClosed: true,
+      isAtHome: true,
       isOpen: false,
       isSafe: false,
-      isHome: false,
+      isAtFort: false,
     },
     third: {
       el: thirdToken,
+      id: 'game-token-computer-3',
       index: 0,
       baseX: thirdToken.getBoundingClientRect().left,
       baseY: thirdToken.getBoundingClientRect().top,
       left: thirdToken.getBoundingClientRect().left,
       top: thirdToken.getBoundingClientRect().top,
-      isClosed: true,
+      isAtHome: true,
       isOpen: false,
       isSafe: false,
-      isHome: false,
+      isAtFort: false,
     },
     fourth: {
       el: fourthToken,
+      id: 'game-token-computer-4',
       index: 0,
       baseX: fourthToken.getBoundingClientRect().left,
       baseY: fourthToken.getBoundingClientRect().top,
       left: fourthToken.getBoundingClientRect().left,
       top: fourthToken.getBoundingClientRect().top,
-      isClosed: true,
+      isAtHome: true,
       isOpen: false,
       isSafe: false,
-      isHome: false,
+      isAtFort: false,
     },
   };
 }
@@ -659,25 +715,6 @@ function setActiveTurnUser() {
 function setActiveTurnComputer() {
   gameState.activeTurn = 'computer';
 }
-function checkTokensForOpening() {
-  let gs = gameState;
-  // Reset this arr as it gets called twice for both dice
-  gs.tokenForOpening = [];
-
-  for (let key in gs.userTokens) {
-    let token = gs.userTokens[key];
-    let isValidOpen = token.isClosed && !token.isOpen && !token.isSafe && !token.isHome;
-
-    if (!isValidOpen) {
-      console.log('Token ineligible for opening: ', token);
-      continue;
-    }
-
-    gs.tokenForOpening.push(token);
-  }
-
-  return gs.tokenForOpening;
-}
 function setupCustomEvents() {
   // Detach custom events first to prevent redundant calls
   document.removeEventListener(userDiceRolledEvent, handleUserDiceRoll, false);
@@ -709,10 +746,27 @@ function showGameStartAnimation() {
     overlay.classList.add('hidden');
   }, DURATION);
 }
+
+function getEligibleTokens(dice) {
+  const { tokenOpenArr, userTokens } = gameState;
+  const canOpenToken = tokenOpenArr.includes(dice);
+
+  return Object.values(userTokens).filter((token) => {
+    if (canOpenToken) {
+      // Tokens still at home and eligible to be opened
+      return (
+        token.index === 0 && token.isAtHome && !token.isOpen && !token.isSafe && !token.isAtFort
+      );
+    }
+
+    // Tokens already on the board and eligible to move
+    return token.index > 0 && !token.isAtHome && token.isOpen && !token.isAtFort;
+  });
+}
 /** User dice roll custom event handler **/
 function handleUserDiceRoll(e) {
   console.log('User dice rolled: ', e.detail);
-  let { dice1, dice2, total } = e.detail;
+  let { dice1, dice2 } = e.detail;
 
   if (!dice1 || !dice2) {
     console.log('Invalid dice values rolled.');
@@ -721,29 +775,39 @@ function handleUserDiceRoll(e) {
 
   dice1 = Number(dice1);
   dice2 = Number(dice2);
-  let gs = gameState;
+  const gs = gameState;
   gs.userDice.first = dice1;
   gs.userDice.second = dice2;
 
-  // Check if tokens are eligible for opening with the current dice values and update the game state accordingly
-  if (gs.tokenOpenArr.indexOf(dice1) > -1 && checkTokensForOpening().length) {
-    gs.tokenEligibleToOpen += 1;
-  }
-  if (gs.tokenOpenArr.indexOf(dice2) > -1 && checkTokensForOpening().length) {
-    gs.tokenEligibleToOpen += 1;
-  }
-
-  // Set eligible tokens active
-  if (gs.tokenForOpening.length && gs.tokenEligibleToOpen) {
-    console.log('Token eligible for opening: ', gs.tokenForOpening);
-    gs.tokenForOpening.forEach((token) => {
+  if (getEligibleTokens(dice1).length) {
+    // Set Eligible tokens for Dice1
+    gs.tokenEligibleArr = getEligibleTokens(dice1);
+    // Set eligible tokens active
+    gs.tokenEligibleArr.forEach((token) => {
       token.el.classList.add('token-eligible');
     });
+    gs.playerTurns = 2;
+    console.log('Eligible tokens for dice1: ', gs.tokenEligibleArr);
+  } else if (getEligibleTokens(dice2).length) {
+    // Set Eligible tokens for Dice1
+    gs.tokenEligibleArr = getEligibleTokens(dice2);
+    // Set eligible tokens active
+    gs.tokenEligibleArr.forEach((token) => {
+      token.el.classList.add('token-eligible');
+    });
+    gs.playerTurns = 1;
+    gs.userDice.first = null;
+    console.log('Eligible tokens for dice2: ', gs.tokenEligibleArr);
+  } else {
+    gs.playerTurns = 0;
+    gs.userDice.first = null;
+    gs.userDice.second = null;
+    console.log('No eligible tokens for the user: ', gs.tokenEligibleArr);
   }
 
   // Disable user dice roll button
   // userDiceRollBtnEl.disabled = true;
-  console.log('current game state: ', gs);
+  console.log('current game state: ', gameState);
 }
 /** Computer dice roll custom event handler **/
 function handleComputerDiceRoll(e) {
